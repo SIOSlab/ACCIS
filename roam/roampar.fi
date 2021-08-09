@@ -1,0 +1,48 @@
+*-------------------------------------------------------------------------------
+*                          Satellite Parameters
+*   MS  - Mass (kg)
+*   AS  - Surface area (m**2)
+*   CD - Drag coefficient
+*   JP  - Principal moments of inertia (kg*m**2)
+*-------------------------------------------------------------------------------
+      DOUBLE PRECISION MS, AS, CD, JP(3)
+
+*-------------------------------------------------------------------------------
+*                        Controls & Disturbances
+*   FC - Control force (N, ECI frame)
+*   FD - Disturbance force (N, ECI frame)
+*   TC - Control torque (N*m, body frame)
+*   TD - Disturbance torque (N*m, body frame)
+*-------------------------------------------------------------------------------
+      DOUBLE PRECISION FC(3), FD(3), TC(3), TD(3)
+
+*-------------------------------------------------------------------------------
+*                              Epoch
+*   T0 - Epoch (Julian day, TT)
+*-------------------------------------------------------------------------------
+      DOUBLE PRECISION T0
+
+*-------------------------------------------------------------------------------
+*                  Time-Varying Astrometric Data
+*   XP  - Celestial intermediate pole position (arcsec)
+*   DT  - Difference TT - UT
+*-------------------------------------------------------------------------------
+      DOUBLE PRECISION XP(2), DT 
+
+*-------------------------------------------------------------------------------
+*                Time-Varying Atmospheric Data
+*   DF - 10.7 cm solar flux (sfu), previous day average
+*   AF - 10.7 cm solar flux (sfu), 81-day average
+*   AP - Geomagnetic index, daily average
+*-------------------------------------------------------------------------------
+      DOUBLE PRECISION DF, AF, AP
+
+*-------------------------------------------------------------------------------
+*                           Common Block
+*-------------------------------------------------------------------------------
+      COMMON /ROAMCS/
+     &  MS, AS, CD, JP,
+     &  FC, FD, TC, TD,
+     &  T0,
+     &  XP, DT,
+     &  DF, AF, AP
