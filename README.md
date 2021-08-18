@@ -32,6 +32,8 @@ The following third-part tools and data are included in this repository:
 - EGM2008 Gravitational Model (https://earth-info.nga.mil/index.php?dir=wgs84&action=wgs84)
 - JPL Planetary and Lunar Ephemerides (https://ssd.jpl.nasa.gov/?planet_eph_export)
 - NASA World Wind (https://worldwind.arc.nasa.gov/java)
+    - Source code: https://github.com/nasa/World-Wind-Java
+    - License: https://worldwind.arc.nasa.gov/LICENSE.html
 - NOVAS: Naval Observatory Vector Astronomy Subroutines (https://ui.adsabs.harvard.edu/abs/2012IAUJD...7P..24K/abstract)
 - NRLMSISE-00 Atmospheric Model (https://ccmc.gsfc.nasa.gov/modelweb/atmos/nrlmsise00.html)
 - RKSUITE ODE Solver (http://www.netlib.org/ode/rksuite)
