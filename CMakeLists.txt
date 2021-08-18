@@ -2,9 +2,9 @@ cmake_minimum_required(VERSION 3.10)
 
 enable_language(Fortran)
 
+#these options may cause issues with gfortran newer than in gcc8
+#either remove -Wall -pedantic or replace with -std=legacy
 add_compile_options(-Wall -g -Og -pedantic)
-
-# Eigen?
 
 find_package(Java REQUIRED)
 find_package(JNI REQUIRED)
@@ -20,6 +20,7 @@ include_directories(${OpenCV_INCLUDE_DIRS})
 include_directories(${GDAL_INCLUDE_DIRS})
 include_directories(.)
 include_directories(roam)
+#add Eigen and OpenCV include paths here if not installed in standard locations
 
 add_jar(Landsat SOURCES Landsat.java INCLUDE_JARS WorldWindJava.jar)
 
