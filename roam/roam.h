@@ -18,6 +18,8 @@ extern void coe2rv_(const double* y, double* x);
 
 extern void rv2coe_(const double* x, double* y);
 
+extern void truano_(const double* y, double* dt);
+
 extern void losgeo_(const double* t, const double* reci, const double* vlos,
         const double* tol, double* lat, double* lon, double* dist);
 

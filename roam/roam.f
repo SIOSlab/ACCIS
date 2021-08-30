@@ -440,6 +440,52 @@
 
 *===============================================================================
 
+      SUBROUTINE TRUANO(Y, DT)
+
+*-------------------------------------------------------------------------------
+*   Propagate true anomaly for time DT (ideal Keplerian orbit)
+*-------------------------------------------------------------------------------
+
+      IMPLICIT DOUBLE PRECISION (A-Z)
+
+      PARAMETER(DEGRAD = 57.29577951308232D0)
+      PARAMETER(RADDEG = 0.017453292519943295D0)
+
+*  Tolerance for iterative solution
+      PARAMETER(TOL = 1E-12)
+
+*  Gravitational Parameter (EGM2008)
+      PARAMETER(GM = 3.986004415D5)
+
+      DIMENSION Y(6)
+
+*  Orbital elements
+      A = Y(1)
+      E = Y(2)
+      F = Y(6) * RADDEG 
+      N = DSQRT(GM / A**3)
+      C = DSQRT((1 + E) / (1 - E))
+
+*  Compute mean anomaly
+      EA0 = 2 * DATAN(DTAN(F/2) / C)
+      M0 = EA0 - E * DSIN(EA0)
+      M = M0 + N * DT
+      
+*  Iterate to find eccentric anomaly
+      EA = M
+ 10   DEA = (EA - E*DSIN(EA) - M) / (1 + E * DCOS(EA)) 
+      EA = EA - DEA
+      IF (DABS(DEA) .GT. TOL) GOTO 10
+
+*  Recover true anomaly
+      F = 2 * DATAN(C * DTAN(EA/2))
+      Y(6) = F * DEGRAD
+
+      RETURN
+      END
+
+*===============================================================================
+
       SUBROUTINE LOSGEO(T, RECI, VLOS, TOL, ALAT, ALON, DIST)
 
 *-------------------------------------------------------------------------------
