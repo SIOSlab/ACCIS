@@ -31,6 +31,8 @@ NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(sim_info, filters, orbit_file, camera_file,
         image_cadence)
 NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(sat_cam, widp, lenp, rho, u, A) 
 
+
+// Main function
 int main(int argc, char** argv) {
 
     // Get basic simulation info
@@ -61,10 +63,31 @@ int main(int argc, char** argv) {
     // Create filters
     std::vector<std::shared_ptr<filter::base>> filter_list;
     for (const std::string& filt_name : si.filters) {
-        if (filt_name == "HOUSE")
+        if (filt_name == "HOUSE") {
             filter_list.emplace_back(new house());
-        else if (filt_name == "UKF")
+        } else if (filt_name == "UKF") {
             filter_list.emplace_back(new ukf());
+        } else {
+            std::cout << "Unkown filter type!" << std::endl;
+            exit(EXIT_FAILURE);
+        }
+    }
+
+    // Iterate over filter types
+    for (int filter_no = 0; filter_no < filter_list.size; filter_no++) {
+
+        // Iterate over trials
+        for (int trial = 0; trial < si.num_trials; trial++) {
+
+            std::cout << "-----------------------------------" << std::endl;
+            std::cout << "Filter: " << si.filters[filter_no]   << std::endl;
+            std::cout << "Trail:  " << trial                   << std::endl; 
+            std::cout << "-----------------------------------" << std::endl;
+
+            // TO DO
+
+        }
+
     }
 
 }
