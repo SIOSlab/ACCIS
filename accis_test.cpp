@@ -7,6 +7,7 @@
 #include "sat_state.hpp"
 #include "ukf.hpp"
 
+#include <fstream>
 #include <iostream>
 #include <memory>
 #include <string>
@@ -29,15 +30,17 @@ struct sim_info {
 NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(sim_info, filters, orbit_file, camera_file,
         num_trials, num_steps, step_size, gps_cadence, star_tracker_cadence,
         image_cadence)
-NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(sat_cam, widp, lenp, rho, u, A) 
-
+NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(sat_cam, widp, lenp, rho, u, A)
 
 // Main function
 int main(int argc, char** argv) {
 
     // Get basic simulation info
-    std::string si_file(argv[1]);
-    nlohmann::json si_json(si_file);
+    std::string si_file = "input/setup.json";
+    nlohmann::json si_json;
+    std::ifstream si_stream(si_file); //(argv[1]);
+    si_stream >> si_json;
+    si_stream.close(); 
     sim_info si = si_json.get<sim_info>();
 
     // Get nominal satellite orbits
@@ -49,7 +52,10 @@ int main(int argc, char** argv) {
         orbit[i].Y = orbit_table.row(i);
 
     // Satellite camera model
-    nlohmann::json cam_json(si.camera_file);
+    nlohmann::json cam_json;
+    std::ifstream cam_stream(si.camera_file);
+    cam_stream >> cam_json;
+    cam_stream.close();
     sat_cam camera = cam_json.get<sat_cam>();
 
     // Get nominal initial states
@@ -74,7 +80,7 @@ int main(int argc, char** argv) {
     }
 
     // Iterate over filter types
-    for (int filter_no = 0; filter_no < filter_list.size; filter_no++) {
+    for (int filter_no = 0; filter_no < filter_list.size(); filter_no++) {
 
         // Iterate over trials
         for (int trial = 0; trial < si.num_trials; trial++) {
