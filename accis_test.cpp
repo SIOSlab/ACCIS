@@ -36,7 +36,7 @@ NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(sat_cam, widp, lenp, rho, u, A)
 int main(int argc, char** argv) {
 
     // Get basic simulation info
-    std::string si_file = "input/setup.json";
+    std::string si_file = (argc == 1) ? "input/setup.json" : argv[1];
     sim_info si;
     ez_json_read(si_file, si);
 
