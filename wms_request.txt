@@ -1,0 +1,11 @@
+https://worldwind25.arc.nasa.gov/wms?
+request=GetMap
+&service=WMS
+&version=1.3.0
+&layers=BlueMarble-200409,ESAT
+&styles=default
+&crs=CRS:84
+&bbox=-90.0,37.0,-89.0,38.0
+&width=1000
+&height=1000
+&format=image%2Fpng
