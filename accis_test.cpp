@@ -2,6 +2,7 @@
 #include "filter.hpp"
 #include "house.hpp"
 #include "mat.hpp"
+#include "nlohmann/json.hpp"
 #include "sat_cam.hpp"
 #include "sat_state.hpp"
 #include "ukf.hpp"
@@ -24,11 +25,18 @@ struct sim_info {
     int image_cadence;
 };
 
+// Set up JSON readers
+NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(sim_info, filters, orbit_file, camera_file,
+        num_trials, num_steps, step_size, gps_cadence, star_tracker_cadence,
+        image_cadence)
+NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(sat_cam, widp, lenp, rho, u, A) 
+
 int main(int argc, char** argv) {
 
     // Get basic simulation info
-    sim_info si;
-    // TO DO: Get values
+    std::string si_file(argv[1]);
+    nlohmann::json si_json(si_file);
+    sim_info si = si_json.get<sim_info>();
 
     // Get nominal satellite orbits
     mat<> orbit_table;
@@ -39,7 +47,8 @@ int main(int argc, char** argv) {
         orbit[i].Y = orbit_table.row(i);
 
     // Satellite camera model
-    sat_cam camera; // TO DO: Get parameters
+    nlohmann::json cam_json(si.camera_file);
+    sat_cam camera = cam_json.get<sat_cam>();
 
     // Get nominal initial states
     std::vector<sat_state> init_ideal_state(num_sats);

@@ -31,6 +31,7 @@ For each satellite at each simulation step:
 The following third-part tools and data are included in this repository:
 - EGM2008 Gravitational Model (https://earth-info.nga.mil/index.php?dir=wgs84&action=wgs84)
 - JPL Planetary and Lunar Ephemerides (https://ssd.jpl.nasa.gov/?planet_eph_export)
+- JSON for Modern C++ (https://github.com/nlohmann/json)
 - NASA World Wind (https://worldwind.arc.nasa.gov/java)
     - Source code: https://github.com/nasa/World-Wind-Java
     - License: https://worldwind.arc.nasa.gov/LICENSE.html
