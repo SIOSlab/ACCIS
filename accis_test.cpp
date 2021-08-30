@@ -1,8 +1,8 @@
 #include "eigen_csv.hpp"
+#include "ez_json.hpp"
 #include "filter.hpp"
 #include "house.hpp"
 #include "mat.hpp"
-#include "nlohmann/json.hpp"
 #include "sat_cam.hpp"
 #include "sat_state.hpp"
 #include "ukf.hpp"
@@ -37,11 +37,8 @@ int main(int argc, char** argv) {
 
     // Get basic simulation info
     std::string si_file = "input/setup.json";
-    nlohmann::json si_json;
-    std::ifstream si_stream(si_file); //(argv[1]);
-    si_stream >> si_json;
-    si_stream.close(); 
-    sim_info si = si_json.get<sim_info>();
+    sim_info si;
+    ez_json_read(si_file, si);
 
     // Get nominal satellite orbits
     mat<> orbit_table;
@@ -52,11 +49,8 @@ int main(int argc, char** argv) {
         orbit[i].Y = orbit_table.row(i);
 
     // Satellite camera model
-    nlohmann::json cam_json;
-    std::ifstream cam_stream(si.camera_file);
-    cam_stream >> cam_json;
-    cam_stream.close();
-    sat_cam camera = cam_json.get<sat_cam>();
+    sat_cam camera;
+    ez_json_read(si.camera_file, camera);
 
     // Get nominal initial states
     std::vector<sat_state> init_ideal_state(num_sats);
