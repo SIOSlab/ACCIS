@@ -6,23 +6,16 @@ enable_language(Fortran)
 #either remove -Wall -pedantic or replace with -std=legacy
 add_compile_options(-Wall -g -Og -pedantic)
 
-find_package(Java REQUIRED)
-find_package(JNI REQUIRED)
 find_package(OpenCV REQUIRED)
 find_package(GDAL REQUIRED)
 
 project(ACCIS)
 
-include(UseJava)
 
-include_directories(${JNI_INCLUDE_DIRS})
 include_directories(${OpenCV_INCLUDE_DIRS})
-include_directories(${GDAL_INCLUDE_DIRS})
 include_directories(.)
 include_directories(roam)
 #add Eigen and OpenCV include paths here if not installed in standard locations
-
-add_jar(Landsat SOURCES Landsat.java INCLUDE_JARS WorldWindJava.jar)
 
 FILE(GLOB ACCIS_SRC *.cpp)
 FILE(GLOB ROAM_SRC roam/*.f)

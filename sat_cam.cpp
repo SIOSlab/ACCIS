@@ -1,7 +1,7 @@
 #include <sat_cam.hpp>
 
 #include <angles.hpp>
-#include <Landsat.hpp>
+#include <landsat.hpp>
 #include <polynomial.hpp>
 #include <roam.h>
 
