@@ -24,11 +24,10 @@ cv::Mat landsat::get_image(double latc, double lonc, double side) {
     std::stringbuf reqbuf;
     std::ostream os(&reqbuf);
 
-    os << "/wms?"
-       << "request=GetMap"
+    os << "request=GetMap"
        << "&service=WMS"
        << "&version=1.3.0"
-       << "&layers=0"
+       << "&layers=BlueMarble-200409,ESAT"
        << "&styles=default"
        << "&crs=CRS:84"
        << "&bbox=" << lonmin << "," << latmin << ","
@@ -37,8 +36,7 @@ cv::Mat landsat::get_image(double latc, double lonc, double side) {
        << "&height=" << pix
        << "&format=image%2Fpng";
 
-    httplib::Client cli("https://landlook.usgs.gov/arcgis/services/"
-            "LandsatLook/ImageServer/WMSServer");
+    httplib::Client cli("https://worldwind25.arc.nasa.gov/wms?");
 
     auto res = cli.Get(reqbuf.str().c_str());
 
