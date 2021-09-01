@@ -152,32 +152,13 @@ cv::Mat sat_cam::ideal_image(cmat<2,4> latlon_corners) {
 
     using namespace cv;
 
-    double latmax, latmin, dlat, lonmax, lonmin, dlon, temp, dp;
+    double latc, lonc, side;
+    latc = latlon_corners.row(0).mean();
+    lonc = latlon_corners.row(1).mean();
+    side = (latlon_corners.rowwise().maxCoeff()
+           - latlon_corners.rowwise().minCoeff()).maxCoeff();
 
-    vec<4> lat, lon;
-    lat = latlon_corners.row(0);
-    lon = latlon_corners.row(1);
-
-    latmin = lat.minCoeff();
-    latmax = lat.maxCoeff();
-    dlat = latmax - latmin;
-
-    lonmin = lon.minCoeff();
-    lonmax = lon.maxCoeff();
-    dlon = lonmax - lonmin;
-
-    if (dlon > 180) {
-        temp = lonmax;
-        lonmax = lonmin;
-        lonmin = temp;
-        dlon = 360 - dlon;
-    }
-
-    dp = fmax(dlon/widp, dlat/lenp);
-
-    std::cout << "latmax = " << latmax << "; lonmin = " << lonmin << "; dp = " << dp << std::endl;
-
-    Mat sector = Landsat::image(widp*2, lenp*2, latmax, lonmin, dp); 
+    Mat sector = landsat::get_image(latc, lonc, side);
 
     Point2f src[4], dst[4];
 
@@ -194,8 +175,10 @@ cv::Mat sat_cam::ideal_image(cmat<2,4> latlon_corners) {
     dst[3].y = lenp;
 
     for (int i = 0; i < 4; i++) {
-        src[i].x = float((lon(i) - lonmin) / dp);
-        src[i].y = float((latmax - lat(i)) / dp);
+        src[i].x = landsat::pix
+            * float(0.5 + (latlon_corners(1,i) - lonc) / side);
+        src[i].y = landsat::pix
+            * float(0.5 + (latlon_corners(0,i) - latc) / side);
     }
 
     Mat T = getPerspectiveTransform(src, dst);

@@ -2,7 +2,6 @@
 #include <cross_cal.hpp>
 #include <filter.hpp>
 #include <house.hpp>
-#include <Landsat.hpp>
 #include <sat_meas.hpp>
 #include <sat_state.hpp>
 #include <ukf.hpp>
@@ -218,7 +217,7 @@ void test_accis(filter::base& filt, const std::string& dir) {
         if ((k % 5) == 0)
             std::cout << "T = " << t << " s" << std::endl;
         
-        if (k == 25 || k == 75) {
+        if (k == 0 || k == 75) {
             
             cv::Mat img1 = cam.real_image(t, states1_tru.back());
             cv::Mat img2 = cam.real_image(t, states2_tru.back());
@@ -268,7 +267,7 @@ int main(int argc, char** argv) {
 
     try {
 
-        char f = argv[1][0];
+        char f = 'u'; // argv[1][0];
   
         if (f == 'h') {
             house the_house;
