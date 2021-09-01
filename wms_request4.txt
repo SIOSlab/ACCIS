@@ -1,0 +1,11 @@
+https://landlook.usgs.gov/arcgis/services/LandsatLook/ImageServer/WMSServer/wms?
+request=GetMap
+&service=WMS
+&version=1.3.0
+&layers=0
+&styles=default
+&crs=CRS:84
+&bbox=-90.0,-0.5,-89.0,0.5
+&width=500
+&height=500
+&format=image%2Ftiff
