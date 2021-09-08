@@ -2,9 +2,9 @@ cmake_minimum_required(VERSION 3.10)
 
 enable_language(Fortran)
 
-#these options may cause issues with gfortran newer than in gcc8
-#either remove -Wall -pedantic or replace with -std=legacy
-add_compile_options(-Wall -g -Og -pedantic)
+set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -std=legacy")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS}")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
 
 find_package(Java REQUIRED)
 find_package(JNI REQUIRED)
@@ -27,7 +27,7 @@ add_jar(Landsat SOURCES Landsat.java INCLUDE_JARS WorldWindJava.jar)
 FILE(GLOB ACCIS_SRC *.cpp)
 FILE(GLOB ROAM_SRC roam/*.f)
 
-add_executable(accis ${ACCIS_SRC} ${ROAM_SRC})
+add_executable(accis ${ROAM_SRC} ${ACCIS_SRC})
 
 set(accis CMAKE_CXX_STANDARD 11)
 set(accis CMAKE_CXX_STANDARD_REQUIRED ON)
