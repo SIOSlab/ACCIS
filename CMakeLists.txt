@@ -6,6 +6,12 @@ set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -std=legacy")
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS}")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
 
+set(accis CMAKE_CXX_STANDARD 11)
+set(accis CMAKE_CXX_STANDARD_REQUIRED ON)
+
+set(accis CMAKE_FORTRAN_STANDARD 77)
+set(accis CMAKE_FORTRAN_STANDARD_REQUIRED ON)
+
 find_package(Java REQUIRED)
 find_package(JNI REQUIRED)
 find_package(OpenCV REQUIRED)
@@ -28,12 +34,6 @@ FILE(GLOB ACCIS_SRC *.cpp)
 FILE(GLOB ROAM_SRC roam/*.f)
 
 add_executable(accis ${ROAM_SRC} ${ACCIS_SRC})
-
-set(accis CMAKE_CXX_STANDARD 11)
-set(accis CMAKE_CXX_STANDARD_REQUIRED ON)
-
-set(accis CMAKE_FORTRAN_STANDARD 77)
-set(accis CMAKE_FORTRAN_STANDARD_REQUIRED ON)
 
 target_link_libraries(accis ${OpenCV_LIBS})
 target_link_libraries(accis ${GDAL_LIBRARIES})
