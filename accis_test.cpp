@@ -72,19 +72,35 @@ int main(int argc, char** argv) {
             exit(EXIT_FAILURE);
         }
     }
+    int num_filters = filter_list.size();
 
     // Iterate over filter types
-    for (int filter_no = 0; filter_no < filter_list.size(); filter_no++) {
+    for (int filt_no = 0; filt_no < num_filters; filt_no++) {
 
         // Iterate over trials
         for (int trial = 0; trial < si.num_trials; trial++) {
 
             std::cout << "-----------------------------------" << std::endl;
-            std::cout << "Filter: " << si.filters[filter_no]   << std::endl;
+            std::cout << "Filter: " << si.filters[filt_no]   << std::endl;
             std::cout << "Trail:  " << trial                   << std::endl; 
             std::cout << "-----------------------------------" << std::endl;
 
-            // TO DO
+            // Iterate over time steps
+            for (int k = 0; k < si.num_steps; k++) {
+
+                // Update ground truth state for each satellite
+                if (k > 0) {
+
+                    for (int sat_no = 0; sat_no < num_sats; sat_no++) {
+
+                        
+                         
+
+                    }
+
+                }
+
+            }
 
         }
 
