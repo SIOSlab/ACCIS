@@ -28,7 +28,7 @@ For each satellite at each simulation step:
     6. Perform SIFT-based update of state estimate using images from other satellites at previous time step
 
 ## Third-Party Tools
-The following third-part tools and data are included in this repository:
+The following third-party tools and data are included in this repository:
 - EGM2008 Gravitational Model (https://earth-info.nga.mil/index.php?dir=wgs84&action=wgs84)
 - JPL Planetary and Lunar Ephemerides (https://ssd.jpl.nasa.gov/?planet_eph_export)
 - JSON for Modern C++ (https://github.com/nlohmann/json)

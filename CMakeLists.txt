@@ -2,9 +2,15 @@ cmake_minimum_required(VERSION 3.10)
 
 enable_language(Fortran)
 
-#these options may cause issues with gfortran newer than in gcc8
-#either remove -Wall -pedantic or replace with -std=legacy
-add_compile_options(-Wall -g -Og -pedantic)
+set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -std=legacy -g -O3")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -g -O3")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -O3")
+
+set(accis CMAKE_CXX_STANDARD 11)
+set(accis CMAKE_CXX_STANDARD_REQUIRED ON)
+
+set(accis CMAKE_FORTRAN_STANDARD 77)
+set(accis CMAKE_FORTRAN_STANDARD_REQUIRED ON)
 
 find_package(Java REQUIRED)
 find_package(JNI REQUIRED)
@@ -27,13 +33,7 @@ add_jar(Landsat SOURCES Landsat.java INCLUDE_JARS WorldWindJava.jar)
 FILE(GLOB ACCIS_SRC *.cpp)
 FILE(GLOB ROAM_SRC roam/*.f)
 
-add_executable(accis ${ACCIS_SRC} ${ROAM_SRC})
-
-set(accis CMAKE_CXX_STANDARD 11)
-set(accis CMAKE_CXX_STANDARD_REQUIRED ON)
-
-set(accis CMAKE_FORTRAN_STANDARD 77)
-set(accis CMAKE_FORTRAN_STANDARD_REQUIRED ON)
+add_executable(accis ${ROAM_SRC} ${ACCIS_SRC})
 
 target_link_libraries(accis ${OpenCV_LIBS})
 target_link_libraries(accis ${GDAL_LIBRARIES})
