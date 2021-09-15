@@ -2,10 +2,6 @@
     "filters" : ["HOUSE", "UKF"],
     "orbit_file" : "input/orbits.csv",
     "camera_file" : "input/camera.json",
-    "num_trials" : 100,
-    "num_steps" : 10000,
-    "step_size" : 0.001,
-    "gps_cadence" : 100,
-    "star_tracker_cadence" : 500,
-    "image_cadence" : 10000
+    "time_file" : "input/time_info.json",
+    "num_trials" : 100
 }

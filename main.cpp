@@ -1,3 +1,4 @@
+#include "accis_sim.hpp"
 #include "eigen_csv.hpp"
 #include "ez_json.hpp"
 #include "filter.hpp"
@@ -18,18 +19,15 @@ struct sim_info {
     std::vector<std::string> filters;
     std::string orbit_file;
     std::string camera_file;
+    std::string time_file;
     int num_trials;
-    int num_steps;
-    double step_size;
-    int gps_cadence;
-    int star_tracker_cadence;
-    int image_cadence;
 };
 
 // Set up JSON readers
 NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(sim_info, filters, orbit_file, camera_file,
-        num_trials, num_steps, step_size, gps_cadence, star_tracker_cadence,
-        image_cadence)
+        time_file, num_trials)
+NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(time_info, num_steps, step_size, start_time,
+        gps_cadence, star_tracker_cadence, image_cadence)
 NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(sat_cam, widp, lenp, rho, u, A)
 
 // Main function
@@ -51,6 +49,10 @@ int main(int argc, char** argv) {
     // Satellite camera model
     sat_cam camera;
     ez_json_read(si.camera_file, camera);
+
+    // Time information
+    time_info t_info;
+    ez_json_read(si.time_file, t_info);
 
     // Get nominal initial states
     std::vector<sat_state> init_ideal_state(num_sats);
@@ -78,29 +80,15 @@ int main(int argc, char** argv) {
     for (int filt_no = 0; filt_no < num_filters; filt_no++) {
 
         // Iterate over trials
-        for (int trial = 0; trial < si.num_trials; trial++) {
+        for (int trial_no = 0; trial_no < si.num_trials; trial_no++) {
 
             std::cout << "-----------------------------------" << std::endl;
-            std::cout << "Filter: " << si.filters[filt_no]   << std::endl;
-            std::cout << "Trail:  " << trial                   << std::endl; 
+            std::cout << "Filter: " << si.filters[filt_no]     << std::endl;
+            std::cout << "Trail:  " << trial_no                << std::endl; 
             std::cout << "-----------------------------------" << std::endl;
 
-            // Iterate over time steps
-            for (int k = 0; k < si.num_steps; k++) {
-
-                // Update ground truth state for each satellite
-                if (k > 0) {
-
-                    for (int sat_no = 0; sat_no < num_sats; sat_no++) {
-
-                        
-                         
-
-                    }
-
-                }
-
-            }
+            run_accis_sim(t_info, *filter_list[filt_no], si.filters[filt_no],
+                trial_no, init_ideal_state, camera); 
 
         }
 
