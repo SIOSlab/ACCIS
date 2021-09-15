@@ -20,15 +20,18 @@ struct sim_info {
     std::string orbit_file;
     std::string camera_file;
     std::string time_file;
+    std::string err_file;
     int num_trials;
 };
 
 // Set up JSON readers
 NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(sim_info, filters, orbit_file, camera_file,
-        time_file, num_trials)
+        time_file, err_file, num_trials)
 NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(time_info, num_steps, step_size, start_time,
         gps_cadence, star_tracker_cadence, image_cadence)
 NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(sat_cam, widp, lenp, rho, u, A)
+NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(sat_state_randomizer, stdr, stdv, stdw,
+        stdba, stdca, stdf, stdc)
 
 // Main function
 int main(int argc, char** argv) {
@@ -53,6 +56,10 @@ int main(int argc, char** argv) {
     // Time information
     time_info t_info;
     ez_json_read(si.time_file, t_info);
+
+    // State randomizer
+    sat_state_randomizer rzer;
+    ez_json_read(si.err_file, rzer);
 
     // Get nominal initial states
     std::vector<sat_state> init_ideal_state(num_sats);
@@ -88,7 +95,7 @@ int main(int argc, char** argv) {
             std::cout << "-----------------------------------" << std::endl;
 
             run_accis_sim(t_info, *filter_list[filt_no], si.filters[filt_no],
-                trial_no, init_ideal_state, camera); 
+                trial_no, init_ideal_state, camera, rzer); 
 
         }
 

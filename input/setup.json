@@ -3,5 +3,6 @@
     "orbit_file" : "input/orbits.csv",
     "camera_file" : "input/camera.json",
     "time_file" : "input/time_info.json",
+    "err_file" : "input/error.json",
     "num_trials" : 100
 }

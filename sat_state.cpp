@@ -133,8 +133,8 @@ sat_state sat_state_randomizer::randomize(const sat_state& state, rando& rand) {
     randst.v() = state.v() + stdv * rand.mvn<3>();
     randst.w() = state.w() + stdw * rand.mvn<3>();
 
-    randst.qb(state.qb() * rand.rq(stdba));
-    randst.qc(state.qc() * rand.rq(stdca));
+    randst.qb(state.qb() * rand.rq(deg2rad(stdba)));
+    randst.qc(state.qc() * rand.rq(deg2rad(stdca)));
 
     randst.f() = state.f() + stdf * rand.norm();
 
@@ -149,8 +149,8 @@ mat<> sat_state_randomizer::cov() {
     p.segment<3>(0).setConstant(stdr); 
     p.segment<3>(3).setConstant(stdv);
     p.segment<3>(6).setConstant(stdw);
-    p.segment<4>(9).setConstant(stdba);
-    p.segment<4>(13).setConstant(stdca);
+    p.segment<4>(9).setConstant(deg2rad(stdba));
+    p.segment<4>(13).setConstant(deg2rad(stdca));
     p(17) = stdf;
     p.segment<sat_state::ND>(18).setConstant(stdc);
     return p.cwiseAbs2().asDiagonal();
