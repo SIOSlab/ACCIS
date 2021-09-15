@@ -44,17 +44,22 @@ void run_accis_sim(const time_info& t_info, filter::base& filt,
     // Iterate over time steps
     for (int k = 0; k <= t_info.num_steps; k++) {
 
-        // Propagate satellite states
+        // Iterate over satellites
+        for (int i = 0; i < num_sat; i++) {
 
-        // Filter prediction
+            // Propagate satellite states
 
-        // GPS Update
+            // Filter prediction
+
+            // GPS Update
         
-        // Star Tracker Update
+            // Star Tracker Update
 
-        // Acquire image
+            // Acquire image
 
-        // Image-based update
+            // Image-based update
+
+        }
 
     }
 
