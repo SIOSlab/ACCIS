@@ -4,5 +4,6 @@
     "camera_file" : "input/camera.json",
     "time_file" : "input/time_info.json",
     "err_file" : "input/error.json",
+    "results_dir" : "",
     "num_trials" : 100
 }

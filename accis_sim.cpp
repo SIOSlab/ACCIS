@@ -5,7 +5,8 @@
 void run_accis_sim(const time_info& t_info, filter::base& filt,
         const std::string& filt_name, int trial_no,
         const std::vector<sat_state>& init_ideal_state,
-        sat_cam& camera, sat_state_randomizer& rzer) {
+        sat_cam& camera, sat_state_randomizer& rzer,
+        const std::string& results_dir) {
 
     // Number of satellites
     int num_sat = init_ideal_state.size();
@@ -35,6 +36,11 @@ void run_accis_sim(const time_info& t_info, filter::base& filt,
         state_est[i].push_back(dist_x0);
     }
 
+    // Times
+    vec<> times;
+    times.setLinSpaced(t_info.num_steps+1, 0,
+            t_info.num_steps * t_info.step_size);
+
     // Iterate over time steps
     for (int k = 0; k <= t_info.num_steps; k++) {
 
@@ -53,5 +59,11 @@ void run_accis_sim(const time_info& t_info, filter::base& filt,
     }
 
     // Save results
+    for (int i = 0; i < num_sat; i++) {
+        std::string results_file = "results/" + results_dir + "sat_"
+            + std::to_string(i+1) + "_" + filt_name + "_"
+            + std::to_string(trial_no);
+        sat_state_save(results_file, times, state_tru[i], state_est[i]);  
+    }
 
 }

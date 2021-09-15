@@ -21,12 +21,13 @@ struct sim_info {
     std::string camera_file;
     std::string time_file;
     std::string err_file;
+    std::string results_dir;
     int num_trials;
 };
 
 // Set up JSON readers
 NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(sim_info, filters, orbit_file, camera_file,
-        time_file, err_file, num_trials)
+        time_file, err_file, results_dir, num_trials)
 NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(time_info, num_steps, step_size, start_time,
         gps_cadence, star_tracker_cadence, image_cadence)
 NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(sat_cam, widp, lenp, rho, u, A)
@@ -95,7 +96,7 @@ int main(int argc, char** argv) {
             std::cout << "-----------------------------------" << std::endl;
 
             run_accis_sim(t_info, *filter_list[filt_no], si.filters[filt_no],
-                trial_no, init_ideal_state, camera, rzer); 
+                trial_no, init_ideal_state, camera, rzer, si.results_dir); 
 
         }
 

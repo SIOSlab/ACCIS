@@ -156,8 +156,7 @@ mat<> sat_state_randomizer::cov() {
     return p.cwiseAbs2().asDiagonal();
 } 
 
-void sat_state_save(const std::string& filename,
-        const std::vector<double>& time,
+void sat_state_save(const std::string& filename, cvec<> time,
         const std::vector<sat_state>& states_tru,
         const std::vector<filter::dist>& states_est) {
 
@@ -168,10 +167,11 @@ void sat_state_save(const std::string& filename,
 
     mat<> xtru(K, N+1), xest(K, N+1), xerr(K, M+1);
 
+    xtru.col(0) = time;
+    xest.col(0) = time;
+    xerr.col(0) = time;
+
     for (int k = 0; k < K; k++) {
-        xtru(k, 0) = time[k];
-        xest(k, 0) = time[k];
-        xerr(k, 0) = time[k];
         xtru.row(k).tail(N) = states_tru[k].X;
         xest.row(k).tail(N) = states_est[k].mean;
         xerr.row(k).tail(M) = sat_state_err::diff(states_tru[k].X,

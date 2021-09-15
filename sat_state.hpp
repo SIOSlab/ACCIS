@@ -142,8 +142,7 @@ class sat_dyn : public filter::dyn {
 
 }; 
 
-void sat_state_save(const std::string& filename,
-        const std::vector<double>& time,
+void sat_state_save(const std::string& filename, cvec<> time,
         const std::vector<sat_state>& states_tru,
         const std::vector<filter::dist>& states_est); 
 
