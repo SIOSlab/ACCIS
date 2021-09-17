@@ -47,9 +47,15 @@ void run_accis_sim(const time_info& t_info, filter::base& filt,
         // Iterate over satellites
         for (int i = 0; i < num_sat; i++) {
 
-            // Propagate satellite states
+            // Prediction
+            if (k > 0) {
 
-            // Filter prediction
+                // Propagate satellite state
+                sat_state xi = states_tru[i].back();
+
+                // Filter prediction
+
+            }
 
             // GPS Update
         
