@@ -31,9 +31,9 @@ void test_accis(filter::base& filt, const std::string& dir) {
 
     coe1.a() = RE + h;
     coe1.e() = 0;
-    coe1.i() = 0;
-    coe1.w() = -44; //-46;//-39;//-38;
-    coe1.u() = 0;
+    coe1.i() = 55;
+    coe1.w() = -100; //-46;//-39;//-38;
+    coe1.u() = 45;
     coe1.f() = 0;
 
     coe2 = coe1;
@@ -168,16 +168,16 @@ void test_accis(filter::base& filt, const std::string& dir) {
     dist_w_kp.par.push_back(kurt_w_kp);
         
     cross_cal cc;
-    cc.dt_max = 20;
-    cc.kp_r_max = 100;
+    cc.dt_max = 0;
+    cc.kp_r_max = 10;
     cc.kp_d_max = 0.1; // 0.05;
     cc.cam = cam;
     cc.dist_w_kp = dist_w_kp;
-    cc.num_sift_pts = 1000;
+    cc.num_sift_pts = 10;
 
-    for (int k = 0; k < 100; k++) {
+    for (int k = 0; k < 150; k++) {
 
-        double t = k * 0.2;
+        double t = k * 1;
 
         if (k > 0) {
 
@@ -218,7 +218,7 @@ void test_accis(filter::base& filt, const std::string& dir) {
         if ((k % 5) == 0)
             std::cout << "T = " << t << " s" << std::endl;
         
-        if (k == 25 || k == 75) {
+        if (true) {
             
             cv::Mat img1 = cam.real_image(t, states1_tru.back());
             cv::Mat img2 = cam.real_image(t, states2_tru.back());
