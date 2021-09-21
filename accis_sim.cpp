@@ -37,8 +37,8 @@ void run_accis_sim(const time_info& t_info, filter::base& filt,
     }
 
     // Times
-    vec<> times;
-    times.setLinSpaced(t_info.num_steps+1, 0,
+    vec<> t;
+    t.setLinSpaced(t_info.num_steps+1, 0,
             t_info.num_steps * t_info.step_size);
 
     // Iterate over time steps
@@ -51,7 +51,8 @@ void run_accis_sim(const time_info& t_info, filter::base& filt,
             if (k > 0) {
 
                 // Propagate satellite state
-                sat_state xi = states_tru[i].back();
+                sat_state xi = state_tru[i].back();
+                sat_state xf = xi.propagate(t(k-1), t(k));
 
                 // Filter prediction
 
@@ -74,7 +75,7 @@ void run_accis_sim(const time_info& t_info, filter::base& filt,
         std::string results_file = "results/" + results_dir + "sat_"
             + std::to_string(i+1) + "_" + filt_name + "_"
             + std::to_string(trial_no);
-        sat_state_save(results_file, times, state_tru[i], state_est[i]);  
+        sat_state_save(results_file, t, state_tru[i], state_est[i]);  
     }
 
 }
