@@ -1,5 +1,7 @@
 cmake_minimum_required(VERSION 3.10)
 
+project(ACCIS CXX)
+
 enable_language(Fortran)
 
 set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -std=legacy -g -O3")
@@ -16,14 +18,17 @@ find_package(Java REQUIRED)
 find_package(JNI REQUIRED)
 find_package(OpenCV REQUIRED)
 find_package(GDAL REQUIRED)
+find_package(PythonLibs REQUIRED)
 
-project(ACCIS)
+include_directories(${PYTHON_INCLUDE_DIRS})
+find_package(pybind11 CONFIG REQUIRED)
 
 include(UseJava)
 
 include_directories(${JNI_INCLUDE_DIRS})
 include_directories(${OpenCV_INCLUDE_DIRS})
 include_directories(${GDAL_INCLUDE_DIRS})
+include_directories(${PYTHON_INCLUDE_DIRS})
 include_directories(.)
 include_directories(roam)
 #add Eigen and OpenCV include paths here if not installed in standard locations
@@ -33,8 +38,13 @@ add_jar(Landsat SOURCES Landsat.java INCLUDE_JARS WorldWindJava.jar)
 FILE(GLOB ACCIS_SRC *.cpp)
 FILE(GLOB ROAM_SRC roam/*.f)
 
-add_executable(accis ${ROAM_SRC} ${ACCIS_SRC})
+pybind11_add_module(accis ${ROAM_SRC} ${ACCIS_SRC})
 
-target_link_libraries(accis ${OpenCV_LIBS})
-target_link_libraries(accis ${GDAL_LIBRARIES})
-target_link_libraries(accis ${JNI_LIBRARIES})
+target_link_libraries(accis PRIVATE ${OpenCV_LIBS})
+target_link_libraries(accis PRIVATE ${GDAL_LIBRARIES})
+target_link_libraries(accis PRIVATE ${JNI_LIBRARIES})
+target_link_libraries(accis PRIVATE ${PYTHON_LIBRARIES})
+
+set_target_properties(accis PROPERTIES PREFIX "")
+set_target_properties(accis PROPERTIES OUTPUT_NAME "accis")
+set_target_properties(accis PROPERTIES SUFFIX ".so")
