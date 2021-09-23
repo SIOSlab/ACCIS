@@ -1,7 +1,6 @@
 #include <sat_state.hpp>
 
 #include <angles.hpp>
-#include <eigen_csv.hpp>
 #include <roam.h>
 
 #include <cmath>
@@ -155,32 +154,3 @@ mat<> sat_state_randomizer::cov() {
     p.segment<sat_state::ND>(18).setConstant(stdc);
     return p.cwiseAbs2().asDiagonal();
 } 
-
-void sat_state_save(const std::string& filename,
-        const std::vector<double>& time,
-        const std::vector<sat_state>& states_tru,
-        const std::vector<filter::dist>& states_est) {
-
-    const int N = sat_state::N;
-    const int M = sat_state_err::N;
-
-    int K = time.size();
-
-    mat<> xtru(K, N+1), xest(K, N+1), xerr(K, M+1);
-
-    for (int k = 0; k < K; k++) {
-        xtru(k, 0) = time[k];
-        xest(k, 0) = time[k];
-        xerr(k, 0) = time[k];
-        xtru.row(k).tail(N) = states_tru[k].X;
-        xest.row(k).tail(N) = states_est[k].mean;
-        xerr.row(k).tail(M) = sat_state_err::diff(states_tru[k].X,
-                states_est[k].mean).dX;
-    }
-
-    eigen_csv::write(xtru, filename + "_tru.csv");
-    eigen_csv::write(xest, filename + "_est.csv");
-    eigen_csv::write(xerr, filename + "_err.csv");
-
-}
-
