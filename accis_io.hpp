@@ -7,11 +7,11 @@
 #include <vector>
 
 struct sim_info {
-    int num_steps;
+    int num_steps = 100;
 };
 
 struct sat_info {
-    int sat_no;
+    std::string filter_type = "UKF";
 };
 
 struct sat_results {
