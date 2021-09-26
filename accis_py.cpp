@@ -1,16 +1,19 @@
-#include "accis_io.hpp"
-#include "accis_sim.hpp"
+#include "accis.hpp"
 
-#include <pybind11/eigen.h>
 #include <pybind11/pybind11.h>
+#include <pybind11/eigen.h>
 #include <pybind11/stl.h>
 
 namespace py = pybind11;
 
 PYBIND11_MODULE(accis, a) {
-    
-    py::class_<sat_info>(a, "sat_info", py::dynamic_attr())
+
+    py::class_<accis_sat>(a, "sat")
         .def(py::init<>())
-        .def_readwrite("filter_type", &sat_info::filter_type);
+        .def("set_param",   &accis_sat::set_param)
+        .def("get_param",   &accis_sat::get_param)
+        .def("get_results", &accis_sat::get_results);
+
+    a.def("run", &accis_run);
 
 }
