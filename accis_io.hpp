@@ -15,7 +15,7 @@ struct sat_info {
 };
 
 struct sat_results {
-    int num_steps;
+    int num_steps = 100;
 };
 
 #endif

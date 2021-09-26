@@ -22,6 +22,8 @@ class accis_sat {
 
         std::shared_ptr<filter::base> filt;
 
+        static void show_error(const std::string& msg);
+
 };
 
 #endif

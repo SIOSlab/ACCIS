@@ -1,5 +1,9 @@
 import build.accis as accis
 
-sat = accis.satellite({}, {});
+sat_i = accis.sat_info()
 
-sat.step();
+d = sat_i.__dict__
+
+print(d)
+
+
