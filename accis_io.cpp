@@ -1,5 +1,7 @@
 #include "accis.hpp"
 
+#include <iostream>
+
 accis_sat::accis_sat() {
     setup();
 }
@@ -21,4 +23,9 @@ pydict::dict accis_sat::get_results() {
     
     return d;
 
+}
+
+void show_error(const std::string& msg) {
+    std::cout << msg << std::endl;
+    exit(EXIT_FAILURE);
 }

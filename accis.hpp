@@ -7,6 +7,8 @@
 #include "sat_cam.hpp"
 #include "sat_state.hpp"
 
+#include <memory>
+#include <string>
 #include <vector>
 
 class accis_sat {
@@ -42,6 +44,9 @@ class accis_sat {
         // State estimates
         std::vector<filter::dist> states_est;
 
+        // Filter
+        std::shared_ptr<filter::base> filt;
+
         // Camera model
         sat_cam cam;
 
@@ -61,5 +66,7 @@ class accis_sat {
 };
 
 void accis_run(std::vector<accis_sat>& sats, int steps);
+
+void show_error(const std::string& msg);
 
 #endif

@@ -1,8 +1,16 @@
 #include "accis.hpp"
 
+#include "ukf.hpp"
+
 void accis_sat::setup() {
 
     using namespace pydict;
+
+    std::string filter_type = getset<std::string>(par, "Filter Type", "UKF");
+    if (filter_type == "UKF")
+        filt.reset(new ukf());
+    else
+        show_error("Fiter Type " + filter_type + " not recognized");
 
     dt = getset<double>(par, "Time Step (s)", 0.1);
 
