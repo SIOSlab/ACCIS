@@ -13,30 +13,11 @@ const int sat_state_err::N;
 
 const int sat_state_err::ND;
 
-sat_state sat_state::propagate(double ti, double tf) {
+vec<> sat_dyn::propagate(double ti, double tf, cvec<> xi, cvec<> w) {
 
-    static const int dr = 1;
     static const int nt = 1;
 
-    static const double Fd[3] = {0, 0, 0};
-    static const double Td[3] = {0, 0, 0};
-
-    sat_state state_f(*this); 
-
-    roamos_("DR", &dr);
-    roamps_("FD", Fd);
-    roamps_("TD", Td); 
-
-    roam_(&ti, x(), &nt, &tf, state_f.x());
-
-    return state_f;
-
-}
-
-vec<> sat_dyn::f(double ti, double tf, cvec<> xi, cvec<> w) {
-
-    static const int dr = 0;
-    static const int nt = 1;
+    int dr = include_drag;
 
     vec<3> Fd, Td;
     Fd = w.head<3>();
@@ -53,6 +34,17 @@ vec<> sat_dyn::f(double ti, double tf, cvec<> xi, cvec<> w) {
 
     return Xf;
 
+}
+
+vec<> sat_dyn::propagate_random(double ti, double tf, cvec<> xi, rando& rnd) {
+    vec<6> w = rnd.mvn<6>();
+    w.head<3>() *= stdf;
+    w.tail<3>() *= stdt;
+    return propagate(ti, tf, xi, w);
+}
+
+vec<> sat_dyn::f(double ti, double tf, cvec<> xi, cvec<> w) {
+    return propagate(ti, tf, xi, w);
 }
 
 mat<> sat_dyn::cov() {

@@ -4,6 +4,8 @@ void accis_sat::setup() {
 
     using namespace pydict;
 
+    dt = getset<double>(par, "Time Step (s)", 0.1);
+
     cam.widp = getset<double>(par, "Camera Image Width (pixels)", 1000);
     cam.lenp = getset<double>(par, "Camera Image Length (pixels)", 1000);
     cam.u    = getset<double>(par, "Camera Focal Length (mm)", 2000);
@@ -20,5 +22,21 @@ void accis_sat::setup() {
 
     sat_state x0;
     x0.set_coe(orb);
+
+    dyn_tru.stdf = getset<double>(par,
+            "Disturbance Torque StD (N*m) - Ground Truth", 1);
+    dyn_tru.stdt = getset<double>(par,
+            "Disturbance Force StD (N) - Ground Truth", 0.1);
+    dyn_filt.stdf = getset<double>(par,
+            "Disturbance Torque StD (N*m) - Filter Model", 10);
+    dyn_filt.stdt = getset<double>(par,
+            "Disturbance Force StD (N) - Filter Model", 1);
+
+    dist_w = filter::dist(6);
+    dist_w.mean.setZero();
+    dist_w.cov = dyn_filt.cov();
+
+    int seed = getset<int>(par, "Random Number Generator Seed", 0);
+    rnd = rando(seed);    
 
 }

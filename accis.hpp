@@ -1,7 +1,9 @@
 #ifndef ACCIS_SAT_HPP
 #define ACCIS_SAT_HPP
 
+#include "filter.hpp"
 #include "pydict.hpp"
+#include "rando.hpp"
 #include "sat_cam.hpp"
 #include "sat_state.hpp"
 
@@ -35,10 +37,26 @@ class accis_sat {
         std::vector<double> times;
 
         // True states
-        std::vector<sat_state> x_tru;
+        std::vector<sat_state> states_tru;
+
+        // State estimates
+        std::vector<filter::dist> states_est;
 
         // Camera model
         sat_cam cam;
+
+        // Satellite dynamic model (ground truth propagation & filtering)
+        sat_dyn dyn_tru;
+        sat_dyn dyn_filt;
+
+        // Distribution of satellite process noise for filtering
+        filter::dist dist_w;
+
+        // Time step
+        double dt;
+
+        // Random number generator
+        rando rnd;
 
 };
 

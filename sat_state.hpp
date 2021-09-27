@@ -70,8 +70,6 @@ class sat_state {
     void qb(const quat& q) { qbv() = q.coeffs(); }
     void qc(const quat& q) { qcv() = q.coeffs(); }
 
-    sat_state propagate(double ti, double tf);
-
     void set_coe(const coe& coe_in);
 
     void set_nadir();
@@ -135,6 +133,12 @@ class sat_dyn : public filter::dyn {
     public:
 
     double stdf, stdt;
+
+    bool include_drag;
+
+    vec<> propagate(double ti, double tf, cvec<> xi, cvec<> w);
+
+    vec<> propagate_random(double ti, double tf, cvec<> xi, rando& rnd);
 
     virtual vec<> f(double ti, double tf, cvec<> xi, cvec<> w);
 
