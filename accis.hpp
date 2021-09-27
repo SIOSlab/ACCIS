@@ -2,6 +2,8 @@
 #define ACCIS_SAT_HPP
 
 #include "pydict.hpp"
+#include "sat_cam.hpp"
+#include "sat_state.hpp"
 
 #include <vector>
 
@@ -27,7 +29,16 @@ class accis_sat {
         void setup();
 
         // Input parameters
-        pydict::dict param;
+        pydict::dict par;
+
+        // Times
+        std::vector<double> times;
+
+        // True states
+        std::vector<sat_state> x_tru;
+
+        // Camera model
+        sat_cam cam;
 
 };
 

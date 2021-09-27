@@ -1,12 +1,13 @@
 import build.accis as accis
 
+import json
+
 sat1 = accis.sat();
 sat2 = accis.sat();
 
-d = sat1.get_results();
+d1 = sat1.get_param();
 
-print(d)
+with open('sat1.json', 'w') as fp:
+    json.dump(d1, fp, sort_keys=True, indent=4)
 
-sat1.set_param(d);
 
-accis.run([sat1, sat2], 3);
