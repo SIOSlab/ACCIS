@@ -8,6 +8,10 @@ void accis_sat::setup() {
 
     using namespace pydict;
 
+    step_no = 0;
+
+    sat_id = getset<std::string>(par, "Satellite ID", "XXX");
+
     int seed = getset<int>(par, "Random Number Generator Seed", 0);
     rnd = rando(seed);    
 
@@ -82,5 +86,9 @@ void accis_sat::setup() {
     dist_w = filter::dist(6);
     dist_w.mean.setZero();
     dist_w.cov = dyn_filt.cov();
+
+    cadence_gps = getset<int>(par, "GPS Measurement Cadence", 10);
+    cadence_str = getset<int>(par, "Star Tracker Measurement Cadence", 10);
+    cadence_img = getset<int>(par, "Imaging Cadence", 10);
 
 }

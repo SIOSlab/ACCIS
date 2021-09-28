@@ -35,6 +35,12 @@ class accis_sat {
         // Input parameters
         pydict::dict par;
 
+        // Satellite ID
+        std::string sat_id;
+        
+        // Current time step
+        int step_no;
+
         // Times
         std::vector<double> times;
 
@@ -62,6 +68,11 @@ class accis_sat {
 
         // Random number generator
         rando rnd;
+
+        // Cadences for GPS, star tracker, and imaging
+        int cadence_gps;
+        int cadence_str;
+        int cadence_img;
 
 };
 

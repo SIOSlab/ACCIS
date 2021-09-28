@@ -19,11 +19,9 @@ pydict::dict accis_sat::get_results() {
 
     pydict::dict d;
 
-    int steps = times.size() - 1;
-
-    mat<> x_tru(steps, sat_state::N), x_est(steps, sat_state::N);
-    vec<> t(steps);
-    for (int k = 0; k < steps; k++) {
+    mat<> x_tru(step_no, sat_state::N), x_est(step_no, sat_state::N);
+    vec<> t(step_no);
+    for (int k = 0; k < step_no; k++) {
         x_tru.row(k) = states_tru[k].X;
         x_est.row(k) = states_est[k].mean;
         t(k) = times[k];

@@ -1,5 +1,10 @@
 #include "accis.hpp"
 
+#include <opencv2/core.hpp>
+#include <opencv2/imgcodecs.hpp> 
+
+#include <string>
+
 void accis_sat::step() {
 
     // Get current time
@@ -16,9 +21,20 @@ void accis_sat::step() {
     // Update state estimate -- Star tracker
     
     // Update state estimate -- Image-based
-   
+    if (step_no % cadence_img == 0) {
+
+        cv::Mat image = cam.real_image(t, x_tru);
+
+        cv::imwrite("images/pic_" + sat_id + "_" +
+                std::to_string(step_no) + ".png", image);
+
+    }
+
+    // Update step
+    step_no++;
+
     // Get next time
-    double t_next = t + dt;
+    double t_next = step_no * dt;
     times.push_back(t_next);
         
     // Propagate true state
