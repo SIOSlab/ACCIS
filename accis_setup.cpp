@@ -1,6 +1,7 @@
 #include "accis.hpp"
 
 #include "angles.hpp"
+#include "house.hpp"
 #include "mat.hpp"
 #include "ukf.hpp"
 
@@ -18,6 +19,8 @@ void accis_sat::setup() {
     std::string filter_type = getset<std::string>(par, "Filter Type", "UKF");
     if (filter_type == "UKF")
         filt.reset(new ukf());
+    else if (filter_type == "HOUSE")
+        filt.reset(new house());
     else
         show_error("Fiter Type " + filter_type + " not recognized");
 
@@ -86,9 +89,34 @@ void accis_sat::setup() {
     dist_w = filter::dist(6);
     dist_w.mean.setZero();
     dist_w.cov = dyn_filt.cov();
+    vec<> skew_w(6), kurt_w(6);
+    skew_w.setZero();
+    kurt_w.setConstant(3);
+    dist_w.par.push_back(skew_w);
+    dist_w.par.push_back(kurt_w);
 
     cadence_gps = getset<int>(par, "GPS Measurement Cadence", 10);
     cadence_str = getset<int>(par, "Star Tracker Measurement Cadence", 10);
     cadence_img = getset<int>(par, "Imaging Cadence", 10);
+
+    gps_err = filter::dist(6);
+    str_err = filter::dist(3);
+
+    gps_err.mean.setZero();
+    str_err.mean.setZero();
+    gps_err.cov = h_gps.cov();
+    str_err.cov = h_str.cov();
+    
+    vec<> skew_gps(6), kurt_gps(6);
+    skew_gps.setZero();
+    kurt_gps.setConstant(3);
+    gps_err.par.push_back(skew_gps);
+    gps_err.par.push_back(kurt_gps); 
+
+    vec<> skew_str(3), kurt_str(3);
+    skew_str.setZero();
+    kurt_str = sat_meas::star_tracker::kurt();
+    str_err.par.push_back(skew_str);
+    str_err.par.push_back(kurt_str);
 
 }

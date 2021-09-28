@@ -5,6 +5,7 @@
 #include "pydict.hpp"
 #include "rando.hpp"
 #include "sat_cam.hpp"
+#include "sat_meas.hpp"
 #include "sat_state.hpp"
 
 #include <memory>
@@ -73,6 +74,14 @@ class accis_sat {
         int cadence_gps;
         int cadence_str;
         int cadence_img;
+
+        // GPS & star tracker measurement models
+        sat_meas::gps h_gps;
+        sat_meas::star_tracker h_str;
+
+        // GPS & star tracker error distributions
+        filter::dist gps_err;
+        filter::dist str_err;
 
 };
 

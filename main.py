@@ -18,3 +18,4 @@ sats = [sat1, sat2]
 
 accis_run(sats, 10)
 
+print(sat1.get_results())

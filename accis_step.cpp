@@ -17,8 +17,22 @@ void accis_sat::step() {
     filter::dist dist_x = states_est.back();
 
     // Update state estimate -- GPS
-    
+    if (step_no % cadence_gps == 0) {
+
+        vec<> z = h_gps.H(t, x_tru.X, rnd);
+
+        dist_x = filt->update(t, z, dist_x, gps_err, h_gps);
+
+    }
+
     // Update state estimate -- Star tracker
+    if (step_no % cadence_str == 0) {
+
+        vec<> z = h_str.H(t, x_tru.X, rnd);
+
+        dist_x = filt->update(t, z, dist_x, str_err, h_str);
+
+    }
     
     // Update state estimate -- Image-based
     if (step_no % cadence_img == 0) {
