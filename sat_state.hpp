@@ -1,9 +1,9 @@
 #ifndef SAT_STATE_HPP
 #define SAT_STATE_HPP
 
-#include <filter.hpp>
-#include <mat.hpp>
-#include <rando.hpp>
+#include "filter.hpp"
+#include "mat.hpp"
+#include "rando.hpp"
 
 #include <string>
 #include <vector>
