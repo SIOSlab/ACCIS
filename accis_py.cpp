@@ -12,8 +12,8 @@ PYBIND11_MODULE(accis, a) {
         .def(py::init<>())
         .def("set_param",   &accis_sat::set_param)
         .def("get_param",   &accis_sat::get_param)
-        .def("get_results", &accis_sat::get_results);
-
-    a.def("run", &accis_run);
+        .def("get_results", &accis_sat::get_results)
+        .def("step",        &accis_sat::step)
+        .def("transmit",    &accis_sat::transmit);
 
 }

@@ -65,8 +65,6 @@ class accis_sat {
 
 };
 
-void accis_run(std::vector<accis_sat>& sats, int steps);
-
 void show_error(const std::string& msg);
 
 #endif

@@ -2,3 +2,4 @@ build/*
 images/*
 plots/*
 results/*
+__pycache__/*

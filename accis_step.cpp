@@ -19,7 +19,8 @@ void accis_sat::step() {
    
     // Get next time
     double t_next = t + dt;
-
+    times.push_back(t_next);
+        
     // Propagate true state
     sat_state x_tru_next;
     x_tru_next.X = dyn_tru.propagate_random(t, t_next, x_tru.X, rnd);
