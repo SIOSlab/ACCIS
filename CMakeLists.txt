@@ -4,7 +4,7 @@ project(ACCIS CXX)
 
 enable_language(Fortran)
 
-set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -std=legacy -g -O3")
+set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -std=legacy -g -O3 -fno-strict-aliasing")
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -g -O3")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -O3")
 
