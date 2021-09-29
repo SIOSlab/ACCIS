@@ -47,8 +47,6 @@ filter::dist cross_cal::run(const transmission& query, filter::base& filt) {
 
     }
 
-    train.push_back(query);
-
     return dist_x;
 
 }

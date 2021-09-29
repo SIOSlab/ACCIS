@@ -36,13 +36,25 @@ void accis_sat::step() {
 
     }
     
-    // Update state estimate -- Image-based
+    // Imaging & cross-calibration
     if (step_no % cadence_img == 0) {
 
+        // Get image
         cv::Mat image = cam.real_image(t, x_tru);
 
-        cv::imwrite("images/pic_" + sat_id + "_" +
+        // Save image
+        cv::imwrite("images/pic_sat_" + std::to_string(sat_id) + "_" +
                 std::to_string(step_no) + ".png", image);
+
+        // Populate transmission tr_last
+        tr_last.sat_id = sat_id;
+        tr_last.step = step_no;
+        tr_last.t = t;
+        tr_last.sift = cc.sift(image);
+        tr_last.dist_x = dist_x;
+
+        // Run image-based cross-calibration
+        dist_x = cc.run(tr_last, *filt);
 
     }
 

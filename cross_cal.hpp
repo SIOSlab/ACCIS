@@ -38,6 +38,8 @@ class cross_cal {
 
         int sat_id;
 
+        int step;
+
         double t;
 
         sift_pts sift;

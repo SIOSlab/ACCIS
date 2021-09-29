@@ -11,7 +11,7 @@ void accis_sat::setup() {
 
     step_no = 0;
 
-    sat_id = getset<std::string>(par, "Satellite ID", "XXX");
+    sat_id = getset<int>(par, "Satellite ID", 0);
 
     int seed = getset<int>(par, "Random Number Generator Seed", 0);
     rnd = rando(seed);    
@@ -127,5 +127,24 @@ void accis_sat::setup() {
         * getset<double>(par, "SMC Constant G", 1);
     att_ctrl.eps = getset<double>(par, "SMC Constant Epsilon", 1E-4);
     att_ctrl.k = getset<double>(par, "SMC Constant k", 1);
+
+    double std_kp = getset<double>(par, "Keypoint Error StD", 10); 
+    filter::dist dist_w_kp(2);
+    dist_w_kp.mean.setZero();
+    dist_w_kp.cov.setIdentity();
+    dist_w_kp.cov *= (std_kp * std_kp);
+    vec<2> skew_w_kp, kurt_w_kp;
+    skew_w_kp.setZero();
+    kurt_w_kp.setConstant(3);
+    dist_w_kp.par.push_back(skew_w_kp);
+    dist_w_kp.par.push_back(kurt_w_kp); 
+
+    cc.train.clear();
+    cc.dist_w_kp = dist_w_kp;
+    cc.num_sift_pts = getset<int>(par, "Number of SIFT Points", 1000);
+    cc.dt_max = getset<double>(par, "Cross Calibration Time Memory (s)", 3600); 
+    cc.kp_r_max = getset<double>(par, "Keypoint Max. Distance (pixels)", 100);
+    cc.kp_d_max = getset<double>(par, "Keypoint Max. Distance (deg)", 0.1);
+    cc.cam = cam;
 
 }

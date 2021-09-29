@@ -2,6 +2,7 @@
 #define ACCIS_SAT_HPP
 
 #include "attitude_smc.hpp"
+#include "cross_cal.hpp"
 #include "filter.hpp"
 #include "pydict.hpp"
 #include "rando.hpp"
@@ -38,7 +39,7 @@ class accis_sat {
         pydict::dict par;
 
         // Satellite ID
-        std::string sat_id;
+        int sat_id;
         
         // Current time step
         int step_no;
@@ -89,6 +90,12 @@ class accis_sat {
 
         // Principal moments of inertia
         vec<3> J;
+
+        // Cross-calibrator
+        cross_cal cc;
+
+        // Latest transmission
+        cross_cal::transmission tr_last;
 
 };
 
