@@ -1,5 +1,6 @@
 #include "accis.hpp"
 
+#include "format.hpp"
 #include "roam.h"
 
 #include <opencv2/core.hpp>
@@ -43,8 +44,8 @@ void accis_sat::step() {
         cv::Mat image = cam.real_image(t, x_tru);
 
         // Save image
-        cv::imwrite("images/pic_sat_" + std::to_string(sat_id) + "_" +
-                std::to_string(step_no) + ".png", image);
+        cv::imwrite("images/pic_sat_" + int2str0(sat_id, 3) + "_" +
+                int2str0(step_no, 6) + ".png", image);
 
         // Populate transmission tr_last
         tr_last.sat_id = sat_id;
