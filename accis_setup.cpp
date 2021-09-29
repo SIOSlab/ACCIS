@@ -119,4 +119,13 @@ void accis_sat::setup() {
     str_err.par.push_back(skew_str);
     str_err.par.push_back(kurt_str);
 
+    vec<3> J_default;
+    J_default << 100, 100, 100;
+    J = getset<vec<3>>(par, "Principal Moments of Inertia (kg*m^2)", J_default);
+    att_ctrl.J = J.asDiagonal();
+    att_ctrl.G = mat<3,3>::Identity()
+        * getset<double>(par, "SMC Constant G", 1);
+    att_ctrl.eps = getset<double>(par, "SMC Constant Epsilon", 1E-4);
+    att_ctrl.k = getset<double>(par, "SMC Constant k", 1);
+
 }

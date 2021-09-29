@@ -1,5 +1,7 @@
 #include "accis.hpp"
 
+#include "roam.h"
+
 #include <opencv2/core.hpp>
 #include <opencv2/imgcodecs.hpp> 
 
@@ -43,6 +45,15 @@ void accis_sat::step() {
                 std::to_string(step_no) + ".png", image);
 
     }
+
+    // Set attitude control torque
+    sat_state x_nadir;
+    x_nadir.X = dist_x.mean;
+    x_nadir.set_nadir();
+    vec<3> td = att_ctrl.control_torque(x_nadir.qb(), x_tru.qb(),
+           x_nadir.w(), x_tru.w(), vec<3>::Zero()); 
+    roamps_("TD", td.data());    
+    roamps_("JP", J.data()); 
 
     // Update step
     step_no++;

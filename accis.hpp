@@ -1,6 +1,7 @@
 #ifndef ACCIS_SAT_HPP
 #define ACCIS_SAT_HPP
 
+#include "attitude_smc.hpp"
 #include "filter.hpp"
 #include "pydict.hpp"
 #include "rando.hpp"
@@ -82,6 +83,12 @@ class accis_sat {
         // GPS & star tracker error distributions
         filter::dist gps_err;
         filter::dist str_err;
+
+        // Attitude control algorithm
+        attitude_smc att_ctrl;
+
+        // Principal moments of inertia
+        vec<3> J;
 
 };
 
