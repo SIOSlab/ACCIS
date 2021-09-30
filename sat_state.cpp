@@ -81,7 +81,7 @@ void sat_state::set_nadir() {
 
     quat qR(R);
 
-    qb(qR);
+    qb(qc().inverse() * qR);
 
     w() = -(h.norm() / r().squaredNorm()) * n2;
 
