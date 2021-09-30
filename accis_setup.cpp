@@ -24,7 +24,7 @@ void accis_sat::setup() {
     else
         show_error("Fiter Type " + filter_type + " not recognized");
 
-    dt = getset<double>(par, "Time Step (s)", 0.1);
+    dt = getset<double>(par, "Time Step (s)", 1);
 
     cam.widp = getset<double>(par, "Camera Image Width (pixels)", 1000);
     cam.lenp = getset<double>(par, "Camera Image Length (pixels)", 1000);
@@ -95,9 +95,9 @@ void accis_sat::setup() {
     dist_w.par.push_back(skew_w);
     dist_w.par.push_back(kurt_w);
 
-    cadence_gps = getset<int>(par, "GPS Measurement Cadence", 10);
-    cadence_str = getset<int>(par, "Star Tracker Measurement Cadence", 10);
-    cadence_img = getset<int>(par, "Imaging Cadence", 10);
+    cadence_gps = getset<int>(par, "GPS Measurement Cadence", 1);
+    cadence_str = getset<int>(par, "Star Tracker Measurement Cadence", 1);
+    cadence_img = getset<int>(par, "Imaging Cadence", 60);
 
     gps_err = filter::dist(6);
     str_err = filter::dist(3);
