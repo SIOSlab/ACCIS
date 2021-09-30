@@ -147,4 +147,6 @@ void accis_sat::setup() {
     cc.kp_d_max = getset<double>(par, "Keypoint Max. Distance (deg)", 0.1);
     cc.cam = cam;
 
+    max_blp = getset<double>(par, "Max. Percentage of Black Pixels", 5);
+
 }

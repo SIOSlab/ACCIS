@@ -5,6 +5,7 @@
 
 #include <opencv2/core.hpp>
 #include <opencv2/imgcodecs.hpp> 
+#include <opencv2/imgproc.hpp>
 
 #include <string>
 
@@ -43,19 +44,29 @@ void accis_sat::step() {
         // Get image
         cv::Mat image = cam.real_image(t, x_tru);
 
-        // Save image
-        cv::imwrite("images/pic_sat_" + int2str0(sat_id, 3) + "_" +
+        // Percentage of black pixels
+        cv::Mat gray;
+        cv::cvtColor(image, gray, cv::COLOR_RGB2GRAY);
+        double blp = 100.0 - (100.0 * cv::countNonZero(gray)) / gray.total();
+
+        // Process image
+        if (blp <= max_blp) {
+
+            // Save image
+            cv::imwrite("images/pic_sat_" + int2str0(sat_id, 3) + "_" +
                 int2str0(step_no, 6) + ".png", image);
 
-        // Populate transmission tr_last
-        tr_last.sat_id = sat_id;
-        tr_last.step = step_no;
-        tr_last.t = t;
-        tr_last.sift = cc.sift(image);
-        tr_last.dist_x = dist_x;
+            // Populate transmission tr_last
+            tr_last.sat_id = sat_id;
+            tr_last.step = step_no;
+            tr_last.t = t;
+            tr_last.sift = cc.sift(image);
+            tr_last.dist_x = dist_x;
 
-        // Run image-based cross-calibration
-        dist_x = cc.run(tr_last, *filt);
+            // Run image-based cross-calibration
+            dist_x = cc.run(tr_last, *filt);
+    
+        }
 
     }
 

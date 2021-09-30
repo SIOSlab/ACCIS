@@ -97,6 +97,9 @@ class accis_sat {
         // Latest transmission
         cross_cal::transmission tr_last;
 
+        // Maximum allowed percentage of black pixels
+        double max_blp;
+
 };
 
 void show_error(const std::string& msg);
