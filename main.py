@@ -15,6 +15,9 @@ p2 = sat2.get_param()
 p1["Satellite ID"] = 1
 p2["Satellite ID"] = 2
 
+p1["Orbit True Anomaly at Epoch (deg)"] = 0
+p2["Orbit True Anomaly at Epoch (deg)"] = 1
+
 sat1.set_param(p1)
 sat2.set_param(p2)
 

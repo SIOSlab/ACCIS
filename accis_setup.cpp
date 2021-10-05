@@ -13,7 +13,7 @@ void accis_sat::setup() {
 
     sat_id = getset<int>(par, "Satellite ID", 0);
 
-    int seed = getset<int>(par, "Random Number Generator Seed", 0);
+    int seed = getset<int>(par, "Random Number Generator Seed", sat_id);
     rnd = rando(seed);    
 
     std::string filter_type = getset<std::string>(par, "Filter Type", "UKF");
@@ -78,7 +78,7 @@ void accis_sat::setup() {
     times.push_back(0);
 
     dyn_tru.stdf = getset<double>(par,
-            "Disturbance Torque StD (N*m) - Ground Truth", 1);
+            "Disturbance Torque StD (N*m) - Ground Truth", 1E-3);
     dyn_tru.stdt = getset<double>(par,
             "Disturbance Force StD (N) - Ground Truth", 0.1);
     dyn_filt.stdf = getset<double>(par,
