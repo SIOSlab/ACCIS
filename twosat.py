@@ -1,10 +1,11 @@
 import numpy as np
 import matplotlib.pyplot as plt
+import pickle
 
 import build.accis as accis
 
 from accis_run import *
-from accis_plot_err import *
+from accis_save_results import *
 
 sat1 = accis.sat()
 sat2 = accis.sat()
@@ -25,4 +26,4 @@ sats = [sat1, sat2]
 
 accis_run(sats, 120)
 
-accis_plot_err(sats, 'plots/err.png')
+accis_save_results(sats)

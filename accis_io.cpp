@@ -19,14 +19,14 @@ pydict::dict accis_sat::get_results() {
 
     pydict::dict d;
 
-    mat<> x_tru(sat_state::N, step_no), x_est(sat_state::N, step_no);
+    mat<> x_tru(step_no, sat_state::N), x_est(step_no, sat_state::N);
     vec<> t(step_no);
-    mat<> x_err(sat_state_err::N, step_no); 
+    mat<> x_err(step_no, sat_state_err::N); 
     for (int k = 0; k < step_no; k++) {
-        x_tru.col(k) = states_tru[k].X;
-        x_est.col(k) = states_est[k].mean;
+        x_tru.row(k) = states_tru[k].X;
+        x_est.row(k) = states_est[k].mean;
         t(k) = times[k];
-        x_err.col(k) = sat_state_err::diff(states_tru[k].X,
+        x_err.row(k) = sat_state_err::diff(states_tru[k].X,
                 states_est[k].mean).dX;
     }
    
