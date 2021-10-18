@@ -14,10 +14,10 @@ set(accis CMAKE_CXX_STANDARD_REQUIRED ON)
 set(accis CMAKE_FORTRAN_STANDARD 77)
 set(accis CMAKE_FORTRAN_STANDARD_REQUIRED ON)
 
+find_package(Eigen3 3.3 REQUIRED NO_MODULE)
 find_package(Java REQUIRED)
 find_package(JNI REQUIRED)
 find_package(OpenCV REQUIRED)
-find_package(GDAL REQUIRED)
 find_package(PythonLibs REQUIRED)
 
 include_directories(${PYTHON_INCLUDE_DIRS})
@@ -27,11 +27,9 @@ include(UseJava)
 
 include_directories(${JNI_INCLUDE_DIRS})
 include_directories(${OpenCV_INCLUDE_DIRS})
-include_directories(${GDAL_INCLUDE_DIRS})
 include_directories(${PYTHON_INCLUDE_DIRS})
 include_directories(.)
 include_directories(roam)
-#add Eigen and OpenCV include paths here if not installed in standard locations
 
 add_jar(Landsat SOURCES Landsat.java INCLUDE_JARS WorldWindJava.jar)
 
@@ -40,8 +38,8 @@ FILE(GLOB ROAM_SRC roam/*.f)
 
 pybind11_add_module(accis ${ROAM_SRC} ${ACCIS_SRC})
 
+target_link_libraries(accis PRIVATE Eigen3::Eigen)
 target_link_libraries(accis PRIVATE ${OpenCV_LIBS})
-target_link_libraries(accis PRIVATE ${GDAL_LIBRARIES})
 target_link_libraries(accis PRIVATE ${JNI_LIBRARIES})
 target_link_libraries(accis PRIVATE ${PYTHON_LIBRARIES})
 
