@@ -1,7 +1,7 @@
 #ifndef ACCIS_SAT_HPP
 #define ACCIS_SAT_HPP
 
-#include "attitude_smc.hpp"
+#include "attitude_pd.hpp"
 #include "cross_cal.hpp"
 #include "filter.hpp"
 #include "pydict.hpp"
@@ -86,7 +86,7 @@ class accis_sat {
         filter::dist str_err;
 
         // Attitude control algorithm
-        attitude_smc att_ctrl;
+        attitude_pd att_ctrl;
 
         // Principal moments of inertia
         vec<3> J;

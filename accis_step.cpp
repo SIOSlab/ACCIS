@@ -71,12 +71,12 @@ void accis_sat::step() {
     }
 
     // Set attitude control torque
-    sat_state x_nadir;
-    x_nadir.X = dist_x.mean;
+    sat_state x_est, x_nadir;
+    x_est.X = dist_x.mean;
+    x_nadir = x_est;
     x_nadir.set_nadir();
-    vec<3> td = att_ctrl.control_torque(x_nadir.qb(), x_tru.qb(),
-           x_nadir.w(), x_tru.w(), vec<3>::Zero()); 
-    roamps_("TD", td.data());    
+    vec<3> tc = att_ctrl.tau(x_est.qb(), x_est.w(), x_nadir.qb(), x_nadir.w());
+    roamps_("TC", tc.data());    
     roamps_("JP", J.data()); 
 
     // Update step

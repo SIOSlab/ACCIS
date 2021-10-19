@@ -122,11 +122,8 @@ void accis_sat::setup() {
     vec<3> J_default;
     J_default << 100, 100, 100;
     J = getset<vec<3>>(par, "Principal Moments of Inertia (kg*m^2)", J_default);
-    att_ctrl.J = J.asDiagonal();
-    att_ctrl.G = mat<3,3>::Identity()
-        * getset<double>(par, "SMC Constant G", 1);
-    att_ctrl.eps = getset<double>(par, "SMC Constant Epsilon", 1E-4);
-    att_ctrl.k = getset<double>(par, "SMC Constant k", 1);
+    att_ctrl.kp = getset<double>(par, "PD Constant kp", 10);
+    att_ctrl.kd = getset<double>(par, "PD Constant kd", 100);
 
     double std_kp = getset<double>(par, "Keypoint Error StD", 10); 
     filter::dist dist_w_kp(2);
