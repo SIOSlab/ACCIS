@@ -3,7 +3,7 @@
     "Keypoint Max. Distance (pixels)": 100.0,
     "Keypoint Error StD": 10.0,
     "PD Constant kp": 10,
-    "Imaging Cadence": 600,
+    "Imaging Cadence": 60,
     "Camera Distortion Parameter StD": 0.01,
     "Principal Moments of Inertia (kg*m^2)": [
         100.0,
@@ -43,7 +43,7 @@
     "Cross Calibration Time Memory (s)": 3600.0,
     "Orbit Semi-Major Axis (km)": 6750.0,
     "Disturbance Force StD (N) - Filter Model": 1,
-    "PD Constant kd": 100,
+    "PD Constant kd": 200,
     "Disturbance Torque StD (N*m) - Filter Model": 0.01,
     "Camera Aperture (mm)": 500.0,
     "Star Tracker Measurement Cadence": 1
