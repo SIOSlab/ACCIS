@@ -1,6 +1,5 @@
 build/*
 images/*
 plots/*
-inputs/*
 results/*
 __pycache__/*
