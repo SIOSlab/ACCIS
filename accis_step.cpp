@@ -1,5 +1,6 @@
 #include "accis.hpp"
 
+#include "angles.hpp"
 #include "format.hpp"
 #include "roam.h"
 
@@ -78,6 +79,11 @@ void accis_sat::step() {
     vec<3> tc = att_ctrl.tau(x_est.qb(), x_est.w(), x_nadir.qb(), x_nadir.w());
     roamps_("TC", tc.data());    
     roamps_("JP", J.data()); 
+
+    sat_state x_tru_nadir = x_tru;
+    x_tru_nadir.set_nadir();
+    std::cout << "Attitude Error (deg) for Satellite " << sat_id << ": "
+       << rad2deg(x_tru.qb().angularDistance(x_tru_nadir.qb())) << std::endl; 
 
     // Update step
     step_no++;
