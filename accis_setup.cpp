@@ -78,13 +78,13 @@ void accis_sat::setup() {
     times.push_back(0);
 
     dyn_tru.stdf = getset<double>(par,
-            "Disturbance Torque StD (N*m) - Ground Truth", 1E-3);
+            "Disturbance Force StD (N) - Ground Truth", 1E-3);
     dyn_tru.stdt = getset<double>(par,
-            "Disturbance Force StD (N) - Ground Truth", 0.1);
+            "Disturbance Torque StD (N*m) - Ground Truth", 0.1);
     dyn_filt.stdf = getset<double>(par,
-            "Disturbance Torque StD (N*m) - Filter Model", 10);
+            "Disturbance Force StD (N) - Filter Model", 10);
     dyn_filt.stdt = getset<double>(par,
-            "Disturbance Force StD (N) - Filter Model", 1);
+            "Disturbance Torque StD (N*m) - Filter Model", 1);
 
     dist_w = filter::dist(6);
     dist_w.mean.setZero();
