@@ -50,12 +50,12 @@ void accis_sat::step() {
         cv::cvtColor(image, gray, cv::COLOR_RGB2GRAY);
         double blp = 100.0 - (100.0 * cv::countNonZero(gray)) / gray.total();
 
+        // Save image
+        cv::imwrite("images/pic_sat_" + int2str0(sat_id, 3) + "_" +
+            int2str0(step_no, 6) + ".png", image);
+        
         // Process image
         if (blp <= max_blp) {
-
-            // Save image
-            cv::imwrite("images/pic_sat_" + int2str0(sat_id, 3) + "_" +
-                int2str0(step_no, 6) + ".png", image);
 
             // Populate transmission tr_last
             tr_last.sat_id = sat_id;
@@ -82,8 +82,11 @@ void accis_sat::step() {
 
     sat_state x_tru_nadir = x_tru;
     x_tru_nadir.set_nadir();
-    std::cout << "Attitude Error (deg) for Satellite " << sat_id << ": "
-       << rad2deg(x_tru.qb().angularDistance(x_tru_nadir.qb())) << std::endl; 
+
+    if (step_no % 10 == 0)
+        std::cout << "Attitude Error (deg) for Satellite " << sat_id << ": "
+            << rad2deg(x_tru.qb().angularDistance(x_tru_nadir.qb()))
+            << std::endl; 
 
     // Update step
     step_no++;

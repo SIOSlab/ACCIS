@@ -25,6 +25,6 @@ sat2.set_param(p2)
 
 sats = [sat1, sat2]
 
-accis_run(sats, 300)
+accis_run(sats, 2*60*10)
 
 accis_save_results(sats)
