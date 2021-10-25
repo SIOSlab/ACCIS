@@ -9,15 +9,18 @@ ylabels = [
     'Angular Velocity Error (deg/s)',
     'Attitude Error (deg)',
     'Camera Attitude Error (deg)',
-    'Focal Length Error (mm)'
+    'Focal Length Error (mm)',
+    'Distortion Parameter c1 Error',
+    'Distortion Parameter c2 Error',
+    'Distortion Parameter c3 Error'
     ]
 
-fig, axs = plt.subplots(3, 2)
+fig, axs = plt.subplots(3, 3)
 
 for i in range(3) :
-    for j in range(2) :
+    for j in range(3) :
         for sat_id in sat_ids :
-            k = 2*i + j
+            k = 3*i + j
             t = np.genfromtxt(
                     "results/sat_" + str(sat_id) + "_time_s.csv",
                     delimiter=","
@@ -34,6 +37,6 @@ for i in range(3) :
         axs[i][j].set_yscale('log')
         axs[i][j].legend()
 
-fig.set_size_inches(8.5, 11)
+fig.set_size_inches(15, 12)
 fig.tight_layout()
 plt.savefig("plots/err.pdf")
