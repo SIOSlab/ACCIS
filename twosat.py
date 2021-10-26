@@ -9,7 +9,7 @@ p1 = sat.get_param()
 p2 = sat.get_param()
 
 p1["Orbit True Anomaly at Epoch (deg)"] = 0
-p2["Orbit True Anomaly at Epoch (deg)"] = 1
+p2["Orbit True Anomaly at Epoch (deg)"] = 0.5
 
 p1["Random Number Generator Seed"] = 1
 p2["Random Number Generator Seed"] = 2
@@ -25,6 +25,8 @@ sat2.set_param(p2)
 
 sats = [sat1, sat2]
 
-accis_run(sats, 2*60*5)
+t_mins = 30
+
+accis_run(sats, 2*60*t_mins)
 
 accis_save_results(sats)

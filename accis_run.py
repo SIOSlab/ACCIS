@@ -12,4 +12,5 @@ def accis_run(sat_list, num_steps) :
             for sat2 in sat_list :
                 sat1.transmit(sat2)
     tf = time.time()
-    print("Run Time: % s" % (tf - ti))
+    run_time = round((tf - ti) / 60, 1)
+    print("Run Time (min): %s" % run_time)

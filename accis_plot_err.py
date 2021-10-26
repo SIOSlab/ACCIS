@@ -25,6 +25,7 @@ for i in range(3) :
                     "results/sat_" + str(sat_id) + "_time_s.csv",
                     delimiter=","
                     )
+            t = t / 60
             err = np.genfromtxt(
                     "results/sat_" + str(sat_id) + "_state_error.csv",
                     delimiter=","
@@ -32,7 +33,7 @@ for i in range(3) :
             e = err[..., k]
             lbl = 'Satellite ' + str(sat_id)
             axs[i][j].plot(t, e, label = lbl)
-        axs[i][j].set_xlabel('Time (s)')
+        axs[i][j].set_xlabel('Time (min)')
         axs[i][j].set_ylabel(ylabels[k])
         axs[i][j].set_yscale('log')
         axs[i][j].legend()

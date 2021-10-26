@@ -20,7 +20,7 @@
     "Time Step (s)": 0.5,
     "Initial Angular Velocity StD (rad/s)": 0.0017453292519943296,
     "Random Number Generator Seed": 0,
-    "Orbit RAAN (deg)": 0.0,
+    "Orbit RAAN (deg)": -45,
     "Orbit Inclination (deg)": 0.0,
     "Satellite ID": 0,
     "Orbit Argument of Perigee (deg)": 0.0,
