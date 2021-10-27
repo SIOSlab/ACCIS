@@ -99,8 +99,6 @@ cross_cal::sift_match cross_cal::match(const cross_cal::transmission& query,
 
     matcher->knnMatch(query.sift.desc, train.sift.desc, dmatches, 1);
 
-    std::cout << "Number of keypoint matches: " << dmatches.size() << std::endl;
-
     sift_match smatch;
 
     smatch.num_pts = 0;
