@@ -25,7 +25,7 @@ sat2.set_param(p2)
 
 sats = [sat1, sat2]
 
-t_mins = 100
+t_mins = 300
 
 accis_run(sats, 2*60*t_mins)
 
