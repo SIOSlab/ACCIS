@@ -28,6 +28,7 @@ def accis_get_sat(filename) :
     return sat
 
 def accis_save_results(sats) :
+    print('-- Saving Results --')
     sat_ids = []
     for sat in sats :
         param = sat.get_param()

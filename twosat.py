@@ -25,8 +25,15 @@ sat2.set_param(p2)
 
 sats = [sat1, sat2]
 
-t_mins = 300
+t_mins = 10
 
-accis_run(sats, 2*60*t_mins)
+t_save = 2
+
+steps_per_min = 120
+
+steps = t_mins * steps_per_min
+save_cadence = t_save * steps_per_min
+
+accis_run(sats, steps, save_cadence)
 
 accis_save_results(sats)
