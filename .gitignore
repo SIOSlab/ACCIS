@@ -3,3 +3,4 @@ images/*
 plots/*
 results/*
 __pycache__/*
+archive/*
