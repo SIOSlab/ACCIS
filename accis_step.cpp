@@ -21,16 +21,28 @@ void accis_sat::step() {
     // Get current state estimate distribution
     filter::dist dist_x = states_est.back();
 
+    // Get position state distribution
+    filter::dist dist_pos(6);
+    dist_pos.mean = dist_x.mean.head<6>();
+    dist_pos.cov = dist_x.cov.topLeftCorner<6,6>();
+
     // Update state estimate -- GPS
     if (step_no % cadence_gps == 0) {
 
         vec<> z = h_gps.H(t, x_tru.X, rnd);
 
-        dist_x = filt->update(t, z, dist_x, gps_err, h_gps);
+        dist_pos = filt->update(t, z, dist_pos, gps_err, h_gps);
 
     }
 
+    dist_x.mean = x_tru.X;
+    dist_x.cov.setZero();
+
+    dist_x.mean.head<6>() = dist_pos.mean;
+    dist_x.cov.topLeftCorner<6,6>() = dist_pos.cov;
+
     // Update state estimate -- Star tracker
+    /*
     if (step_no % cadence_str == 0) {
 
         vec<> z = h_str.H(t, x_tru.X, rnd);
@@ -38,8 +50,10 @@ void accis_sat::step() {
         dist_x = filt->update(t, z, dist_x, str_err, h_str);
 
     }
-    
+    */
+
     // Imaging & cross-calibration
+    /*
     if (step_no % cadence_img == 0) {
 
         // Get image
@@ -70,6 +84,10 @@ void accis_sat::step() {
         }
 
     }
+    */
+
+    // Store updated state estimate
+    states_est.back() = dist_x;
 
     // Set attitude control torque
     sat_state x_est, x_nadir;
