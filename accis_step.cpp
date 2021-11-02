@@ -71,6 +71,9 @@ void accis_sat::step() {
 
     }
 
+    // Store updated state estimate
+    states_est.back() = dist_x;
+    
     // Set attitude control torque
     sat_state x_est, x_nadir;
     x_est.X = dist_x.mean;
