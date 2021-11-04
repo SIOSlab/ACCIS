@@ -82,8 +82,8 @@ dist ukf::join(const dist& dist1, const dist& dist2) {
 // Matrix square root
 mat<> ukf::mat_sqrt(cmat<> A) {
     using namespace Eigen;
-    //BDCSVD<mat<>> svd(A, ComputeFullU);
-    JacobiSVD<mat<>> svd(A, ComputeFullU);
+    BDCSVD<mat<>> svd(A, ComputeFullU);
+    //JacobiSVD<mat<>> svd(A, ComputeFullU);
     return svd.matrixU() * svd.singularValues().cwiseSqrt().asDiagonal();    
 }
 

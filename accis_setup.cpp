@@ -77,6 +77,9 @@ void accis_sat::setup() {
     times.clear();
     times.push_back(0);
 
+    dyn_tru.include_drag = true;
+    dyn_filt.include_drag = false;
+
     dyn_tru.stdf = getset<double>(par,
             "Disturbance Force StD (N) - Ground Truth", 1E-3);
     dyn_tru.stdt = getset<double>(par,

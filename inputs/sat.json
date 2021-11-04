@@ -17,7 +17,7 @@
     "Camera Image Width (pixels)": 1000.0,
     "Filter Type": "UKF",
     "Initial Velocity StD (km/s)": 0.1,
-    "Time Step (s)": 0.5,
+    "Time Step (s)": 0.1,
     "Initial Angular Velocity StD (rad/s)": 0.0017453292519943296,
     "Random Number Generator Seed": 0,
     "Orbit RAAN (deg)": -45,

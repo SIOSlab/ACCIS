@@ -8,6 +8,7 @@
 #include <opencv2/imgcodecs.hpp> 
 #include <opencv2/imgproc.hpp>
 
+#include <iostream>
 #include <string>
 
 void accis_sat::step() {
@@ -34,6 +35,9 @@ void accis_sat::step() {
         dist_pos = filt->update(t, z, dist_pos, gps_err, h_gps);
 
     }
+
+    //std::cout << dist_pos.cov << std::endl;
+    //std::cout << "------------------" << std::endl;
 
     dist_x.mean = x_tru.X;
     dist_x.cov.setZero();
