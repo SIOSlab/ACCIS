@@ -74,3 +74,18 @@ vec<3> star_tracker::kurt() {
     k(2) = 3;
     return k;
 }
+
+// Measurement with noise w
+vec<> gyro::h(double t, cvec<> x, cvec<> w) {
+    return x.segment<3>(ind_w) + w;
+}
+        
+// Measurement with randomly generated noise
+vec<> gyro::H(double t, cvec<> x, rando& rdo) {
+    return h(t, x, rdo.mvn<3>() * std_w); 
+}
+
+// Measurement noise covariance matrix
+mat<> gyro::cov() {
+    return std_w * std_w * mat<3,3>::Identity();
+}

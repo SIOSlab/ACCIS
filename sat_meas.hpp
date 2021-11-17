@@ -75,6 +75,33 @@ namespace sat_meas {
 
     };
 
+    class gyro : public filter::meas {
+
+        public:
+
+        // Indices of first component of angular velocity in state vector
+        int ind_w;
+
+        // Error standard deviation (rad/s)
+        double std_w;
+
+        // Measurement with noise w
+        virtual vec<> h(double t, cvec<> x, cvec<> w);
+        
+        // Measurement with randomly generated noise
+        vec<> H(double t, cvec<> x, rando& rdo);
+
+        // Measurement noise covariance matrix
+        mat<> cov();
+
+        // Constructor
+        gyro(double std_w_deg_s = 1, int ind_w_ = 1) :
+            ind_w(ind_w_),
+            std_w(deg2rad(std_w_deg_s))
+        {}
+
+    };
+
 }
 
 #endif
