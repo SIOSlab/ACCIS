@@ -4,6 +4,7 @@
 #include "filter.hpp"
 #include "mat.hpp"
 #include "rando.hpp"
+#include "rodrigues.hpp"
 
 #include <string>
 #include <vector>
@@ -40,7 +41,7 @@ class sat_state {
 
     static const int ND = 3;
 
-    static const int N = 18 + ND; 
+    static const int N = 16 + ND; 
 
     vec<N> X;
 
@@ -48,27 +49,35 @@ class sat_state {
 
     const double* x() const { return X.data(); }
 
-    rvec<3> r  () { return X.head<3>();      }
-    rvec<3> v  () { return X.segment<3>(3);  }
-    rvec<3> w  () { return X.segment<3>(6);  }
-    rvec<4> qbv() { return X.segment<4>(9);  }
-    rvec<4> qcv() { return X.segment<4>(13); }
-    double& f  () { return X(17);            }
-    rvec<ND> c () { return X.tail<ND>();     }
+    rvec<3> r () { return X.head<3>();      }
+    rvec<3> v () { return X.segment<3>(3);  }
+    rvec<3> w () { return X.segment<3>(6);  }
+    rvec<3> pb() { return X.segment<3>(9);  }
+    rvec<3> pc() { return X.segment<3>(12); }
+    double& f () { return X(15);            }
+    rvec<ND> c() { return X.tail<ND>();     }
 
     cvec<3> r      () const { return X.head<3>();      }
     cvec<3> v      () const { return X.segment<3>(3);  }
     cvec<3> w      () const { return X.segment<3>(6);  }
-    cvec<4> qbv    () const { return X.segment<4>(9);  }
-    cvec<4> qcv    () const { return X.segment<4>(13); }
-    const double& f() const { return X(17);            }
+    cvec<3> pb     () const { return X.segment<3>(9);  }
+    cvec<3> pc     () const { return X.segment<3>(12); }
+    const double& f() const { return X(15);            }
     cvec<ND> c     () const { return X.tail<ND>();     }
     
-    quat qb() const { quat q(qbv()); q.normalize(); return q; }
-    quat qc() const { quat q(qcv()); q.normalize(); return q; }
+    quat qa() const;
+    quat qb() const { return rod2quat(pb()) * qa(); }
+    quat qc() const { return rod2quat(pc());        }
 
-    void qb(const quat& q) { qbv() = q.coeffs(); }
-    void qc(const quat& q) { qcv() = q.coeffs(); }
+    vec<4> qva() const { return qa().coeffs(); }
+    vec<4> qvb() const { return qb().coeffs(); }
+    vec<4> qvc() const { return qc().coeffs(); }
+
+    void qb(const quat& q) { pb() = quat2rod(q * qa().conjugate()); }
+    void qc(const quat& q) { pc() = quat2rod(q);                    }
+
+    void qvb(cvec<4> qv) { quat q(qv); qb(q); } 
+    void qvc(cvec<4> qv) { quat q(qv); qc(q); } 
 
     void set_coe(const coe& coe_in);
 

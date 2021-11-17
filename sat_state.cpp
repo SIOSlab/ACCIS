@@ -27,12 +27,20 @@ vec<> sat_dyn::propagate(double ti, double tf, cvec<> xi, cvec<> w) {
     roamps_("FD", Fd.data());
     roamps_("TD", Td.data());
 
-    vec<> Xi = xi;
-    vec<> Xf = Xi;
+    sat_state s1, s2;
+    s1.X = xi;
+    s2.X = xi;
 
-    roam_(&ti, Xi.data(), &nt, &tf, Xf.data());
+    vec<13> xdi, xdf;
+    xdi.head<9>() = s1.X.head<9>(); 
+    xdi.tail<4>() = s1.qvb();
 
-    return Xf;
+    roam_(&ti, xdi.data(), &nt, &tf, xdf.data());
+
+    s2.X.head<9>() = xdf.head<9>();
+    s2.qvb(xdf.tail<4>());
+
+    return s2.X;
 
 }
 
@@ -65,7 +73,7 @@ coe sat_state::get_coe() {
     return coe_out;
 }
 
-void sat_state::set_nadir() {
+quat sat_state::qa() const {
 
     vec<3> n1, n2, n3, h;
 
@@ -79,11 +87,17 @@ void sat_state::set_nadir() {
 
     R << n1, n2, n3;
 
-    quat qR(R);
+    return quat(R);
 
-    qb(qc().inverse() * qR);
+}
 
-    w() = -(h.norm() / r().squaredNorm()) * qb().inverse()._transformVector(n2);
+void sat_state::set_nadir() {
+
+    qb(qc().conjugate() * qa());
+    
+    vec<3> h = r().cross(v());
+
+    w() = qb().conjugate()._transformVector(h) / r().squaredNorm();
 
 }
 
@@ -140,9 +154,9 @@ mat<> sat_state_randomizer::cov() {
     p.segment<3>(0).setConstant(stdr); 
     p.segment<3>(3).setConstant(stdv);
     p.segment<3>(6).setConstant(stdw);
-    p.segment<4>(9).setConstant(stdba);
-    p.segment<4>(13).setConstant(stdca);
-    p(17) = stdf;
-    p.segment<sat_state::ND>(18).setConstant(stdc);
+    p.segment<3>(9).setConstant(stdba);
+    p.segment<3>(12).setConstant(stdca);
+    p(15) = stdf;
+    p.segment<sat_state::ND>(16).setConstant(stdc);
     return p.cwiseAbs2().asDiagonal();
 } 

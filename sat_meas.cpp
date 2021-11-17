@@ -36,14 +36,14 @@ vec<> star_tracker::h(double t, cvec<> x, cvec<> w) {
                                     sin(w(0)) * vec<3>::UnitY()); 
 
     Eigen::AngleAxisd qba(w(1), n), qna(w(2), b);
+    quat qb(qba), qn(qna);
 
-    quat qtru(x.segment<4>(ind_q)), qb(qba), qn(qna);
+    sat_state s;
+    s.X = x;
+    quat qtru = s.qb(); 
+    s.qb(qtru * qn * qb);
 
-    quat qmeas = qtru * qn * qb;
-
-    qmeas.normalize();
-
-    return qmeas.coeffs(); 
+    return s.pb(); 
 
 }
 
