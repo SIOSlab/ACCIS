@@ -95,7 +95,7 @@ namespace sat_meas {
         mat<> cov();
 
         // Constructor
-        gyro(double std_w_deg_s = 0.01, int ind_w_ = 6) :
+        gyro(double std_w_deg_s = 0.001, int ind_w_ = 6) :
             ind_w(ind_w_),
             std_w(deg2rad(std_w_deg_s))
         {}
