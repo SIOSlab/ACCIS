@@ -39,6 +39,15 @@ void accis_sat::step() {
 
     }
     
+    // Update state estimate -- Gyroscope
+    if (step_no % cadence_gyr == 0) {
+
+        vec<> z = h_gyr.H(t, x_tru.X, rnd);
+
+        dist_x = filt->update(t, z, dist_x, str_err, h_gyr);
+
+    }
+
     // Imaging & cross-calibration
     if (step_no % cadence_img == 0) {
 

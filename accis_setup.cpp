@@ -97,15 +97,19 @@ void accis_sat::setup() {
 
     cadence_gps = getset<int>(par, "GPS Measurement Cadence", 1);
     cadence_str = getset<int>(par, "Star Tracker Measurement Cadence", 1);
+    cadence_gyr = getset<int>(par, "Gyroscope Measurement Cadence", 1);
     cadence_img = getset<int>(par, "Imaging Cadence", 60);
 
     gps_err = filter::dist(6);
     str_err = filter::dist(3);
+    gyr_err = filter::dist(3);
 
     gps_err.mean.setZero();
     str_err.mean.setZero();
+    gyr_err.mean.setZero();
     gps_err.cov = h_gps.cov();
     str_err.cov = h_str.cov();
+    gyr_err.cov = h_gyr.cov();
     
     vec<> skew_gps(6), kurt_gps(6);
     skew_gps.setZero();

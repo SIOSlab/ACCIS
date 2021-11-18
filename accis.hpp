@@ -72,18 +72,21 @@ class accis_sat {
         // Random number generator
         rando rnd;
 
-        // Cadences for GPS, star tracker, and imaging
+        // Cadences for measurements and imaging
         int cadence_gps;
         int cadence_str;
+        int cadence_gyr;
         int cadence_img;
 
-        // GPS & star tracker measurement models
+        // Measurement models
         sat_meas::gps h_gps;
         sat_meas::star_tracker h_str;
+        sat_meas::gyro h_gyr;
 
-        // GPS & star tracker error distributions
+        // Measurement error distributions
         filter::dist gps_err;
         filter::dist str_err;
+        filter::dist gyr_err;
 
         // Attitude control algorithm
         attitude_pd att_ctrl;
