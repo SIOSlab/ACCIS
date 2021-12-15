@@ -48,6 +48,7 @@ void accis_sat::step() {
 
     }
 
+    /*
     // Imaging & cross-calibration
     if (step_no % cadence_img == 0) {
 
@@ -79,6 +80,7 @@ void accis_sat::step() {
         }
 
     }
+    */
 
     // Store updated state estimate
     states_est.back() = dist_x;
