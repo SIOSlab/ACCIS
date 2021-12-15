@@ -28,8 +28,7 @@ mat<> gps::cov() {
 
 // Measurement function for attitude
 vec<> star_tracker::h(double t, cvec<> x, cvec<> w) {
-
-    /*    
+    
     quat bfs;
     bfs.setFromTwoVectors(vec<3>::UnitZ(), b); 
 
@@ -45,35 +44,34 @@ vec<> star_tracker::h(double t, cvec<> x, cvec<> w) {
     s.qb(qtru * qn * qb);
 
     return s.pb(); 
-    */
-
-    Eigen::AngleAxisd err(w.norm(), w.normalized());
-    quat qerr(err);
-
-    sat_state s;
-    s.X = x;
-    quat qtru = s.qb(); 
-    s.qb(qerr * qtru);
-
-    return s.pb(); 
 
 }
 
 // Generate measurement
 vec<> star_tracker::H(double t, cvec<> x, rando& rdo) {
-    return h(t, x, rdo.mvn<3>() * std_w); 
+    vec<3> w;
+    w(0) = M_PI     * rdo.unif();
+    w(1) = std_bor  * rdo.norm();
+    w(2) = std_nrm  * rdo.norm();
+    return h(t, x, w);
 }
 
 // Get noise covariance matrix
 mat<> star_tracker::cov() {
-    return mat<3,3>::Identity() * std_w * std_w;
+    vec<3> d;
+    d(0) = M_PI * M_PI * rando::unif_var;
+    d(1) = std_bor * std_bor;
+    d(2) = std_nrm * std_nrm;
+    return d.asDiagonal();    
 }
 
 
 // Noise kurtosis
 vec<3> star_tracker::kurt() {
     vec<3> k;
-    k.setConstant(3);
+    k(0) = rando::unif_kurt;
+    k(1) = 3;
+    k(2) = 3;
     return k;
 }
 

@@ -52,12 +52,19 @@ namespace sat_meas {
         // Get noise covariance matrix
         mat<> cov(); 
 
-        // Error standard deviation (rad)
-        double std_w;
+        // Boresight & normal error standard deviation (rad)
+        double std_bor;
+        double std_nrm; 
+
+        // Boresight vector
+        vec<3> b;
 
         // Constructor
-        star_tracker(double std_w_arcsec = 10) :
-            std_w(sec2rad(std_w_arcsec))
+        star_tracker(double std_bor_arcsec = 70, double std_nrm_arcsec = 5,
+                cvec<3> b_ = -vec<3>::UnitZ()) :
+           std_bor(sec2rad(std_bor_arcsec)),
+           std_nrm(sec2rad(std_nrm_arcsec)),
+           b(b_)
         {}
 
         // Noise kurtosis
