@@ -60,7 +60,7 @@ namespace sat_meas {
         vec<3> b;
 
         // Constructor
-        star_tracker(double std_bor_arcsec = 70, double std_nrm_arcsec = 5,
+        star_tracker(double std_bor_arcsec = 22, double std_nrm_arcsec = 3.1,
                 cvec<3> b_ = -vec<3>::UnitZ()) :
            std_bor(sec2rad(std_bor_arcsec)),
            std_nrm(sec2rad(std_nrm_arcsec)),
