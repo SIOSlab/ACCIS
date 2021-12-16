@@ -47,7 +47,8 @@ void accis_sat::step() {
         dist_x = filt->update(t, z, dist_x, str_err, h_gyr);
 
     }
-
+    
+    /*
     // Imaging & cross-calibration
     if (step_no % cadence_img == 0) {
 
@@ -79,6 +80,7 @@ void accis_sat::step() {
         }
 
     }
+    */
 
     // Store updated state estimate
     states_est.back() = dist_x;
