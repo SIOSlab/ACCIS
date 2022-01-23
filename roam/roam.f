@@ -86,9 +86,8 @@
 *  Gravitational accelerations
       DOUBLE PRECISION GECI(3), GECEF(3)
 
-*  Air density, velocity, & drag
-      DOUBLE PRECISION RHO, VA(3), VANORM, DRAGR
-      REAL DENSTY
+*  Ballistic coefficient & specific drag force
+      DOUBLE PRECISION BC, FSDR(3)
 
 *  Parameters & Options
       INCLUDE 'roampar.fi'
@@ -124,16 +123,12 @@
       ATOT(3) = ATOT(3) + GECI(3)
 
 *  Drag force
-      IF (DR .NE. 0) THEN  
-          RHO = DENSTY(UT, RECEF, DF, AF, AP)
-          VA(1) = X(4) + WE*RECI(2)
-          VA(2) = X(5) - WE*RECI(1)
-          VA(3) = X(6)
-          VANORM = DSQRT(VA(1)**2 + VA(2)**2 + VA(3)**2)
-          DRAGR = 1D3 * AS * CD * RHO * VANORM / (2 * MS)
-          ATOT(1) = ATOT(1) - DRAGR*VA(1)
-          ATOT(2) = ATOT(2) - DRAGR*VA(2)
-          ATOT(3) = ATOT(3) - DRAGR*VA(3)
+      IF (DR .NE. 0) THEN
+          BC = MS / (CD * AS) 
+          CALL DRAGFS(T0, UTL, X(1), X(4), BC, FSDR)
+          ATOT(1) = ATOT(1) + FSDR(1)
+          ATOT(2) = ATOT(2) + FSDR(2)
+          ATOT(3) = ATOT(3) + FSDR(3)
       ENDIF
 
 *  Lunar gravity -- TO DO
