@@ -35,5 +35,5 @@ The following third-party tools and data are included in this repository:
     - Source code: https://github.com/nasa/World-Wind-Java
     - License: https://worldwind.arc.nasa.gov/LICENSE.html
 - NOVAS: Naval Observatory Vector Astronomy Subroutines (https://ui.adsabs.harvard.edu/abs/2012IAUJD...7P..24K/abstract)
-- NRLMSISE-00 Atmospheric Model (https://ccmc.gsfc.nasa.gov/modelweb/atmos/nrlmsise00.html)
+- JB2008 Atmospheric Model (http://sol.spacenvironment.net/~JB2008/)
 - RKSUITE ODE Solver (http://www.netlib.org/ode/rksuite)
