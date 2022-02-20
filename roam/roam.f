@@ -300,7 +300,7 @@
 
       INCLUDE 'roamopt.fi'
       
-      DATA TL /-12/, TH /-20/,
+      DATA TL /-9/, TH /-20/,
      &  GD /10/, LG /1/, SG /1/, DR /1/
 
       END
