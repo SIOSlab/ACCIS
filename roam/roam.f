@@ -23,14 +23,8 @@
       EXTERNAL ROAMF
 
 *  ODE Solver Arguments
-      PARAMETER(ITOL = 1)
-      PARAMETER(ITASK = 1)
-      PARAMETER(IOPT = 0)
-      PARAMETER(LRW = 20+16*NX)
-      PARAMETER(LIW = 20)
-      PARAMETER(MF = 10)
-      DIMENSION RWORK(LRW)
-      DIMENSION IWORK(LIW)
+      DIMENSION RWORK(100+21*NX)
+      DIMENSION IWORK(5)
       DIMENSION XK(NX)
 
 *  Options
@@ -45,14 +39,15 @@
           XK(I) = XI(I)
       ENDDO
       TK = TI
-      ISTATE = 1
+      IFLAG = 1
       RWORK = 0
       IWORK = 0
 
 *  Run ODE solver
       DO K = 1,NT
-          CALL DLSODE(ROAMF, NX, XK, TK, T(K), ITOL, RTOL, ATOL, ITASK,
-     &        ISTATE, IOPT, RWORK, LRW, IWORK, LIW, ROAMF, MF) 
+          CALL ODE(ROAMF, NX, XK, TK, T(K), RTOL, ATOL, IFLAG,
+     &              RWORK, IWORK)
+          IF (IFLAG.NE.2) WRITE(*,*) 'IFLAG = ', IFLAG
           DO I = 1,NX
               X(I,K) = XK(I)
           ENDDO    
@@ -63,12 +58,11 @@
 
 *===============================================================================
 
-      SUBROUTINE ROAMF(NX, T, X, XD)
+      SUBROUTINE ROAMF(T, X, XD)
 
 *-------------------------------------------------------------------------------
 *                           State Derivative
-*  IN:  NX - Number of state components (should be 13)
-*       T  - Time (seconds since epoch T0)
+*  IN:  T  - Time (seconds since epoch T0)
 *       X  - State (see subroutine ROAM)
 *  OUT: XD - State derivative
 *-------------------------------------------------------------------------------
@@ -77,6 +71,7 @@
 
 *  State Dimension      
       INTEGER NX
+      PARAMETER(NX = 13)
 
 *  Arguments
       DOUBLE PRECISION T, X(NX), XD(NX)
@@ -300,8 +295,8 @@
 
       INCLUDE 'roamopt.fi'
       
-      DATA TL /-9/, TH /-20/,
-     &  GD /10/, LG /1/, SG /1/, DR /1/
+      DATA TL /-8/, TH /-8/,
+     &  GD /3/, LG /1/, SG /1/, DR /1/
 
       END
 
