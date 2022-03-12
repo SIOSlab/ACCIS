@@ -34,7 +34,7 @@ namespace sat_meas {
 
         // Constructor
         gps(int ind_r_ = 0, int ind_v_ = 3,
-                double std_r_ = 0.004, double std_v_ = 0.02E-3) :
+                double std_r_ = 0, double std_v_ = 0) :
                 ind_r(ind_r_), ind_v(ind_v_), std_r(std_r_), std_v(std_v_) {}
 
     };
@@ -60,7 +60,7 @@ namespace sat_meas {
         vec<3> b;
 
         // Constructor
-        star_tracker(double std_bor_arcsec = 22, double std_nrm_arcsec = 3.1,
+        star_tracker(double std_bor_arcsec = 0, double std_nrm_arcsec = 0,
                 cvec<3> b_ = -vec<3>::UnitZ()) :
            std_bor(sec2rad(std_bor_arcsec)),
            std_nrm(sec2rad(std_nrm_arcsec)),
