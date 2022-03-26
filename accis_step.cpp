@@ -49,7 +49,7 @@ void accis_sat::step() {
     }
 
     // Imaging & cross-calibration
-    if (step_no % cadence_img == 0) {
+    if (cadence_img != 0 && step_no % cadence_img == 0) {
 
         // Get image
         cv::Mat image = cam.real_image(t, x_tru);
