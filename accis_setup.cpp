@@ -126,8 +126,15 @@ void accis_sat::setup() {
     vec<3> J_default;
     J_default << 100, 100, 100;
     J = getset<vec<3>>(par, "Principal Moments of Inertia (kg*m^2)", J_default);
+
     att_ctrl.kp = getset<double>(par, "PD Constant kp", 10);
     att_ctrl.kd = getset<double>(par, "PD Constant kd", 100);
+    att_ctrl.dt = dt;
+    att_ctrl.tc_ref = getset<double>(par,
+            "Reference Attitude Time Constant (s)", dt);
+    att_ctrl.tc_est = getset<double>(par,
+            "Estimated Attitude Time Constant (s)", dt);
+    att_ctrl.reset();
 
     double std_kp = getset<double>(par, "Keypoint Error StD", 10); 
     filter::dist dist_w_kp(2);
