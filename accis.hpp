@@ -103,6 +103,9 @@ class accis_sat {
         // Maximum allowed percentage of black pixels
         double max_blp;
 
+        // Attitude state errors
+        std::vector<vec<2>> att_err;
+
 };
 
 void show_error(const std::string& msg);

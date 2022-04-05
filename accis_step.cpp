@@ -95,10 +95,11 @@ void accis_sat::step() {
     sat_state x_tru_nadir = x_tru;
     x_tru_nadir.set_nadir();
 
-    if (step_no % 10 == 0)
-        std::cout << "Attitude Error (deg) for Satellite " << sat_id << ": "
-            << rad2deg(x_tru.qb().angularDistance(x_tru_nadir.qb()))
-            << std::endl; 
+    // Get pointing error
+    vec<2> att_err_k;
+    att_err_k.x() = rad2deg(x_tru.qb().angularDistance(x_tru_nadir.qb()));
+    att_err_k.y() = rad2deg((x_tru.w() - x_tru_nadir.w()).norm()); 
+    att_err.push_back(att_err_k);
 
     // Update step
     step_no++;

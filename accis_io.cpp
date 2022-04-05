@@ -21,13 +21,14 @@ pydict::dict accis_sat::get_results() {
 
     mat<> x_tru(step_no, sat_state::N), x_est(step_no, sat_state::N);
     vec<> t(step_no);
-    mat<> x_err(step_no, sat_state_err::N); 
+    mat<> x_err(step_no, sat_state_err::N + 2); 
     for (int k = 0; k < step_no; k++) {
         x_tru.row(k) = states_tru[k].X;
         x_est.row(k) = states_est[k].mean;
         t(k) = times[k];
-        x_err.row(k) = sat_state_err::diff(states_tru[k].X,
-                states_est[k].mean).dX;
+        x_err.row(k).head<sat_state_err::N>() =
+            sat_state_err::diff(states_tru[k].X, states_est[k].mean).dX;
+        x_err.row(k).tail<2>() = att_err[k]; 
     }
    
     pydict::set<mat<>>(d, "True States", x_tru);
