@@ -128,6 +128,7 @@ void accis_sat::setup() {
     J = getset<vec<3>>(par, "Principal Moments of Inertia (kg*m^2)", J_default);
     att_ctrl.kp = getset<double>(par, "PD Constant kp", 10);
     att_ctrl.kd = getset<double>(par, "PD Constant kd", 100);
+    att_ctrl.J = J.asDiagonal();
 
     double std_kp = getset<double>(par, "Keypoint Error StD", 10); 
     filter::dist dist_w_kp(2);
