@@ -13,9 +13,16 @@ class attitude_pd {
         mat<3,3> J;
 
         vec<3> tau(const quat& q, cvec<3> w, const quat& qc, cvec<3> wc) const {
+            
             quat dq = q * qc.conjugate();
-            vec<3> W = dq._transformVector(wc);
-            return W.cross(J*W) - kp*dq.vec() - kd*(w - W);
+            
+            mat<3,3> dA = q.toRotationMatrix()
+                * qc.toRotationMatrix().transpose();
+            
+            vec<3> dw = w - dA * wc;
+            
+            return (dA * wc).cross(J * dA * wc) - kp * dq.vec() - kd * dw;
+        
         }
 
 };
