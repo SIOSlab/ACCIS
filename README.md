@@ -36,4 +36,4 @@ The following third-party tools and data are included in this repository:
     - License: https://worldwind.arc.nasa.gov/LICENSE.html
 - NOVAS: Naval Observatory Vector Astronomy Subroutines (https://ui.adsabs.harvard.edu/abs/2012IAUJD...7P..24K/abstract)
 - JB2008 Atmospheric Model (http://sol.spacenvironment.net/~JB2008/)
-- RKSUITE ODE Solver (http://www.netlib.org/ode/rksuite)
+- ODEPACK (https://www.netlib.org/odepack)
