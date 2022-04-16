@@ -84,21 +84,16 @@ void accis_sat::step() {
     states_est.back() = dist_x;
     
     // Set attitude control torque
-    sat_state x_est, x_nadir;
+    sat_state x_est;
     x_est.X = dist_x.mean;
-    x_nadir = x_est;
-    x_nadir.set_nadir();
-    vec<3> tc = att_ctrl.tau(x_est.qb(), x_est.w(), x_nadir.qb(), x_nadir.w());
+    vec<3> tc = att_ctrl.tau(x_est.qb(), x_est.w(), t);
     roamps_("TC", tc.data());    
     roamps_("JP", J.data()); 
 
-    sat_state x_tru_nadir = x_tru;
-    x_tru_nadir.set_nadir();
-
     // Get pointing error
     vec<2> att_err_k;
-    att_err_k.x() = rad2deg(x_tru.qb().angularDistance(x_tru_nadir.qb()));
-    att_err_k.y() = rad2deg((x_tru.w() - x_tru_nadir.w()).norm()); 
+    att_err_k.x() = rad2deg(x_tru.qb().angularDistance(att_ctrl.qct(t)));
+    att_err_k.y() = rad2deg((x_tru.w() - att_ctrl.wc).norm()); 
     att_err.push_back(att_err_k);
 
     // Update step

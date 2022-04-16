@@ -2,8 +2,8 @@
     "Max. Percentage of Black Pixels": 5.0,
     "Keypoint Max. Distance (pixels)": 100.0,
     "Keypoint Error StD": 100.0,
-    "PD Constant kp": 1E-4,
-    "Imaging Cadence": 120,
+    "PD Constant kp": 1E-2,
+    "Imaging Cadence": 0,
     "Camera Distortion Parameter StD": 0.01,
     "Principal Moments of Inertia (kg*m^2)": [
         100.0,

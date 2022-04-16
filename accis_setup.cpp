@@ -126,6 +126,8 @@ void accis_sat::setup() {
     vec<3> J_default;
     J_default << 100, 100, 100;
     J = getset<vec<3>>(par, "Principal Moments of Inertia (kg*m^2)", J_default);
+    att_ctrl.q0 = x0_ideal.qb();
+    att_ctrl.wc = x0_ideal.w();
     att_ctrl.kp = getset<double>(par, "PD Constant kp", 10);
     att_ctrl.kd = getset<double>(par, "PD Constant kd", 100);
     att_ctrl.J = J.asDiagonal();

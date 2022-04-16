@@ -12,10 +12,33 @@ class attitude_pd {
 
         mat<3,3> J;
 
-        vec<3> tau(const quat& q, cvec<3> w, const quat& qc, cvec<3> wc) const {
-            
+        quat q0;
+        vec<3> wc;
+
+        static int sgn(double x) {
+            return (x > 0) - (x < 0);
+        }
+
+        quat qct(double t) const {
+
+            Eigen::AngleAxisd aa(wc.norm()*t, wc.normalized()); 
+
+            quat qc = q0 * aa;
+
+            return qc;
+
+        }
+
+        vec<3> tau(const quat& q, cvec<3> w, double t) const {
+           
+            quat qc = qct(t);
+
             quat dq = q * qc.conjugate();
-            
+
+            return - q.inverse()._transformVector(kp * sgn(dq.w()) * dq.vec()
+                    + kd * (q._transformVector(w) - qc._transformVector(wc)));
+
+            /*            
             mat<3,3> dA = q.toRotationMatrix()
                 * qc.toRotationMatrix().transpose();
             
@@ -23,6 +46,8 @@ class attitude_pd {
             
             return (dA * wc).cross(J * dA * wc) - kp * dq.vec() - kd * dw;
         
+            */
+
         }
 
 };
