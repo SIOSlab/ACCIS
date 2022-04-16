@@ -37,17 +37,7 @@ class attitude_pd {
 
             return - q.inverse()._transformVector(kp * sgn(dq.w()) * dq.vec()
                     + kd * (q._transformVector(w) - qc._transformVector(wc)));
-
-            /*            
-            mat<3,3> dA = q.toRotationMatrix()
-                * qc.toRotationMatrix().transpose();
-            
-            vec<3> dw = w - dA * wc;
-            
-            return (dA * wc).cross(J * dA * wc) - kp * dq.vec() - kd * dw;
         
-            */
-
         }
 
 };
