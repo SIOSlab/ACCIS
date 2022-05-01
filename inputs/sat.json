@@ -3,7 +3,7 @@
     "Keypoint Max. Distance (pixels)": 100.0,
     "Keypoint Error StD": 100.0,
     "PD Constant kp": 0.5,
-    "Imaging Cadence": 0,
+    "Imaging Cadence": 120,
     "Camera Distortion Parameter StD": 0.01,
     "Principal Moments of Inertia (kg*m^2)": [
         100.0,
