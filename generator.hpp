@@ -9,7 +9,7 @@ class generator {
 
     public:
 
-        run();
+        void run();
 
     private:
 

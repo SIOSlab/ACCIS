@@ -2,7 +2,7 @@
 
 #include "rando.hpp"
 
-generator::run() {
+void generator::run() {
 
     // Random number generator
     rando rand(seed);
