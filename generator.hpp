@@ -13,8 +13,6 @@ class generator {
 
         generator();
 
-        generator(const pydict::dict& d);
-
         void set_param(const pydict::dict& d);
 
         pydict::dict get_param();

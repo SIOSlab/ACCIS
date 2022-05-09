@@ -15,11 +15,6 @@ generator::generator() {
     setup();
 }
 
-generator::generator(const pydict::dict& d) {
-    par = d;
-    setup();
-}
-
 void generator::set_param(const pydict::dict& d) {
     par = d;
     setup();
