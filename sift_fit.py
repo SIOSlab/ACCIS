@@ -17,7 +17,7 @@ Y = table[:, (ncols-5):(ncols-1)]
 
 A, res, rank, s = np.linalg.lstsq(X, Y, rcond=-1)
 
-np.savetxt("results/sift_fit.csv", A, delimiter=",")
+np.savetxt("results/sift_fit.csv", np.transpose(A), delimiter=",")
 
 dY = np.subtract(Y, np.matmul(X, A))
 
