@@ -57,7 +57,7 @@ mat<> generator::run() {
         sat_state s;
 
         // Set ideal camera parameters
-        s.set_ideal_cam(f_ideal);
+        s.set_ideal_cam(cam.u);
 
         // Set orbital elements
         s.set_coe(orbit);
@@ -132,5 +132,36 @@ mat<> generator::run() {
 
 void generator::setup() {
 
+    using namespace pydict;
+
+    seed = getset<int>(par, "Seed", 0);
+
+    max_imgs = getset<int>(par, "Max. Number of Images", 100);
+
+    num_pts = getset<int>(par, "Number of Key Points", 100);
+
+    dmax = getset<double>(par, "Max. Key Point Distance", 100);
+
+    max_blp = getset<double>(par, "Max. Percentage of Black Pixels", 5);
+
+    avg_alt = getset<double>(par, "Average Altitude (km)", 500);
+    var_alt = getset<double>(par, "Altitude Variation (km)", 100);
+
+    cam.widp = getset<double>(par, "Camera Image Width (pixels)", 1000);
+    cam.lenp = getset<double>(par, "Camera Image Length (pixels)", 1000);
+    cam.u    = getset<double>(par, "Camera Focal Length (mm)", 2000);
+    cam.A    = getset<double>(par, "Camera Aperture (mm)", 500);
+    cam.rho  = getset<double>(par, "Camera Pixel Density (pixels/mm)", 1);
+
+    rzer.stdr = getset<double>(par, "Position StD (km)", 10);
+    rzer.stdv = getset<double>(par, "Velocity StD (km/s)", 1);
+    rzer.stdw = getset<double>(par, "Angular Velocity StD (rad/s)",
+        deg2rad(0.1));
+    rzer.stdba = getset<double>(par, "Body Attitude StD (rad)",
+        deg2rad(1));
+    rzer.stdca = getset<double>(par, "Camera Attitude StD (rad)",
+        deg2rad(1));
+    rzer.stdf = getset<double>(par, "Camera Focal Length StD (mm)", 10);
+    rzer.stdc = getset<double>(par, "Camera Distortion Parameter StD", 0.1);
 
 }

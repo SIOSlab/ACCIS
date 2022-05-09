@@ -28,6 +28,7 @@ class generator {
 
         // Input parameters
         pydict::dict par;
+
         int seed;
 
         int max_imgs;
@@ -38,12 +39,8 @@ class generator {
 
         double max_blp;
 
-        double max_phas;
-
         double avg_alt;
         double var_alt;
-
-        double f_ideal;
 
         sat_cam cam;
         
