@@ -37,7 +37,7 @@ mat<> generator::run() {
     std::vector<sifter::points> key_pts;
 
     // Generate & process states & images
-    for (int i = 0; i < max_imgs; i++) {
+    for (int i = 1; i <= max_imgs; i++) {
 
         // Generate orbital elements
         coe orbit;
@@ -115,10 +115,14 @@ mat<> generator::run() {
 
     // Make table of states & key points
     int num_pts = states_query.size(); 
+
     mat<> table(num_pts, 2*sat_state::N + 8);
-    for (int i = 0; i < num_pts; i++)
-        table.row(i) << states_query[i].X, states_train[i].X,
-                        points_query[i],   points_train[i];
+    vec<> r(2*sat_state::N + 8);
+    for (int i = 0; i < num_pts; i++) {
+        r << states_query[i].X, states_train[i].X,
+             points_query[i],   points_train[i];
+        table.row(i) = r;
+    }
 
     // Return table
     return table;

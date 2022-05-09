@@ -13,6 +13,18 @@ class numpy_encoder(json.JSONEncoder):
             return obj.tolist()
         return json.JSONEncoder.default(self, obj)
 
+def make_gen_file(filename) :
+    gen = accis.generator()
+    d = gen.get_param()
+    with open('inputs/' + filename + '.json', 'w') as f :
+        json.dump(d, f, indent = 4, cls = numpy_encoder)
+
+def accis_get_gen(filename) :
+    gen = accis.generator()
+    with open('inputs/' + filename + '.json') as f :
+        d = json.load(f)
+        gen.set_param(d)
+    return gen
 
 def make_sat_file(filename) :
     sat = accis.sat()

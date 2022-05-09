@@ -45,7 +45,7 @@ points sifter::sift(const cv::Mat& image, int num_pts) {
 
 }
 
-matches match(const points& query, const points& train, double dmax) {
+matches sifter::match(const points& query, const points& train, double dmax) {
 
     using namespace cv;
 
