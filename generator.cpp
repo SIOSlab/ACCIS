@@ -10,6 +10,7 @@
 #include <opencv2/imgproc.hpp>
 
 #include <cmath>
+#include <iostream>
 
 generator::generator() {
     setup();
@@ -38,6 +39,8 @@ mat<> generator::run() {
 
     // Generate & process states & images
     for (int i = 1; i <= max_imgs; i++) {
+
+        std::cout << "Image " << i << " of " << max_imgs << std::endl;
 
         // Generate orbital elements
         coe orbit;
