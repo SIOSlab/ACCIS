@@ -1,6 +1,7 @@
 #ifndef GENERATOR_HPP
 #define GENERATOR_HPP
 
+#include "pydict.hpp"
 #include "sat_cam.hpp"
 #include "sat_state.hpp"
 
@@ -10,13 +11,26 @@ class generator {
 
     public:
 
-        void run();
+        generator();
+
+        generator(const pydict::dict& d);
+
+        void set_param(const pydict::dict& d);
+
+        pydict::dict get_param();
+        
+        mat<> run();
 
     private:
 
+        // Called by constructor and set_param
+        void setup();
+
+        // Input parameters
+        pydict::dict par;
         int seed;
 
-        int max_pairs;
+        int max_imgs;
 
         int num_pts;
 
@@ -24,8 +38,12 @@ class generator {
 
         double max_blp;
 
-        double max_alt;
-        double min_alt;
+        double max_phas;
+
+        double avg_alt;
+        double var_alt;
+
+        double f_ideal;
 
         sat_cam cam;
         

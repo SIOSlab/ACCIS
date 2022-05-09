@@ -1,5 +1,6 @@
 #include "generator.hpp"
 
+#include "angles.hpp"
 #include "format.hpp"
 #include "rando.hpp"
 #include "sifter.hpp"
@@ -8,49 +9,128 @@
 #include <opencv2/imgcodecs.hpp> 
 #include <opencv2/imgproc.hpp>
 
-void generator::run() {
+#include <cmath>
+
+generator::generator() {
+    setup();
+}
+
+generator::generator(const pydict::dict& d) {
+    par = d;
+    setup();
+}
+
+void generator::set_param(const pydict::dict& d) {
+    par = d;
+    setup();
+}
+
+pydict::dict generator::get_param() {
+    return par;
+}
+
+mat<> generator::run() {
+
+    // Equatorial radius of Earth
+    const double RE = 6378;
 
     // Random number generator
-    rando rand(seed);
+    rando rnd(seed);
 
-    // Generate & process pairs of images
-    for (int i = 0; i < max_pairs; i++) {
+    // Satellite states & SIFT points
+    std::vector<sat_state> states;
+    std::vector<sifter::points> key_pts;
 
-        sat_state s1;
-        sat_state s2;
+    // Generate & process states & images
+    for (int i = 0; i < max_imgs; i++) {
 
-        // TO DO -- Generate s1 & s2
+        // Generate orbital elements
+        coe orbit;
+        orbit.a() = RE + avg_alt + var_alt * rnd.unif();
+        orbit.e() = 0;
+        orbit.i() = rad2deg(acos(rnd.unif()));
+        orbit.w() = 180 * rnd.unif();
+        orbit.u() = 180 * rnd.unif();
+        orbit.f() = 180 * rnd.unif();
+
+        // Satellite state
+        sat_state s;
+
+        // Set ideal camera parameters
+        s.set_ideal_cam(f_ideal);
+
+        // Set orbital elements
+        s.set_coe(orbit);
+
+        // Set to nadir-pointing
+        s.set_nadir();
+
+        // Randomize state
+        s = rzer.randomize(s, rnd);
         
         // Get images
-        cv::Mat img1 = cam.real_image(0, s1); 
-        cv::Mat img2 = cam.real_image(0, s2); 
+        cv::Mat img = cam.real_image(0, s); 
 
-        // Save images
-        cv::imwrite("images/pic_query_" + int2str0(i, 6) + ".png", img1);
-        cv::imwrite("images/pic_train_" + int2str0(i, 6) + ".png", img2);
+        // Save image
+        cv::imwrite("images/gen_pic_" + int2str0(i, 6) + ".png", img);
 
         // Percentages of black pixels
-        cv::Mat gray1;
-        cv::Mat gray2;
-        cv::cvtColor(img1, gray1, cv::COLOR_RGB2GRAY);
-        cv::cvtColor(img2, gray2, cv::COLOR_RGB2GRAY);
-        double blp1 = 100.0 - (100.0 * cv::countNonZero(gray1)) / gray1.total();
-        double blp2 = 100.0 - (100.0 * cv::countNonZero(gray2)) / gray2.total();
+        cv::Mat gray;
+        cv::cvtColor(img, gray, cv::COLOR_RGB2GRAY);
+        double blp = 100.0 - (100.0 * cv::countNonZero(gray)) / gray.total();
 
-        // Apply SIFT & match         
-        if (blp1 < max_blp && blp2 < max_blp) {
+        // Apply SIFT 
+        if (blp < max_blp) {
 
             // SIFT key points
-            sifter::points pts1 = sifter::sift(img1, num_pts);
-            sifter::points pts2 = sifter::sift(img2, num_pts);
+            sifter::points pts = sifter::sift(img, num_pts);
 
-            // Match SIFT key points
-            sifter::matches sm = sifter::match(pts1, pts2, dmax); 
+            // Save state & key points
+            states.push_back(s);
+            key_pts.push_back(pts);
 
-            // TO DO -- Save points
+        }
+
+    } 
+
+    // Matched states & key points
+    std::vector<sat_state> states_query, states_train;
+    std::vector<vec<4>>    points_query, points_train;
+
+    // Match SIFT key points
+    for (int i = 0; i < states.size(); i++) {
+
+        for (int j = 0; j < i; j++) {
+
+            sifter::matches sm = sifter::match(key_pts[i], key_pts[j], dmax);
+
+            for (int k = 0; k < sm.num_pts; k++) {
+
+                states_query.push_back(states[i]);
+                states_train.push_back(states[j]);
+    
+                points_query.push_back(sm.query[k]);
+                points_train.push_back(sm.train[k]);
+
+            }
 
         }
 
     }
+
+    // Make table of states & key points
+    int num_pts = states_query.size(); 
+    mat<> table(num_pts, 2*sat_state::N + 8);
+    for (int i = 0; i < num_pts; i++)
+        table.row(i) << states_query[i].X, states_train[i].X,
+                        points_query[i],   points_train[i];
+
+    // Return table
+    return table;
+
+}
+
+void generator::setup() {
+
 
 }
