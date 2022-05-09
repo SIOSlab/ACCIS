@@ -7,7 +7,6 @@
     "Camera Pixel Density (pixels/mm)": 1.0,
     "Max. Number of Images": 5,
     "Number of Key Points": 100,
-    "Max. Key Point Distance": 1000000.0,
     "Body Attitude StD (rad)": 0.017453292519943295,
     "Max. Percentage of Black Pixels": 5.0,
     "Average Altitude (km)": 500.0,

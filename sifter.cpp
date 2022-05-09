@@ -45,7 +45,7 @@ points sifter::sift(const cv::Mat& image, int num_pts) {
 
 }
 
-matches sifter::match(const points& query, const points& train, double dmax) {
+matches sifter::match(const points& query, const points& train) {
 
     using namespace cv;
 
@@ -61,11 +61,10 @@ matches sifter::match(const points& query, const points& train, double dmax) {
 
     for (const std::vector<DMatch>& dmv : dmatches) {
         DMatch dmatch = dmv[0];
-        if (dmatch.distance < dmax) {
-            sm.query.push_back(query.key_pts[dmatch.queryIdx]);
-            sm.train.push_back(train.key_pts[dmatch.trainIdx]);
-            sm.num_pts++;
-        }
+        sm.query.push_back(query.key_pts[dmatch.queryIdx]);
+        sm.train.push_back(train.key_pts[dmatch.trainIdx]);
+        sm.dist.push_back(dmatch.distance);
+        sm.num_pts++;
     }
 
     return sm;

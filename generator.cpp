@@ -91,13 +91,14 @@ mat<> generator::run() {
     // Matched states & key points
     std::vector<sat_state> states_query, states_train;
     std::vector<vec<4>>    points_query, points_train;
+    std::vector<double> dist;
 
     // Match SIFT key points
     for (int i = 0; i < states.size(); i++) {
 
         for (int j = 0; j < i; j++) {
 
-            sifter::matches sm = sifter::match(key_pts[i], key_pts[j], dmax);
+            sifter::matches sm = sifter::match(key_pts[i], key_pts[j]);
 
             for (int k = 0; k < sm.num_pts; k++) {
 
@@ -106,6 +107,8 @@ mat<> generator::run() {
     
                 points_query.push_back(sm.query[k]);
                 points_train.push_back(sm.train[k]);
+
+                dist.push_back(sm.dist[k]);
 
             }
 
@@ -116,12 +119,12 @@ mat<> generator::run() {
     // Make table of states & key points
     int num_pts = states_query.size(); 
 
-    mat<> table(num_pts, 2*sat_state::N + 8);
-    vec<> r(2*sat_state::N + 8);
-    for (int i = 0; i < num_pts; i++) {
-        r << states_query[i].X, states_train[i].X,
-             points_query[i],   points_train[i];
-        table.row(i) = r;
+    mat<> table(num_pts, 2*sat_state::N + 9);
+    vec<> r(2*sat_state::N + 9);
+    for (int k = 0; k < num_pts; k++) {
+        r << states_query[k].X, states_train[k].X,
+             points_query[k],   points_train[k], dist[k];
+        table.row(k) = r;
     }
 
     // Return table
@@ -138,8 +141,6 @@ void generator::setup() {
     max_imgs = getset<int>(par, "Max. Number of Images", 100);
 
     num_pts = getset<int>(par, "Number of Key Points", 100);
-
-    dmax = getset<double>(par, "Max. Key Point Distance", 100);
 
     max_blp = getset<double>(par, "Max. Percentage of Black Pixels", 5);
 

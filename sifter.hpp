@@ -27,11 +27,13 @@ namespace sifter {
 
         std::vector<vec<4>> train;
 
+        std::vector<double> dist;
+
     };
     
     points sift(const cv::Mat& image, int num_pts); 
 
-    matches match(const points& query, const points& train, double dmax);
+    matches match(const points& query, const points& train);
 
 }
 

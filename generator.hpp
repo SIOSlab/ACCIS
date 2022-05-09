@@ -33,8 +33,6 @@ class generator {
 
         int num_pts;
 
-        double dmax;
-
         double max_blp;
 
         double avg_alt;
