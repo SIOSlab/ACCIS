@@ -126,7 +126,7 @@ mat<> generator::run() {
     vec<> r(img_state_diff::N + 9);
     for (int k = 0; k < num_pts; k++) {
         img_state_diff d(states_query[k], states_train[k]);
-        r << d.dx, points_query[k], points_train[k], dist[k];
+        r << dist[k], points_query[k], points_train[k], d.dx;
         table.row(k) = r;
     }
 
