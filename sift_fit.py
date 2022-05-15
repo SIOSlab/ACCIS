@@ -25,4 +25,16 @@ for i in range(npts):
 
 B = K2
 
-Y, res, rank, s = linalg.lstsq(A, B, rcond=-1)
+X, res, rank, s = linalg.lstsq(A, B, rcond=-1)
+
+savetxt("results/sift_fit.csv", transpose(X), delimiter=",")
+
+dY = B - matmul(A, X)
+
+R = matmul(transpose(dY), dY) / npts
+
+savetxt("results/sift_fit_cov.csv", R, delimiter=",")
+
+bias = sum(dY, axis=0) / npts
+
+savetxt("results/sift_fit_bias.csv", bias, delimiter=",")
