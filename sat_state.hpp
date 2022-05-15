@@ -163,7 +163,8 @@ class img_state_diff {
 
     vec<N> dx;
 
-    img_state_diff(const sat_state& s1, const sat_state& s2);
+    img_state_diff(double t1, double t2, const sat_state& s1,
+            const sat_state& s2);
 
 }; 
 

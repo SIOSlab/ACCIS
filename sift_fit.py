@@ -3,25 +3,18 @@ from numpy import *
 table = genfromtxt("results/gen.csv", delimiter=",")
 
 npts = table.shape[0]
+ncol = table.shape[1]
 
-ndx = 10
+K1 = table[:, 0:4]
+K2 = table[:, 4:8]
 
-dist = table[:, 0]
+dx = table[:, 8:ncol]
 
-print("Minimum distance: " + str(amin(dist)))
-print("Maximum distance: " + str(amax(dist)))
+u = hstack((dx, K1, ones([npts, 1])))
 
-K1 = table[:, 1:5]
-K2 = table[:, 5:9]
-
-dx = table[:, 9:(9+ndx)]
-
-K1a = hstack((K1, ones([npts, 1])))
-dxa = hstack((dx, ones([npts, 1])))
-
-A = empty([npts, 5*(ndx+1)])
+A = empty([npts, (ncol-3)**2])
 for i in range(npts):
-    A[i, :] = kron(K1a[i, :], dxa[i, :])
+    A[i, :] = kron(u[i, :], u[i, :])
 
 B = K2
 

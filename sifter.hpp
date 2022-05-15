@@ -6,14 +6,21 @@
 #include <vector>
 
 #include "mat.hpp"
+#include "sat_cam.hpp"
+#include "sat_state.hpp"
 
 namespace sifter {
 
     struct points {
 
+        double t;
+
+        sat_state state;
+
         int num_pts;
 
         std::vector<vec<4>> key_pts;
+        std::vector<vec<2>> key_center;
 
         cv::Mat desc;
 
@@ -23,17 +30,19 @@ namespace sifter {
 
         int num_pts;
 
+        vec<img_state_diff::N> dx;
+
         std::vector<vec<4>> query;
 
         std::vector<vec<4>> train;
 
-        std::vector<double> dist;
-
     };
     
-    points sift(const cv::Mat& image, int num_pts); 
+    points sift(double t, const sat_state& state, const cv::Mat& image,
+            int num_pts);
 
-    matches match(const points& query, const points& train);
+    matches match(const points& query, const points& train, sat_cam& cam,
+            double max_dist, double max_kp_dist);
 
 }
 

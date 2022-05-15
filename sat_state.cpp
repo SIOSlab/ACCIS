@@ -164,9 +164,18 @@ mat<> sat_state_randomizer::cov() {
 }
 
 
-img_state_diff::img_state_diff(const sat_state& s1, const sat_state& s2) {
+img_state_diff::img_state_diff(double t1, double t2, const sat_state& s1,
+        const sat_state& s2) {
 
-    dx.head<3>() = s2.r() - s1.r();
+    vec<3> reci1, reci2, recef1, recef2;
+
+    reci1 = s1.r();
+    reci2 = s2.r();
+
+    eci2ef_(&t1, reci1.data(), recef1.data());
+    eci2ef_(&t2, reci2.data(), recef2.data());
+
+    dx.head<3>() = recef2 - recef1;
 
     quat q1 = s1.qb() * s1.qc();
     quat q2 = s2.qb() * s2.qc();

@@ -8,13 +8,17 @@
 
 using namespace sifter;
 
-points sifter::sift(const cv::Mat& image, int num_pts) {
+points sifter::sift(double t, const sat_state& state, const cv::Mat& image,
+        int num_pts) {
 
     using namespace cv;
 
     Ptr<SIFT> sifter = SIFT::create(num_pts);
 
     points sp;
+
+    sp.t = t;
+    sp.state = state;
 
     sp.num_pts = num_pts;
 
@@ -39,15 +43,20 @@ points sifter::sift(const cv::Mat& image, int num_pts) {
         
         sp.key_pts.push_back(z);
 
+        sp.key_center.push_back(r);
+
     }
 
     return sp;
 
 }
 
-matches sifter::match(const points& query, const points& train) {
+matches sifter::match(const points& query, const points& train,
+        sat_cam& cam, double max_dist, double max_kp_dist) {
 
     using namespace cv;
+
+    img_state_diff diff(query.t, train.t, query.state, train.state);
 
     std::vector<std::vector<DMatch>> dmatches;
 
@@ -57,14 +66,28 @@ matches sifter::match(const points& query, const points& train) {
 
     matches sm;
 
+    sm.dx = diff.dx;
+
     sm.num_pts = 0;
 
     for (const std::vector<DMatch>& dmv : dmatches) {
+
         DMatch dmatch = dmv[0];
-        sm.query.push_back(query.key_pts[dmatch.queryIdx]);
-        sm.train.push_back(train.key_pts[dmatch.trainIdx]);
-        sm.dist.push_back(dmatch.distance);
-        sm.num_pts++;
+        
+        int ind_query = dmatch.queryIdx;
+        int ind_train = dmatch.trainIdx;
+        
+        double dist = cam.pt_dist(query.t, train.t, query.state, train.state,
+                query.key_center[ind_query], train.key_center[ind_train]); 
+        
+        double kp_dist = dmatch.distance;   
+        
+        if (dist < max_dist && kp_dist < max_kp_dist) {
+            sm.query.push_back(query.key_pts[ind_query]);
+            sm.train.push_back(train.key_pts[ind_train]);
+            sm.num_pts++;
+        }
+    
     }
 
     return sm;

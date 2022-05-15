@@ -27,6 +27,8 @@ extern void ll2eci_(const double* t, const double* lat, const double* lon,
 extern void eci2ll_(const double* t, const double* reci, const double* tol,
         double* lat, double* lon, double* alt);
 
+extern void eci2ef_(const double* t, const double* reci, double* recef);
+
 #ifdef __cplusplus
 }
 #endif

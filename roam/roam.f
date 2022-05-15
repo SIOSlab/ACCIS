@@ -583,3 +583,34 @@
       END
 
 *===============================================================================
+
+      SUBROUTINE ECI2EF(T, RECI, RECEF)
+
+*-------------------------------------------------------------------------------
+*                ECI Position to ECEF Position 
+*
+*  IN:  T     - Time (seconds since epoch T0)
+*       RECI  - Position (km, ECI frame)
+*  OUT: RECEF - Position (km, ECEF frame)
+*
+*-------------------------------------------------------------------------------
+
+      IMPLICIT DOUBLE PRECISION (A-Z) 
+
+      INCLUDE 'roampar.fi' 
+
+      DIMENSION RECI(3), RECEF(3)
+
+*  Time conversions
+      PARAMETER(SECDAY = 86400)
+      TTL = T / SECDAY
+      UTL = TTL - DT
+      CALL SETDT(DT)
+
+*  ECEF position
+      CALL CELTER(T0, UTL, XP(1), XP(2), RECI, RECEF)
+
+      RETURN
+      END
+
+*===============================================================================

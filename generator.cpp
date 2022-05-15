@@ -30,11 +30,13 @@ mat<> generator::run() {
     // Equatorial radius of Earth
     const double RE = 6378;
 
+    // Time
+    const double t = 0;
+
     // Random number generator
     rando rnd(seed);
 
-    // Satellite states & SIFT points
-    std::vector<sat_state> states;
+    // SIFT points
     std::vector<sifter::points> key_pts;
 
     // Generate & process states & images
@@ -67,7 +69,7 @@ mat<> generator::run() {
         s = rzer.randomize(s, rnd);
         
         // Get images
-        cv::Mat img = cam.real_image(0, s); 
+        cv::Mat img = cam.real_image(t, s); 
 
         // Save image
         cv::imwrite("images/gen_pic_" + int2str0(i, 6) + ".png", img);
@@ -81,37 +83,33 @@ mat<> generator::run() {
         if (blp < max_blp) {
 
             // SIFT key points
-            sifter::points pts = sifter::sift(img, num_pts);
+            sifter::points pts = sifter::sift(t, s, img, num_pts);
 
-            // Save state & key points
-            states.push_back(s);
+            // Save key points
             key_pts.push_back(pts);
 
         }
 
     } 
 
-    // Matched states & key points
-    std::vector<sat_state> states_query, states_train;
-    std::vector<vec<4>>    points_query, points_train;
-    std::vector<double> dist;
+    // Matched key points & state differences
+    std::vector<vec<4>> points_query, points_train;
+    std::vector<vec<img_state_diff::N>> dxs;
 
     // Match SIFT key points
-    for (int i = 0; i < states.size(); i++) {
+    for (int i = 0; i < key_pts.size(); i++) {
 
         for (int j = 0; j < i; j++) {
 
-            sifter::matches sm = sifter::match(key_pts[i], key_pts[j]);
+            sifter::matches sm = sifter::match(key_pts[i], key_pts[j], cam,
+                    max_dist, max_kp_dist);
 
             for (int k = 0; k < sm.num_pts; k++) {
 
-                states_query.push_back(states[i]);
-                states_train.push_back(states[j]);
-    
                 points_query.push_back(sm.query[k]);
                 points_train.push_back(sm.train[k]);
 
-                dist.push_back(sm.dist[k]);
+                dxs.push_back(sm.dx);
 
             }
 
@@ -120,13 +118,12 @@ mat<> generator::run() {
     }
 
     // Make table of states & key points
-    int num_pts = states_query.size(); 
+    int num_pts = dxs.size(); 
 
-    mat<> table(num_pts, img_state_diff::N + 9);
-    vec<> r(img_state_diff::N + 9);
+    mat<> table(num_pts, img_state_diff::N + 8);
+    vec<> r(img_state_diff::N + 8);
     for (int k = 0; k < num_pts; k++) {
-        img_state_diff d(states_query[k], states_train[k]);
-        r << dist[k], points_query[k], points_train[k], d.dx;
+        r << points_query[k], points_train[k], dxs[k];
         table.row(k) = r;
     }
 
@@ -166,5 +163,9 @@ void generator::setup() {
         deg2rad(1));
     rzer.stdf = getset<double>(par, "Camera Focal Length StD (mm)", 10);
     rzer.stdc = getset<double>(par, "Camera Distortion Parameter StD", 0.1);
+
+    max_dist = getset<double>(par, "Max. Key Point Angular Distance (deg)", 1);
+    
+    max_kp_dist = getset<double>(par, "Max. Key Point Pixel Distance", 100);
 
 }
