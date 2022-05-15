@@ -155,4 +155,16 @@ class sat_dyn : public filter::dyn {
 
 }; 
 
+class img_state_diff {
+
+    public:
+
+    static const int N = sat_state::ND + 7;
+
+    vec<N> dx;
+
+    img_state_diff(const sat_state& s1, const sat_state& s2);
+
+}; 
+
 #endif

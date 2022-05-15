@@ -122,11 +122,11 @@ mat<> generator::run() {
     // Make table of states & key points
     int num_pts = states_query.size(); 
 
-    mat<> table(num_pts, 2*sat_state::N + 9);
-    vec<> r(2*sat_state::N + 9);
+    mat<> table(num_pts, img_state_diff::N + 9);
+    vec<> r(img_state_diff::N + 9);
     for (int k = 0; k < num_pts; k++) {
-        r << states_query[k].X, states_train[k].X,
-             points_query[k],   points_train[k], dist[k];
+        img_state_diff d(states_query[k], states_train[k]);
+        r << d.dx, points_query[k], points_train[k], dist[k];
         table.row(k) = r;
     }
 

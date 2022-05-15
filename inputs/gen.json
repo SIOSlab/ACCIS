@@ -5,7 +5,7 @@
     "Camera Distortion Parameter StD": 0.1,
     "Seed": 0,
     "Camera Pixel Density (pixels/mm)": 1.0,
-    "Max. Number of Images": 200,
+    "Max. Number of Images": 5,
     "Number of Key Points": 100,
     "Body Attitude StD (rad)": 0.017453292519943295,
     "Max. Percentage of Black Pixels": 5.0,

@@ -13,6 +13,8 @@ const int sat_state_err::N;
 
 const int sat_state_err::ND;
 
+const int img_state_diff::N;
+
 vec<> sat_dyn::propagate(double ti, double tf, cvec<> xi, cvec<> w) {
 
     static const int nt = 1;
@@ -159,4 +161,20 @@ mat<> sat_state_randomizer::cov() {
     p(15) = stdf;
     p.segment<sat_state::ND>(16).setConstant(stdc);
     return p.cwiseAbs2().asDiagonal();
-} 
+}
+
+
+img_state_diff::img_state_diff(const sat_state& s1, const sat_state& s2) {
+
+    dx.head<3>() = s2.r() - s1.r();
+
+    quat q1 = s1.qb() * s1.qc();
+    quat q2 = s2.qb() * s2.qc();
+
+    dx.segment<3>(3) = quat2rod(q2 * q1.inverse()); 
+
+    dx(6) = s2.f() - s1.f();
+
+    dx.tail<sat_state::ND>() = s2.c() - s1.c();
+
+}
