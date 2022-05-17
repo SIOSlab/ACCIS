@@ -1,6 +1,6 @@
 from numpy import *
 
-table = genfromtxt("results/gen.csv", delimiter=",")
+table = genfromtxt("results/sift_pairs.csv", delimiter=",")
 
 npts = table.shape[0]
 ncol = table.shape[1]
