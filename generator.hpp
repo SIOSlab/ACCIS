@@ -6,6 +6,7 @@
 #include "sat_state.hpp"
 
 #include <string>
+#include <vector>
 
 class generator {
 
@@ -16,8 +17,11 @@ class generator {
         void set_param(const pydict::dict& d);
 
         pydict::dict get_param();
-        
-        mat<> run();
+ 
+        void gen_imgs();
+
+        mat<> proc_imgs(const std::vector<std::string>& img_files,
+                const std::vector<std::string>& state_files);
 
     private:
 

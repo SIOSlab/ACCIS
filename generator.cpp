@@ -1,6 +1,7 @@
 #include "generator.hpp"
 
 #include "angles.hpp"
+#include "eigen_csv.hpp"
 #include "format.hpp"
 #include "rando.hpp"
 #include "sifter.hpp"
@@ -25,7 +26,7 @@ pydict::dict generator::get_param() {
     return par;
 }
 
-mat<> generator::run() {
+void generator::gen_imgs() {
 
     // Equatorial radius of Earth
     const double RE = 6378;
@@ -35,9 +36,6 @@ mat<> generator::run() {
 
     // Random number generator
     rando rnd(seed);
-
-    // SIFT points
-    std::vector<sifter::points> key_pts;
 
     // Generate & process states & images
     for (int i = 1; i <= max_imgs; i++) {
@@ -68,13 +66,40 @@ mat<> generator::run() {
         // Randomize state
         s = rzer.randomize(s, rnd);
         
-        // Get images
+        // Get image
         cv::Mat img = cam.real_image(t, s); 
 
         // Save image
-        cv::imwrite("images/gen_pic_" + int2str0(i, 6) + ".png", img);
+        cv::imwrite("gen/img_" + int2str0(seed, 6) + "_"
+                + int2str0(i, 6) + ".png", img);
 
-        // Percentages of black pixels
+        // Save state
+        eigen_csv::write(s.X, "gen/state_" + int2str0(seed, 6) + "_"
+                + int2str0(i, 6) + ".csv");
+
+    }
+
+}
+
+mat<> generator::proc_imgs(const std::vector<std::string>& img_files,
+        const std::vector<std::string>& state_files) {
+
+    // Time
+    const double t = 0;
+    
+    // SIFT points
+    std::vector<sifter::points> key_pts;
+
+    for (int i = 0; i < img_files.size(); i++) {
+
+        // Read image
+        cv::Mat img = cv::imread(img_files[i]);
+
+        // Read state
+        sat_state s;
+        eigen_csv::read(state_files[i], false, false, s.X);
+
+        // Percentage of black pixels
         cv::Mat gray;
         cv::cvtColor(img, gray, cv::COLOR_RGB2GRAY);
         double blp = 100.0 - (100.0 * cv::countNonZero(gray)) / gray.total();
@@ -90,7 +115,7 @@ mat<> generator::run() {
 
         }
 
-    } 
+    }
 
     // Matched key points & state differences
     std::vector<vec<4>> points_query, points_train;
@@ -99,17 +124,21 @@ mat<> generator::run() {
     // Match SIFT key points
     for (int i = 0; i < key_pts.size(); i++) {
 
-        for (int j = 0; j < i; j++) {
+        for (int j = 0; j < key_pts.size(); j++) {
 
-            sifter::matches sm = sifter::match(key_pts[i], key_pts[j], cam,
-                    max_dist, max_kp_dist);
+            if (i != j) {
 
-            for (int k = 0; k < sm.num_pts; k++) {
+                sifter::matches sm = sifter::match(key_pts[i], key_pts[j], cam,
+                        max_dist, max_kp_dist);
 
-                points_query.push_back(sm.query[k]);
-                points_train.push_back(sm.train[k]);
+                for (int k = 0; k < sm.num_pts; k++) {
 
-                dxs.push_back(sm.dx);
+                    points_query.push_back(sm.query[k]);
+                    points_train.push_back(sm.train[k]);
+
+                    dxs.push_back(sm.dx);
+
+                }
 
             }
 
@@ -119,15 +148,13 @@ mat<> generator::run() {
 
     // Make table of states & key points
     int num_pts = dxs.size(); 
-
     mat<> table(num_pts, img_state_diff::N + 8);
-    vec<> r(img_state_diff::N + 8);
+    vec<img_state_diff::N + 8> r;
     for (int k = 0; k < num_pts; k++) {
         r << points_query[k], points_train[k], dxs[k];
         table.row(k) = r;
     }
 
-    // Return table
     return table;
 
 }
