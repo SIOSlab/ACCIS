@@ -228,3 +228,13 @@ cv::Mat sat_cam::real_image(double t, const sat_state& x) {
     return defocused_img;
 
 }
+
+double sat_cam::blp(const cv::Mat& img) {
+
+   cv::Mat gray;
+   
+   cv::cvtColor(img, gray, cv::COLOR_RGB2GRAY);
+   
+   return 100.0 - (100.0 * cv::countNonZero(gray)) / gray.total();
+
+}

@@ -19,6 +19,8 @@ class generator {
         
         mat<> run();
 
+        sat_state gen_state(rando& rnd);
+
     private:
 
         // Called by constructor and set_param

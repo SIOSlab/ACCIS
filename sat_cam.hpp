@@ -87,6 +87,9 @@ class sat_cam {
     // "Real" image from satellite state
     cv::Mat real_image(double t, const sat_state& x);
 
+    // Percentage of black pixels in image
+    static double blp(const cv::Mat& img);
+
 };
 
 #endif

@@ -12,7 +12,7 @@ dx = table[:, 8:ncol]
 
 u = hstack((dx, K1, ones([npts, 1])))
 
-A = empty([npts, (ncol-3)**2])
+A = empty([npts, (ncol-4)**2])
 for i in range(npts):
     A[i, :] = kron(u[i, :], u[i, :])
 

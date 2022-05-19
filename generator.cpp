@@ -27,93 +27,83 @@ pydict::dict generator::get_param() {
 
 mat<> generator::run() {
 
-    // Equatorial radius of Earth
-    const double RE = 6378;
-
     // Time
     const double t = 0;
 
     // Random number generator
     rando rnd(seed);
 
-    // SIFT points
-    std::vector<sifter::points> key_pts;
-
-    // Generate & process states & images
-    for (int i = 1; i <= max_imgs; i++) {
-
-        std::cout << "Image " << i << " of " << max_imgs << std::endl;
-
-        // Generate orbital elements
-        coe orbit;
-        orbit.a() = RE + avg_alt + var_alt * rnd.unif();
-        orbit.e() = 0;
-        orbit.i() = rad2deg(acos(rnd.unif()));
-        orbit.w() = 180 * rnd.unif();
-        orbit.u() = 180 * rnd.unif();
-        orbit.f() = 180 * rnd.unif();
-
-        // Satellite state
-        sat_state s;
-
-        // Set ideal camera parameters
-        s.set_ideal_cam(cam.u);
-
-        // Set orbital elements
-        s.set_coe(orbit);
-
-        // Set to nadir-pointing
-        s.set_nadir();
-
-        // Randomize state
-        s = rzer.randomize(s, rnd);
-        
-        // Get images
-        cv::Mat img = cam.real_image(t, s); 
-
-        // Save image
-        cv::imwrite("images/gen_pic_" + int2str0(i, 6) + ".png", img);
-
-        // Percentages of black pixels
-        cv::Mat gray;
-        cv::cvtColor(img, gray, cv::COLOR_RGB2GRAY);
-        double blp = 100.0 - (100.0 * cv::countNonZero(gray)) / gray.total();
-
-        // Apply SIFT 
-        if (blp < max_blp) {
-
-            // SIFT key points
-            sifter::points pts = sifter::sift(t, s, img, num_pts);
-
-            // Save key points
-            key_pts.push_back(pts);
-
-        }
-
-    } 
+    // Camera center
+    vec<2> c = cam.center();
 
     // Matched key points & state differences
     std::vector<vec<4>> points_query, points_train;
     std::vector<vec<img_state_diff::N>> dxs;
+    
+    // Generate & process states & images
+    for (int i = 1; i <= max_imgs; i++) {
 
-    // Match SIFT key points
-    for (int i = 0; i < key_pts.size(); i++) {
+        std::cout << "Image Pair " << i << " of " << max_imgs << std::endl;
 
-        for (int j = 0; j < i; j++) {
+        double blp;
+        double dist;
 
-            sifter::matches sm = sifter::match(key_pts[i], key_pts[j], cam,
-                    max_dist, max_kp_dist);
+        sat_state s1;
+        sat_state s2;
 
-            for (int k = 0; k < sm.num_pts; k++) {
+        cv::Mat img1;
+        cv::Mat img2;
 
-                points_query.push_back(sm.query[k]);
-                points_train.push_back(sm.train[k]);
+        // Generate first satellite state & image
+        std::cout << " -- Generating first image" << std::endl;
+        do {
+            
+            s1 = gen_state(rnd); 
 
-                dxs.push_back(sm.dx);
+            img1 = cam.real_image(t, s1);
 
-            }
+            blp = sat_cam::blp(img1);
 
-        }
+        } while (blp > max_blp);
+
+        // Generate second satellite state & image
+        std::cout << " -- Generating second image" << std::endl;
+        do {
+
+            do {
+                    
+                s2 = gen_state(rnd); 
+                
+                dist = cam.pt_dist(t, t, s1, s2, c, c);
+
+            } while (dist > max_dist);
+
+            img2 = cam.real_image(t, s2);
+
+            blp = sat_cam::blp(img2);
+
+        } while (blp > max_blp);
+
+        // Save image
+        cv::imwrite("images/gen_pic_" + int2str0(i, 6) + "_1.png", img1);
+        cv::imwrite("images/gen_pic_" + int2str0(i, 6) + "_2.png", img2);
+
+        // SIFT key points
+        sifter::points pts1 = sifter::sift(t, s1, img1, num_pts);
+        sifter::points pts2 = sifter::sift(t, s2, img2, num_pts);
+
+        // Match SIFT key points
+        sifter::matches sm = sifter::match(pts1, pts2, cam, max_dist,
+                max_kp_dist);
+
+        for (int k = 0; k < sm.num_pts; k++) {
+
+            points_query.push_back(sm.query[k]);
+            points_train.push_back(sm.train[k]);
+
+            dxs.push_back(sm.dx);
+
+        } 
 
     }
 
@@ -167,5 +157,38 @@ void generator::setup() {
     max_dist = getset<double>(par, "Max. Key Point Angular Distance (deg)", 1);
     
     max_kp_dist = getset<double>(par, "Max. Key Point Pixel Distance", 100);
+
+}
+
+sat_state generator::gen_state(rando& rnd) {
+
+    // Equatorial radius of Earth
+    const double RE = 6378;
+
+    // Generate orbital elements
+    coe orbit;
+    orbit.a() = RE + avg_alt + var_alt * rnd.unif();
+    orbit.e() = 0;
+    orbit.i() = rad2deg(acos(rnd.unif()));
+    orbit.w() = 180 * rnd.unif();
+    orbit.u() = 180 * rnd.unif();
+    orbit.f() = 180 * rnd.unif();
+
+    // Satellite state
+    sat_state s;
+
+    // Set ideal camera parameters
+    s.set_ideal_cam(cam.u);
+
+    // Set orbital elements
+    s.set_coe(orbit);
+
+    // Set to nadir-pointing
+    s.set_nadir();
+
+    // Randomize state
+    s = rzer.randomize(s, rnd);
+
+    return s;
 
 }
