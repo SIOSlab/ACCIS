@@ -1,6 +1,6 @@
 mkdir -p build
 cd build
-cmake ..
+cmake .. -DCMAKE_PREFIX_PATH=/opt/local
 make
 cd ..
 
