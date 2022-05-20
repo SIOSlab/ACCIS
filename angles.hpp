@@ -38,7 +38,7 @@ inline double ahav(double x) {
 }
 
 inline double hav_dist(double lat1, double lat2, double lon1, double lon2) {
-    return ahav(hav(lat2-lat1) + cos(lat1)*cos(lat2)*hav(lon2-lon1));
+    return ahav(hav(lat2-lat1) + cos(deg2rad(lat1))*cos(deg2rad(lat2))*hav(lon2-lon1));
 }
 
 #endif
