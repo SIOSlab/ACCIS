@@ -26,7 +26,7 @@ namespace filter {
         std::vector<mat<>> par;
 
         // Constructor
-        dist(int dim_ = 0) : dim(dim_), mean(dim), cov(dim, dim) {}
+        dist(int dim_ = 0) : dim(dim_), mean(dim), cov(dim, dim) {} 
 
     };
 
@@ -71,6 +71,9 @@ namespace filter {
         // Joint distribution from two independent distributions 
         virtual dist join(const dist& dist1, const dist& dist2) = 0;
 
+        // Marginal distribution for distribution components
+        virtual dist marginal(const dist& joint_dist, int ind, int dim) = 0; 
+        
         // Standard normal distribution
         //virtual dist normal(int dim) = 0;
 

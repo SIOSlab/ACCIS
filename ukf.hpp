@@ -29,6 +29,10 @@ class ukf : public filter::base {
     virtual filter::dist join(const filter::dist& dist1,
                 const filter::dist& dist2);
 
+    // Marginal distribution for distribution components
+    virtual filter::dist marginal(const filter::dist& joint_dist, int ind,
+                int dim); 
+    
     // Matrix square root
     static mat<> mat_sqrt(cmat<> A);
 

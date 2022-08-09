@@ -84,6 +84,21 @@ dist house::join(const dist& dist1, const dist& dist2) {
 
 }
 
+// Marginal distribution for distribution components
+dist house::marginal(const dist& joint_dist, int ind, int dim) {
+
+    dist marg_dist(dim);
+
+    marg_dist.mean = joint_dist.mean.segment(ind, dim);
+
+    marg_dist.cov = joint_dist.cov.block(ind, ind, dim, dim);
+
+    // TO DO -- SKEWNESS & KURTOSIS
+
+    return marg_dist;
+
+} 
+
 dist house::get_dist(cmat<> X, cvec<> w) {
 
     dist distX(X.rows());
