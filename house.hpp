@@ -29,6 +29,10 @@ class house : public filter::base {
     virtual filter::dist join(const filter::dist& dist1,
                 const filter::dist& dist2);
 
+    // Marginal distribution for distribution components
+    virtual filter::dist marginal(const filter::dist& joint_dist, int ind,
+                int dim); 
+    
     // Distribution from points & weights
     static filter::dist get_dist(cmat<> X, cvec<> w);
 

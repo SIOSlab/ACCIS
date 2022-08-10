@@ -79,6 +79,19 @@ dist ukf::join(const dist& dist1, const dist& dist2) {
 
 }
 
+// Marginal distribution for distribution components
+dist ukf::marginal(const dist& joint_dist, int ind, int dim) {
+
+    dist marg_dist(dim);
+
+    marg_dist.mean = joint_dist.mean.segment(ind, dim);
+
+    marg_dist.cov = joint_dist.cov.block(ind, ind, dim, dim);
+
+    return marg_dist;
+
+} 
+
 // Matrix square root
 mat<> ukf::mat_sqrt(cmat<> A) {
     using namespace Eigen;

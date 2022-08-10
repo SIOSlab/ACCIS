@@ -30,16 +30,22 @@ filter::dist cross_cal::run(const transmission& query, filter::base& filt) {
 
             sift_match smatch = match(query, tr);
 
-            filter::dist dist_w = filt.join(dist_w_4kp, tr.dist_x);
+            if (smatch.num_pts > 0) {
+
+                filter::dist dist_xx = filt.join(dist_x, tr.dist_x);
             
-            h.tr = tr.t;
+                h.tr = tr.t;
 
-            for (int i = 0; i < smatch.num_pts; i++) {
+                for (int i = 0; i < smatch.num_pts; i++) {
 
-                h.zr = smatch.train[i];
+                    h.zr = smatch.train[i];
 
-                dist_x = filt.update(query.t, smatch.query[i],
-                        dist_x, dist_w, h);
+                    dist_xx = filt.update(query.t, smatch.query[i],
+                            dist_xx, dist_w_4kp, h);
+
+                }
+
+                dist_x = filt.marginal(dist_xx, 0, sat_state::N);
 
             }
                 
@@ -128,8 +134,8 @@ cross_cal::sift_match cross_cal::match(const cross_cal::transmission& query,
 vec<> cross_cal::meas::h(double t, cvec<> x, cvec<> w) {
 
     sat_state xr, xc;
-    xr.X = w.tail<sat_state::N>();
-    xc.X = x;
+    xc.X = x.head<sat_state::N>();
+    xr.X = x.tail<sat_state::N>();
 
     vec<2> wr1, wr2, wc1, wc2;
     wr1 = w.segment<2>(0);
