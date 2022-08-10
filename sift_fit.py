@@ -1,6 +1,6 @@
 from numpy import *
 
-table = genfromtxt("results/gen.csv", delimiter=",")
+table = genfromtxt("sift_coefs/gen.csv", delimiter=",")
 
 npts = table.shape[0]
 ncol = table.shape[1]
@@ -20,14 +20,14 @@ B = K2
 
 X, res, rank, s = linalg.lstsq(A, B, rcond=-1)
 
-savetxt("results/sift_fit.csv", transpose(X), delimiter=",")
+savetxt("sift_coefs/h_mat.csv", transpose(X), delimiter=",")
 
 dY = B - matmul(A, X)
 
 R = matmul(transpose(dY), dY) / npts
 
-savetxt("results/sift_fit_cov.csv", R, delimiter=",")
+savetxt("sift_coefs/cov.csv", R, delimiter=",")
 
 bias = sum(dY, axis=0) / npts
 
-savetxt("results/sift_fit_bias.csv", bias, delimiter=",")
+savetxt("sift_coefs/bias.csv", bias, delimiter=",")

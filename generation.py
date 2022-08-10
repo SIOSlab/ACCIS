@@ -8,4 +8,4 @@ gen = accis_get_gen("gen")
 
 table = gen.run()
 
-np.savetxt("results/gen.csv", table, delimiter=",")
+np.savetxt("sift_coefs/gen.csv", table, delimiter=",")

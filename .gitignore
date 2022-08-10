@@ -2,5 +2,6 @@ build/*
 images/*
 plots/*
 results/*
+sift_coefs/*
 __pycache__/*
 archive/*
