@@ -23,7 +23,7 @@ filter::dist cross_cal::run(const transmission& query, filter::base& filt) {
         if (dt > 0 && dt < dt_max && query.sat_id != tr.sat_id) {
 
             matches smatch = match(query.sift, tr.sift, cam, 
-                    kp_r_max, kp_d_max);
+                    kp_d_max, kp_r_max);
 
             if (smatch.num_pts > 0) {
 
