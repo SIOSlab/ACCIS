@@ -37,7 +37,7 @@ mat<> generator::run() {
     vec<2> c = cam.center();
 
     // Matched key points & state differences
-    std::vector<vec<4>> points_query, points_train;
+    std::vector<vec<4>> dzs;
     std::vector<vec<img_state_diff::N>> dxs;
     
     // Generate & process states & images
@@ -97,12 +97,8 @@ mat<> generator::run() {
                 max_kp_dist);
 
         for (int k = 0; k < sm.num_pts; k++) {
-
-            points_query.push_back(sm.query[k]);
-            points_train.push_back(sm.train[k]);
-
+            dzs.push_back(sm.query[k] - sm.train[k]);
             dxs.push_back(sm.dx);
-
         } 
 
     }
@@ -110,11 +106,10 @@ mat<> generator::run() {
     // Make table of states & key points
     int num_pts = dxs.size(); 
 
-    mat<> table(num_pts, img_state_diff::N + 8);
-    vec<> r(img_state_diff::N + 8);
+    mat<> table(num_pts, img_state_diff::N + 4);
     for (int k = 0; k < num_pts; k++) {
-        r << points_query[k], points_train[k], dxs[k];
-        table.row(k) = r;
+        table.row(k).head<4>() = dzs[k];
+        table.row(k).tail<img_state_diff::N>() = dxs[k];
     }
 
     // Return table
