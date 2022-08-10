@@ -3,6 +3,7 @@
 #include "angles.hpp"
 #include "format.hpp"
 #include "roam.h"
+#include "sifter.hpp"
 
 #include <opencv2/core.hpp>
 #include <opencv2/imgcodecs.hpp> 
@@ -66,11 +67,15 @@ void accis_sat::step() {
         // Process image
         if (blp <= max_blp) {
 
+            // Estimated state at image generation
+            sat_state x_img;
+            x_img.X = dist_x.mean;
+
             // Populate transmission tr_last
             tr_last.sat_id = sat_id;
             tr_last.step = step_no;
             tr_last.t = t;
-            tr_last.sift = cc.sift(image);
+            tr_last.sift = sifter::sift(t, x_img, image, cc.num_sift_pts);
             tr_last.dist_x = dist_x;
 
             // Run image-based cross-calibration

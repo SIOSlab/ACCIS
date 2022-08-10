@@ -1,6 +1,7 @@
 #include "accis.hpp"
 
 #include "angles.hpp"
+#include "eigen_csv.hpp"
 #include "house.hpp"
 #include "mat.hpp"
 #include "ukf.hpp"
@@ -132,16 +133,15 @@ void accis_sat::setup() {
     att_ctrl.kd = getset<double>(par, "PD Constant kd", 100);
     att_ctrl.J = J.asDiagonal();
 
-    double std_kp = getset<double>(par, "Keypoint Error StD", 10); 
-    filter::dist dist_w_kp(2);
+    mat<4,4> sift_cov;
+    mat<4,img_state_diff::N> sift_h_mat;
+
+    eigen_csv::read("sift_coefs/cov.csv", false, false, sift_cov);    
+    eigen_csv::read("sift_coefs/h_mat.csv", false, false, sift_h_mat);    
+
+    filter::dist dist_w_kp(4);
     dist_w_kp.mean.setZero();
-    dist_w_kp.cov.setIdentity();
-    dist_w_kp.cov *= (std_kp * std_kp);
-    vec<2> skew_w_kp, kurt_w_kp;
-    skew_w_kp.setZero();
-    kurt_w_kp.setConstant(3);
-    dist_w_kp.par.push_back(skew_w_kp);
-    dist_w_kp.par.push_back(kurt_w_kp); 
+    dist_w_kp.cov = sift_cov;
 
     cc.train.clear();
     cc.dist_w_kp = dist_w_kp;
@@ -150,6 +150,7 @@ void accis_sat::setup() {
     cc.kp_r_max = getset<double>(par, "Keypoint Max. Distance (pixels)", 100);
     cc.kp_d_max = getset<double>(par, "Keypoint Max. Distance (deg)", 0.1);
     cc.cam = cam;
+    cc.h.h_mat = sift_h_mat;
 
     max_blp = getset<double>(par, "Max. Percentage of Black Pixels", 5);
 

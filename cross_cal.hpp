@@ -5,6 +5,7 @@
 #include <mat.hpp>
 #include <sat_cam.hpp>
 #include <sat_state.hpp>
+#include <sifter.hpp>
 
 #include <opencv2/core.hpp>
 
@@ -14,26 +15,6 @@ class cross_cal {
 
     public:
 
-    struct sift_pts {
-
-        int num_pts;
-
-        std::vector<vec<4>> key_pts;
-
-        cv::Mat desc;
-
-    };
-
-    struct sift_match {
-
-        int num_pts;
-
-        std::vector<vec<4>> query;
-
-        std::vector<vec<4>> train;
-
-    };
-
     struct transmission {
 
         int sat_id;
@@ -42,7 +23,7 @@ class cross_cal {
 
         double t;
 
-        sift_pts sift;
+        sifter::points sift;
 
         filter::dist dist_x;
 
@@ -52,21 +33,17 @@ class cross_cal {
 
         public:
 
+        mat<> h_mat;
+
         double tr;
-
-        vec<4> zr;
-
-        sat_cam cam;
 
         virtual vec<> h(double t, cvec<> x, cvec<> w);
 
     };
 
-    sift_pts sift(const cv::Mat& image); 
-
-    sift_match match(const transmission& query, const transmission& train); 
-
     //----------------------------------------------------------------
+
+    meas h;
 
     std::vector<transmission> train; 
 
