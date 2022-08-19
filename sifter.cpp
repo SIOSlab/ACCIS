@@ -72,20 +72,23 @@ matches sifter::match(const points& query, const points& train,
 
     for (const std::vector<DMatch>& dmv : dmatches) {
 
-        DMatch dmatch = dmv[0];
+        for (const DMatch& dmatch : dmv) {
         
-        int ind_query = dmatch.queryIdx;
-        int ind_train = dmatch.trainIdx;
+            int ind_query = dmatch.queryIdx;
+            int ind_train = dmatch.trainIdx;
         
-        double dist = cam.pt_dist(query.t, train.t, query.state, train.state,
-                query.key_center[ind_query], train.key_center[ind_train]); 
+            double dist = cam.pt_dist(query.t, train.t, query.state,
+                    train.state, query.key_center[ind_query], 
+                    train.key_center[ind_train]); 
         
-        double kp_dist = dmatch.distance;   
+            double kp_dist = dmatch.distance;   
         
-        if (dist < max_dist && kp_dist < max_kp_dist) {
-            sm.query.push_back(query.key_pts[ind_query]);
-            sm.train.push_back(train.key_pts[ind_train]);
-            sm.num_pts++;
+            if (dist < max_dist && kp_dist < max_kp_dist) {
+                sm.query.push_back(query.key_pts[ind_query]);
+                sm.train.push_back(train.key_pts[ind_train]);
+                sm.num_pts++;
+            }
+
         }
     
     }
