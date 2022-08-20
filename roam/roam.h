@@ -29,6 +29,8 @@ extern void eci2ll_(const double* t, const double* reci, const double* tol,
 
 extern void eci2ef_(const double* t, const double* reci, double* recef);
 
+extern void ef2eci_(const double* t, const double* recef, double* reci);
+
 #ifdef __cplusplus
 }
 #endif

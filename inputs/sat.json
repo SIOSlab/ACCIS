@@ -31,7 +31,7 @@
         1.0
     ],
     "Initial Body Attitude StD (rad)": 0.0001,
-    "Keypoint Max. Distance (deg)": 1,
+    "Keypoint Max. Distance (deg)": 3,
     "Camera Focal Length (mm)": 2000.0,
     "Initial Position StD (km)": 0.01,
     "Number of SIFT Points": 1000,
