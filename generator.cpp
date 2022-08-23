@@ -1,6 +1,7 @@
 #include "generator.hpp"
 
 #include "angles.hpp"
+#include "cross_cal.hpp"
 #include "format.hpp"
 #include "rando.hpp"
 #include "sifter.hpp"
@@ -36,9 +37,8 @@ mat<> generator::run() {
     // Camera center
     vec<2> c = cam.center();
 
-    // Matched key points & state differences
-    std::vector<vec<4>> dzs;
-    std::vector<vec<img_state_diff::N>> dxs;
+    // Key point errors
+    std::vector<vec<4>> kp_err;
     
     // Generate & process states & images
     for (int i = 1; i <= max_imgs; i++) {
@@ -97,23 +97,32 @@ mat<> generator::run() {
                 max_kp_dist);
 
         for (int k = 0; k < sm.num_pts; k++) {
-            dzs.push_back(sm.query[k] - sm.train[k]);
-            dxs.push_back(sm.dx);
+
+            vec<4> z  = sm.query[k];
+            vec<4> zr = sm.train[k];        
+            
+            vec<4> zc = cross_cal_meas(t, t, s1, s2, cam, zr);
+
+            kp_err.push_back(z - zc);
+        
         } 
 
     }
 
-    // Make table of states & key points
-    int num_pts = dxs.size(); 
+    // Number of key point pairs
+    int num_pts = kp_err.size(); 
+    std::cout << num_pts << " key point pairs generated" << std::endl;  
 
-    mat<> table(num_pts, img_state_diff::N + 4);
-    for (int k = 0; k < num_pts; k++) {
-        table.row(k).head<4>() = dzs[k];
-        table.row(k).tail<img_state_diff::N>() = dxs[k];
-    }
+    // Make table of key point errors
+    mat<> w(4, num_pts);
+    for (int k = 0; k < num_pts; k++) 
+        w.col(k) = kp_err[k];
 
-    // Return table
-    return table;
+    // Error covariance
+    mat<4,4> Pww = w * w.transpose() / num_pts; 
+
+    // Return covariance
+    return Pww;
 
 }
 

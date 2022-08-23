@@ -137,7 +137,6 @@ void accis_sat::setup() {
     mat<4,img_state_diff::N> sift_h_mat;
 
     eigen_csv::read("sift_coefs/cov.csv", false, false, sift_cov);    
-    eigen_csv::read("sift_coefs/h_mat.csv", false, false, sift_h_mat);    
 
     filter::dist dist_w_kp(4);
     dist_w_kp.mean.setZero();
@@ -150,7 +149,6 @@ void accis_sat::setup() {
     cc.kp_r_max = getset<double>(par, "Keypoint Max. Distance (pixels)", 100);
     cc.kp_d_max = getset<double>(par, "Keypoint Max. Distance (deg)", 0.1);
     cc.cam = cam;
-    cc.h.h_mat = sift_h_mat;
 
     max_blp = getset<double>(par, "Max. Percentage of Black Pixels", 5);
 

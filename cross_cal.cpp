@@ -16,6 +16,10 @@ filter::dist cross_cal::run(const transmission& query, filter::base& filt) {
 
     filter::dist dist_x = query.dist_x;
 
+    meas h;
+
+    h.cam = cam;
+
     for (const transmission& tr : train) { 
     
         double dt = query.t - tr.t;
@@ -32,12 +36,14 @@ filter::dist cross_cal::run(const transmission& query, filter::base& filt) {
                           << " points" << std::endl;
 
                 filter::dist dist_xx = filt.join(dist_x, tr.dist_x);
-            
+           
                 h.tr = tr.t;
 
                 for (int i = 0; i < smatch.num_pts; i++) {
 
-                    vec<4> z = smatch.train[i] - smatch.query[i];
+                    h.zr = smatch.train[i];
+
+                    vec<4> z = smatch.query[i];
 
                     dist_xx = filt.update(query.t, z, dist_xx, dist_w_kp, h);
 
@@ -61,9 +67,29 @@ vec<> cross_cal::meas::h(double t, cvec<> x, cvec<> w) {
     xc.X = x.head<sat_state::N>();
     xr.X = x.tail<sat_state::N>();
 
-    img_state_diff diff(t, tr, xc, xr);
-
-    return h_mat * diff.dx + w;
+    return cross_cal_meas(t, tr, xc, xr, cam, zr) + w;
 
 }
-    
+
+vec<4> cross_cal_meas(double tc, double tr, const sat_state& xc,
+        const sat_state& xr, sat_cam& cam, cvec<4> zr) {
+
+    vec<2> pixr1, pixr2;
+    pixr1 = zr.head<2>();
+    pixr2 = zr.tail<2>(); 
+
+    vec<2> ll1, ll2;
+    ll1 = cam.pix2latlon(tr, xr, cam.undistort(xr, pixr1));
+    ll2 = cam.pix2latlon(tr, xr, cam.undistort(xr, pixr2));
+
+    vec<2> pixc1, pixc2;
+    pixc1 = cam.distort(xc, cam.latlon2pix(tc, xc, ll1));
+    pixc2 = cam.distort(xc, cam.latlon2pix(tc, xc, ll2));
+
+    vec<4> zc;
+    zc.head<2>() = pixc1;
+    zc.tail<2>() = pixc2; 
+
+    return zc;
+
+}

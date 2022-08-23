@@ -33,17 +33,17 @@ class cross_cal {
 
         public:
 
-        mat<> h_mat;
-
         double tr;
+
+        vec<4> zr;
+
+        sat_cam cam;
 
         virtual vec<> h(double t, cvec<> x, cvec<> w);
 
     };
 
     //----------------------------------------------------------------
-
-    meas h;
 
     std::vector<transmission> train; 
 
@@ -62,5 +62,8 @@ class cross_cal {
     filter::dist run(const transmission& query, filter::base& filt);
 
 };
+
+vec<4> cross_cal_meas(double tc, double tr, const sat_state& xc,
+        const sat_state& xr, sat_cam& cam, cvec<4> zr);
 
 #endif
