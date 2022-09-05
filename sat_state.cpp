@@ -167,7 +167,7 @@ mat<> sat_state_randomizer::cov() {
 img_state_diff::img_state_diff(double t1, double t2, const sat_state& s1,
         const sat_state& s2) {
 
-    vec<3> reci1, reci2, recef1, recef2, dr_ecef, dr_eci;
+    vec<3> reci1, reci2, recef1, recef2, dr_ecef;
 
     reci1 = s1.r();
     reci2 = s2.r();
@@ -177,17 +177,33 @@ img_state_diff::img_state_diff(double t1, double t2, const sat_state& s1,
 
     dr_ecef = recef2 - recef1;
 
-    ef2eci_(&t1, dr_ecef.data(), dr_eci.data());
+    quat qecef1 = ecef_quat(t1);
+    quat qecef2 = ecef_quat(t2); 
 
-    quat q1 = s1.qb() * s1.qc();
-    quat q2 = s2.qb() * s2.qc();
+    quat q1 = qecef1.inverse() * s1.qb() * s1.qc();
+    quat q2 = qecef2.inverse() * s2.qb() * s2.qc();
 
-    dx.head<3>() = q1.inverse()._transformVector(dr_eci);
+    dx.head<3>() = dr_ecef;
 
     dx.segment<3>(3) = quat2rod(q2 * q1.inverse()); 
 
     dx(6) = s2.f() - s1.f();
 
     dx.tail<sat_state::ND>() = s2.c() - s1.c();
+
+}
+
+quat ecef_quat(double t) {
+
+    mat<3,3> I, R;
+
+    I = mat<3,3>::Identity();
+
+    for (int i = 0; i < 3; i++)
+        ef2eci_(&t, I.col(i).data(), R.col(i).data());
+
+    quat q(R);
+
+    return q;
 
 }

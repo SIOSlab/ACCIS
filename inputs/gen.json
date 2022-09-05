@@ -6,7 +6,7 @@
     "Seed": 0,
     "Camera Pixel Density (pixels/mm)": 1.0,
     "Max. Number of Images": 100,
-    "Number of Key Points": 10000,
+    "Number of Key Points": 1000,
     "Body Attitude StD (rad)": 0.017453292519943295,
     "Max. Percentage of Black Pixels": 5.0,
     "Max. Key Point Pixel Distance": 100.0,

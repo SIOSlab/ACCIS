@@ -168,4 +168,6 @@ class img_state_diff {
 
 }; 
 
+quat ecef_quat(double t);
+
 #endif
