@@ -97,8 +97,8 @@ matches sifter::match(const points& query, const points& train,
 
 }
 
-points_rgb sift_rgb(double t, const sat_state& state, const cv::Mat& image,
-        int num_pts) {
+points_rgb sifter::sift_rgb(double t, const sat_state& state,
+        const cv::Mat& image, int num_pts) {
 
     std::vector<cv::Mat> image_rgb;
 
@@ -113,7 +113,7 @@ points_rgb sift_rgb(double t, const sat_state& state, const cv::Mat& image,
 
 }
 
-matches match_rgb(const points_rgb& query, const points_rgb& train,
+matches sifter::match_rgb(const points_rgb& query, const points_rgb& train,
         sat_cam& cam, double max_dist, double max_kp_dist) {
 
     matches match_rgb;
