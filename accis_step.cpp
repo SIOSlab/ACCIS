@@ -75,7 +75,7 @@ void accis_sat::step() {
             tr_last.sat_id = sat_id;
             tr_last.step = step_no;
             tr_last.t = t;
-            tr_last.sift = sifter::sift(t, x_img, image, cc.num_sift_pts);
+            tr_last.sift = sifter::sift_rgb(t, x_img, image, cc.num_sift_pts);
             tr_last.dist_x = dist_x;
 
             // Run image-based cross-calibration

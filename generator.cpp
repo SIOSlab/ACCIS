@@ -89,11 +89,11 @@ mat<> generator::run() {
         cv::imwrite("images/gen_pic_" + int2str0(i, 6) + "_2.png", img2);
 
         // SIFT key points
-        sifter::points pts1 = sifter::sift(t, s1, img1, num_pts);
-        sifter::points pts2 = sifter::sift(t, s2, img2, num_pts);
+        sifter::points_rgb pts1 = sifter::sift_rgb(t, s1, img1, num_pts);
+        sifter::points_rgb pts2 = sifter::sift_rgb(t, s2, img2, num_pts);
 
         // Match SIFT key points
-        sifter::matches sm = sifter::match(pts1, pts2, cam, max_dist,
+        sifter::matches sm = sifter::match_rgb(pts1, pts2, cam, max_dist,
                 max_kp_dist);
 
         for (int k = 0; k < sm.num_pts; k++) {

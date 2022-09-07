@@ -23,7 +23,7 @@ class cross_cal {
 
         double t;
 
-        sifter::points sift;
+        sifter::points_rgb sift;
 
         filter::dist dist_x;
 

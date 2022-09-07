@@ -44,6 +44,14 @@ namespace sifter {
     matches match(const points& query, const points& train, sat_cam& cam,
             double max_dist, double max_kp_dist);
 
+    typedef std::array<points,3> points_rgb;
+
+    points_rgb sift_rgb(double t, const sat_state& state, const cv::Mat& image,
+            int num_pts);
+
+    matches match_rgb(const points_rgb& query, const points_rgb& train,
+            sat_cam& cam, double max_dist, double max_kp_dist);
+
 }
 
 #endif

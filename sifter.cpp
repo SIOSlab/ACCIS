@@ -96,3 +96,47 @@ matches sifter::match(const points& query, const points& train,
     return sm;
 
 }
+
+points_rgb sift_rgb(double t, const sat_state& state, const cv::Mat& image,
+        int num_pts) {
+
+    std::vector<cv::Mat> image_rgb;
+
+    cv::split(image, image_rgb);
+
+    points_rgb pts_rgb;
+
+    for (int i = 0; i < 3; i++)
+        pts_rgb[i] = sift(t, state, image_rgb[i], num_pts);
+
+    return pts_rgb;
+
+}
+
+matches match_rgb(const points_rgb& query, const points_rgb& train,
+        sat_cam& cam, double max_dist, double max_kp_dist) {
+
+    matches match_rgb;
+
+    match_rgb.num_pts = 0;
+
+    for (int i = 0; i < 3; i++) {
+    
+        matches match_i = match(query[i], train[i], cam, max_dist, max_kp_dist);
+
+        match_rgb.num_pts += match_i.num_pts;
+
+        if (i == 0)
+            match_rgb.dx = match_i.dx;         
+
+        match_rgb.query.insert(match_rgb.query.end(), match_i.query.begin(),
+                match_i.query.end());
+
+        match_rgb.train.insert(match_rgb.train.end(), match_i.train.begin(),
+                match_i.train.end());
+
+    }
+
+    return match_rgb;
+
+}
