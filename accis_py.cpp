@@ -23,4 +23,10 @@ PYBIND11_MODULE(accis, a) {
         .def("get_param", &generator::get_param)
         .def("run",       &generator::run); 
 
+    py::class_<observer>(a, "observer")
+        .def(py::init<>())
+        .def("set_param", &observer::set_param)
+        .def("f", &observer::f)
+        .def("h", &observer::h); 
+
 }
