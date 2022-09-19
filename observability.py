@@ -31,12 +31,12 @@ pts2 = np.random.rand(4, npts) * npix
 
 observer.set_pts(pts1, pts2)
 
-print(pts1)
-
 h = lambda dx : observer.h(dx)
 
 ndx = 12
 
 dxc = np.zeros(ndx)
 
+z = h(dxc)
 
+print(z)

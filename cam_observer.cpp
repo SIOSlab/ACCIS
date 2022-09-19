@@ -24,7 +24,7 @@ vec<> cam_observer::h(cvec<> dx_cam) {
     s1.c() += dx_cam.segment<sat_state::ND>(6);
     s2.c() += dx_cam.tail<sat_state::ND>();
 
-    vec<> x1, x2;
+    vec<> x1(2 * sat_state::N), x2(2 * sat_state::N);
     x1 << s1.X, s2.X;
     x2 << s2.X, s1.X;
     
@@ -43,7 +43,7 @@ vec<> cam_observer::h(cvec<> dx_cam) {
     for (int i = 0; i < n2; i++)
         z2.col(i) = cross_cal_meas(t2, t1, s2, s1, sat2.cam, pts2.col(i));
 
-    vec<> z;
+    vec<> z(4 * (n1 + n2));
     z << z1.reshaped(), z2.reshaped();
 
     return z;
