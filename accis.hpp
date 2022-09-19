@@ -30,7 +30,7 @@ class accis_sat {
 
         void transmit(accis_sat& target);
 
-    private:
+        //----------------------------------------------------------------------
 
         // Called by constructor and set_param
         void setup();

@@ -1,4 +1,5 @@
 #include "accis.hpp"
+#include "cam_observer.hpp"
 #include "generator.hpp"
 
 #include <pybind11/pybind11.h>
@@ -23,10 +24,10 @@ PYBIND11_MODULE(accis, a) {
         .def("get_param", &generator::get_param)
         .def("run",       &generator::run); 
 
-    py::class_<observer>(a, "observer")
+    py::class_<cam_observer>(a, "cam_observer")
         .def(py::init<>())
-        .def("set_param", &observer::set_param)
-        .def("f", &observer::f)
-        .def("h", &observer::h); 
+        .def("set_param", &cam_observer::set_param)
+        .def("set_pts", &cam_observer::set_pts)
+        .def("h", &cam_observer::h); 
 
 }
