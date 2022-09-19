@@ -3,6 +3,7 @@ import build.accis as accis
 from accis_io import *
 
 import numpy as np
+import numdifftools as nd
 
 sat = accis_get_sat('sat')
 
@@ -22,9 +23,9 @@ observer = accis.cam_observer()
 
 observer.set_param(p1, p2)
 
-npts = 10
+npts = 2
 
-npix = 1000
+npix = 100
 
 pts1 = np.random.rand(4, npts) * npix
 pts2 = np.random.rand(4, npts) * npix
@@ -37,6 +38,9 @@ ndx = 12
 
 dxc = np.zeros(ndx)
 
-z = h(dxc)
+obsmat = nd.Jacobian(h)(dxc)
 
-print(z)
+rk = np.linalg.matrix_rank(obsmat)
+
+print("Observability matrix rank:")
+print(rk)
