@@ -6,6 +6,4 @@ import numpy as np
 
 gen = accis_get_gen("gen")
 
-cov = gen.run()
-
-np.savetxt("sift_coefs/cov.csv", cov, delimiter=",")
+gen.run()

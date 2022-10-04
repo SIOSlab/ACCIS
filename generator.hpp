@@ -17,7 +17,7 @@ class generator {
 
         pydict::dict get_param();
         
-        mat<> run();
+        void run();
 
         sat_state gen_state(rando& rnd);
 
@@ -33,8 +33,6 @@ class generator {
 
         int max_imgs;
 
-        int num_pts;
-
         double max_blp;
 
         double avg_alt;
@@ -45,7 +43,6 @@ class generator {
         sat_state_randomizer rzer;
 
         double max_dist;
-        double max_kp_dist;
 
 };
 

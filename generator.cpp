@@ -2,9 +2,9 @@
 
 #include "angles.hpp"
 #include "cross_cal.hpp"
+#include "eigen_csv.hpp"
 #include "format.hpp"
 #include "rando.hpp"
-#include "sifter.hpp"
 
 #include <opencv2/core.hpp>
 #include <opencv2/imgcodecs.hpp> 
@@ -26,7 +26,7 @@ pydict::dict generator::get_param() {
     return par;
 }
 
-mat<> generator::run() {
+void generator::run() {
 
     // Time
     const double t = 0;
@@ -37,8 +37,9 @@ mat<> generator::run() {
     // Camera center
     vec<2> c = cam.center();
 
-    // Key point errors
-    std::vector<vec<4>> kp_err;
+    // Generated states
+    mat<sat_state::N> X1(sat_state::N, max_imgs); 
+    mat<sat_state::N> X2(sat_state::N, max_imgs); 
     
     // Generate & process states & images
     for (int i = 1; i <= max_imgs; i++) {
@@ -84,45 +85,20 @@ mat<> generator::run() {
 
         } while (blp > max_blp);
 
-        // Save image
-        cv::imwrite("images/gen_pic_" + int2str0(i, 6) + "_1.png", img1);
-        cv::imwrite("images/gen_pic_" + int2str0(i, 6) + "_2.png", img2);
+        std::cout << " -- Saving Results" << std::endl;
 
-        // SIFT key points
-        sifter::points pts1 = sifter::sift(t, s1, img1, num_pts);
-        sifter::points pts2 = sifter::sift(t, s2, img2, num_pts);
+        // Save images
+        cv::imwrite("gen/pic_" + int2str0(i, 6) + "_1.png", img1);
+        cv::imwrite("gen/pic_" + int2str0(i, 6) + "_2.png", img2);
 
-        // Match SIFT key points
-        sifter::matches sm = sifter::match(pts1, pts2, cam, max_dist,
-                max_kp_dist);
-
-        for (int k = 0; k < sm.num_pts; k++) {
-
-            vec<4> z  = sm.query[k];
-            vec<4> zr = sm.train[k];        
-            
-            vec<4> zc = cross_cal_meas(t, t, s1, s2, cam, zr);
-
-            kp_err.push_back(z - zc);
-        
-        } 
+        // Save states
+        X1.col(i-1) = s1.X;
+        X2.col(i-1) = s2.X;
+        eigen_csv::write(X1.leftCols(i).transpose(), "gen/state1.csv"); 
+        eigen_csv::write(X2.leftCols(i).transpose(), "gen/state2.csv"); 
 
     }
 
-    // Number of key point pairs
-    int num_pts = kp_err.size(); 
-    std::cout << num_pts << " key point pairs generated" << std::endl;  
-
-    // Make table of key point errors
-    mat<> w(4, num_pts);
-    for (int k = 0; k < num_pts; k++) 
-        w.col(k) = kp_err[k];
-
-    // Error covariance
-    mat<4,4> Pww = w * w.transpose() / num_pts; 
-
-    // Return covariance
-    return Pww;
 
 }
 
@@ -133,8 +109,6 @@ void generator::setup() {
     seed = getset<int>(par, "Seed", 0);
 
     max_imgs = getset<int>(par, "Max. Number of Images", 100);
-
-    num_pts = getset<int>(par, "Number of Key Points", 100);
 
     max_blp = getset<double>(par, "Max. Percentage of Black Pixels", 5);
 
@@ -158,10 +132,8 @@ void generator::setup() {
     rzer.stdf = getset<double>(par, "Camera Focal Length StD (mm)", 10);
     rzer.stdc = getset<double>(par, "Camera Distortion Parameter StD", 0.1);
 
-    max_dist = getset<double>(par, "Max. Key Point Angular Distance (deg)", 1);
+    max_dist = getset<double>(par, "Max. Angular Distance (deg)", 1);
     
-    max_kp_dist = getset<double>(par, "Max. Key Point Pixel Distance", 100);
-
 }
 
 sat_state generator::gen_state(rando& rnd) {
