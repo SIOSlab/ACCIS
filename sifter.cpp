@@ -52,7 +52,7 @@ points sifter::sift(double t, const sat_state& state, const cv::Mat& image,
 }
 
 matches sifter::match(const points& query, const points& train,
-        sat_cam& cam, double max_dist) {
+        double max_dist) {
 
     using namespace cv;
 
