@@ -53,9 +53,7 @@ class cross_cal {
 
     double dt_max; 
 
-    double kp_r_max;
-
-    double kp_d_max;
+    double max_dist;
 
     sat_cam cam;
 

@@ -23,11 +23,16 @@ filter::dist cross_cal::run(const transmission& query, filter::base& filt) {
     for (const transmission& tr : train) { 
     
         double dt = query.t - tr.t;
-    
-        if (dt > 0 && dt < dt_max && query.sat_id != tr.sat_id) {
 
-            matches smatch = match(query.sift, tr.sift, cam, 
-                    kp_d_max, kp_r_max);
+        sat_state sq, st;
+        sq.X = query.dist_x.mean;
+        st.X = tr.dist_x.mean;
+
+        bool overlap = cam.img_overlap(query.t, tr.t, sq, st); 
+
+        if (dt > 0 && dt < dt_max && query.sat_id != tr.sat_id && overlap) {
+
+            matches smatch = match(query.sift, tr.sift, max_dist);
 
             if (smatch.num_pts > 0) {
 

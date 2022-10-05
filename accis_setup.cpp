@@ -146,8 +146,7 @@ void accis_sat::setup() {
     cc.dist_w_kp = dist_w_kp;
     cc.num_sift_pts = getset<int>(par, "Number of SIFT Points", 1000);
     cc.dt_max = getset<double>(par, "Cross Calibration Time Memory (s)", 3600); 
-    cc.kp_r_max = getset<double>(par, "Keypoint Max. Distance (pixels)", 100);
-    cc.kp_d_max = getset<double>(par, "Keypoint Max. Distance (deg)", 0.1);
+    cc.max_dist = getset<double>(par, "Keypoint Max. Distance", 100);
     cc.cam = cam;
 
     max_blp = getset<double>(par, "Max. Percentage of Black Pixels", 5);
