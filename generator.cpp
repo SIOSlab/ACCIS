@@ -5,6 +5,7 @@
 #include "eigen_csv.hpp"
 #include "format.hpp"
 #include "rando.hpp"
+#include "sifter.hpp"
 
 #include <opencv2/core.hpp>
 #include <opencv2/imgcodecs.hpp> 
@@ -128,7 +129,11 @@ void generator::setup() {
         deg2rad(1));
     rzer.stdf = getset<double>(par, "Camera Focal Length StD (mm)", 10);
     rzer.stdc = getset<double>(par, "Camera Distortion Parameter StD", 0.1);
-    
+
+    num_pts = getset<int>(par, "Number of Key Points", 100);
+
+    max_dist = getset<double>(par, "Max. Keypoint Descriptor Distance", 100);
+
 }
 
 sat_state generator::gen_state(rando& rnd) {
@@ -161,5 +166,37 @@ sat_state generator::gen_state(rando& rnd) {
     s = rzer.randomize(s, rnd);
 
     return s;
+
+}
+
+mat<> generator::get_cov() {
+
+    using namespace sifter;
+
+    const double t = 0;
+    
+    mat<> X1, X2;
+    eigen_csv::read("gen/states1.csv", false, true, X1);
+    eigen_csv::read("gen/states2.csv", false, true, X2);
+
+    int npic = X1.rows();
+
+    for (int i  = 0; i < npic; i++) {
+
+        sat_state s1, s2;
+        s1.X = X1.row(i);
+        s2.X = X2.row(i);
+
+        cv::Mat img1 = cv::imread("gen/pic_" + int2str0(i, 6) + "_1.png");
+        cv::Mat img2 = cv::imread("gen/pic_" + int2str0(i, 6) + "_2.png");
+
+        points pts1 = sift(t, s1, img1, num_pts); 
+        points pts2 = sift(t, s2, img2, num_pts); 
+
+        matches mtch = match(pts1, pts2, max_dist);
+
+        
+
+    } 
 
 }

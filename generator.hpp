@@ -19,6 +19,8 @@ class generator {
         
         void run();
 
+        mat<> get_cov();
+
         sat_state gen_state(rando& rnd);
 
     private:
@@ -41,6 +43,10 @@ class generator {
         sat_cam cam;
         
         sat_state_randomizer rzer;
+
+        int num_pts;
+
+        double max_dist;
 
 };
 
