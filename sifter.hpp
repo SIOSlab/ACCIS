@@ -42,7 +42,7 @@ namespace sifter {
             int num_pts);
 
     matches match(const points& query, const points& train, sat_cam& cam,
-            double max_dist, double max_kp_dist);
+            double max_dist);
 
 }
 

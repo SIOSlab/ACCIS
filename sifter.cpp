@@ -52,7 +52,7 @@ points sifter::sift(double t, const sat_state& state, const cv::Mat& image,
 }
 
 matches sifter::match(const points& query, const points& train,
-        sat_cam& cam, double max_dist, double max_kp_dist) {
+        sat_cam& cam, double max_dist) {
 
     using namespace cv;
 
@@ -77,13 +77,9 @@ matches sifter::match(const points& query, const points& train,
             int ind_query = dmatch.queryIdx;
             int ind_train = dmatch.trainIdx;
         
-            double dist = cam.pt_dist(query.t, train.t, query.state,
-                    train.state, query.key_center[ind_query], 
-                    train.key_center[ind_train]); 
-        
             double kp_dist = dmatch.distance;   
         
-            if (dist < max_dist && kp_dist < max_kp_dist) {
+            if (kp_dist < max_dist) {
                 sm.query.push_back(query.key_pts[ind_query]);
                 sm.train.push_back(train.key_pts[ind_train]);
                 sm.num_pts++;
