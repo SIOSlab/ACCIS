@@ -13,6 +13,7 @@
 
 #include <cmath>
 #include <iostream>
+#include <vector>
 
 generator::generator() {
     setup();
@@ -181,6 +182,8 @@ mat<> generator::get_cov() {
 
     int npic = X1.rows();
 
+    std::vector<vec<4>> kp_err;
+
     for (int i  = 0; i < npic; i++) {
 
         sat_state s1, s2;
@@ -193,10 +196,21 @@ mat<> generator::get_cov() {
         points pts1 = sift(t, s1, img1, num_pts); 
         points pts2 = sift(t, s2, img2, num_pts); 
 
-        matches mtch = match(pts1, pts2, max_dist);
+        matches sm = match(pts1, pts2, max_dist);
 
+        for (int k = 0; k < sm.num_pts; k++) {
+
+            vec<4> z  = sm.query[k];
+            vec<4> zr = sm.train[k];        
+            
+            vec<4> zc = cross_cal_meas(t, t, s1, s2, cam, zr);
+
+            kp_err.push_back(z - zc);
         
-
+        } 
+        
     } 
+
+    
 
 }
