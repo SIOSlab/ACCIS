@@ -47,7 +47,6 @@ void generator::run() {
         std::cout << "Image Pair " << i << " of " << max_imgs << std::endl;
 
         double blp;
-        double dist;
 
         sat_state s1;
         sat_state s2;
@@ -75,9 +74,7 @@ void generator::run() {
                     
                 s2 = gen_state(rnd); 
                 
-                dist = cam.pt_dist(t, t, s1, s2, c, c);
-
-            } while (dist > max_dist);
+            } while (!cam.img_overlap(t, t, s1, s2));
 
             img2 = cam.real_image(t, s2);
 
@@ -131,8 +128,6 @@ void generator::setup() {
         deg2rad(1));
     rzer.stdf = getset<double>(par, "Camera Focal Length StD (mm)", 10);
     rzer.stdc = getset<double>(par, "Camera Distortion Parameter StD", 0.1);
-
-    max_dist = getset<double>(par, "Max. Angular Distance (deg)", 1);
     
 }
 

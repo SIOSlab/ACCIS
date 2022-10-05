@@ -64,6 +64,13 @@ class sat_cam {
     double pt_dist(double t1, double t2, const sat_state& x1,
             const sat_state& x2, cvec<2> pix1, cvec<2> pix2);
 
+    // Radius of small circle (deg) inscribed in image
+    double img_rad(double t, const sat_state& x);
+
+    // Determine whether two images overlap
+    bool img_overlap(double t1, double t2, const sat_state& x1,
+            const sat_state& x2);
+
     //--------------------------------------------------------------------------
     //  Image Distortions
     //--------------------------------------------------------------------------

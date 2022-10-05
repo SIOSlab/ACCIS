@@ -42,8 +42,6 @@ class generator {
         
         sat_state_randomizer rzer;
 
-        double max_dist;
-
 };
 
 #endif

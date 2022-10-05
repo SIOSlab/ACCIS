@@ -84,6 +84,24 @@ double sat_cam::pt_dist(double t1, double t2, const sat_state& x1,
     return hav_dist(ll1.x(), ll2.x(), ll1.y(), ll2.y());
 }
 
+double sat_cam::img_rad(double t, const sat_state& x) {
+    mat<2,4> crnr = corner_pix();
+    vec<2> c = center();
+    vec<4> d;
+    for (int i = 0; i < 4; i++)
+        d(i) = pt_dist(t, t, x, x, c, crnr.col(i));
+    return 0.5 * d.minCoeff(); 
+}
+
+bool sat_cam::img_overlap(double t1, double t2, const sat_state& x1,
+        const sat_state& x2) {
+    vec<2> c = center();
+    double d = pt_dist(t1, t2, x1, x2, c, c);
+    double r1 = img_rad(t1, x1); 
+    double r2 = img_rad(t2, x2);
+    return (d < r1) && (d < r2);
+}
+
 mat<2,4> sat_cam::corner_latlon(double t, const sat_state& x) {
     mat<2,4> pix, latlon;
     pix = corner_pix();

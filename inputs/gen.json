@@ -2,7 +2,6 @@
     "Camera Attitude StD (rad)": 0.017453292519943295,
     "Camera Distortion Parameter StD": 0.1,
     "Seed": 0,
-    "Max. Angular Distance (deg)": 1.0,
     "Camera Pixel Density (pixels/mm)": 1.0,
     "Max. Number of Images": 100,
     "Body Attitude StD (rad)": 0.017453292519943295,
