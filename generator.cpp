@@ -177,18 +177,18 @@ mat<> generator::get_cov() {
     const double t = 0;
     
     mat<> X1, X2;
-    eigen_csv::read("gen/states1.csv", false, true, X1);
-    eigen_csv::read("gen/states2.csv", false, true, X2);
+    eigen_csv::read("gen/state1.csv", false, true, X1);
+    eigen_csv::read("gen/state2.csv", false, true, X2);
 
     int npic = X1.rows();
 
     std::vector<vec<4>> kp_err;
 
-    for (int i  = 0; i < npic; i++) {
+    for (int i  = 1; i <= npic; i++) {
 
         sat_state s1, s2;
-        s1.X = X1.row(i);
-        s2.X = X2.row(i);
+        s1.X = X1.row(i-1);
+        s2.X = X2.row(i-1);
 
         cv::Mat img1 = cv::imread("gen/pic_" + int2str0(i, 6) + "_1.png");
         cv::Mat img2 = cv::imread("gen/pic_" + int2str0(i, 6) + "_2.png");
@@ -211,6 +211,19 @@ mat<> generator::get_cov() {
         
     } 
 
-    
+    // Number of key point pairs
+    int npairs = kp_err.size(); 
+    std::cout << npairs << " key point pairs generated" << std::endl;  
+
+    // Make table of key point errors
+    mat<> w(4, npairs);
+    for (int k = 0; k < npairs; k++) 
+        w.col(k) = kp_err[k];
+
+    // Error covariance
+    mat<4,4> Pww = w * w.transpose() / npairs; 
+
+    // Return covariance
+    return Pww;
 
 }
