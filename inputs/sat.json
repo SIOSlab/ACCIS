@@ -1,7 +1,7 @@
 {
     "Max. Percentage of Black Pixels": 5.0,
     "PD Constant kp": 10.0,
-    "Keypoint Max. Distance": 100.0,
+    "Keypoint Max. Distance": 10000.0,
     "Imaging Cadence": 60,
     "Camera Distortion Parameter StD": 0.01,
     "Principal Moments of Inertia (kg*m^2)": [
@@ -35,7 +35,7 @@
     "Camera Focal Length (mm)": 2000.0,
     "Initial Position StD (km)": 0.1,
     "Number of SIFT Points": 1000,
-    "Camera Attitude StD (rad)": 0.0017453292519943296,
+    "Camera Attitude StD (rad)": 0.00017453292519943296,
     "Camera Focal Length StD (mm)": 1.0,
     "Disturbance Force StD (N) - Ground Truth": 0.001,
     "Disturbance Torque StD (N*m) - Ground Truth": 0.1,

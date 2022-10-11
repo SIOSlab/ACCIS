@@ -8,8 +8,8 @@ sat = accis_get_sat('sat')
 p1 = sat.get_param()
 p2 = sat.get_param()
 
-p1["Orbit True Anomaly at Epoch (deg)"] = 0
-p2["Orbit True Anomaly at Epoch (deg)"] = 0.5
+p1["Orbit True Anomaly at Epoch (deg)"] = 4
+p2["Orbit True Anomaly at Epoch (deg)"] = 0
 
 p1["Random Number Generator Seed"] = 1
 p2["Random Number Generator Seed"] = 2

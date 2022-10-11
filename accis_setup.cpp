@@ -151,4 +151,6 @@ void accis_sat::setup() {
 
     max_blp = getset<double>(par, "Max. Percentage of Black Pixels", 5);
 
+    tr_last.step = -10;
+
 }
