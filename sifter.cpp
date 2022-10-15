@@ -72,12 +72,10 @@ matches sifter::match(const points& query, const points& train,
 
     for (const std::vector<DMatch>& dmv : dmatches) {
 
-        const double k = 0.6;
-
         double d1 = dmv.at(0).distance;
         double d2 = dmv.at(1).distance;
 
-        if (d1 / d2 < k) {
+        if (d1 / d2 < max_dist) {
 
             int ind_query = dmv.at(0).queryIdx;
             int ind_train = dmv.at(0).trainIdx;
