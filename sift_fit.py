@@ -6,6 +6,6 @@ import numpy as np
 
 gen = accis_get_gen("gen")
 
-cov = gen.get_cov()
+diffs = gen.get_diffs()
 
-np.savetxt("sift_coefs/cov.csv", cov, delimiter=",")
+np.savetxt("sift_coefs/diffs.csv", diffs, delimiter=",")

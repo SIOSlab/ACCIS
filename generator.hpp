@@ -19,7 +19,7 @@ class generator {
         
         void run();
 
-        mat<> get_cov();
+        mat<> get_diffs();
 
         sat_state gen_state(rando& rnd);
 

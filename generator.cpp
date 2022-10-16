@@ -170,7 +170,7 @@ sat_state generator::gen_state(rando& rnd) {
 
 }
 
-mat<> generator::get_cov() {
+mat<> generator::get_diffs() {
 
     using namespace sifter;
 
@@ -182,7 +182,8 @@ mat<> generator::get_cov() {
 
     int npic = X1.rows();
 
-    std::vector<vec<4>> kp_err;
+    std::vector<vec<4>> kp_diff;
+    std::vector<vec<img_state_diff::N>> state_diff;
 
     for (int i  = 1; i <= npic; i++) {
 
@@ -198,32 +199,33 @@ mat<> generator::get_cov() {
 
         matches sm = match(pts1, pts2, max_dist);
 
+        img_state_diff ds(t, t, s1, s2);
+
         for (int k = 0; k < sm.num_pts; k++) {
 
-            vec<4> z  = sm.query[k];
+            vec<4> zc = sm.query[k];
             vec<4> zr = sm.train[k];        
             
-            vec<4> zc = cross_cal_meas(t, t, s1, s2, cam, zr);
+            kp_diff.push_back(zc - zr);
+       
+            state_diff.push_back(ds.dx);
 
-            kp_err.push_back(z - zc);
-        
         } 
         
     } 
 
     // Number of key point pairs
-    int npairs = kp_err.size(); 
+    int npairs = kp_diff.size(); 
     std::cout << npairs << " key point pairs generated" << std::endl;  
 
-    // Make table of key point errors
-    mat<> w(4, npairs);
-    for (int k = 0; k < npairs; k++) 
-        w.col(k) = kp_err[k];
+    // Make table of key point & state differences
+    mat<> table(npairs, 4 + img_state_diff::N);
+    for (int k = 0; k < npairs; k++) {
+        table.row(k).head<4>() = kp_diff[k];
+        table.row(k).tail<img_state_diff::N>() = state_diff[k];
+    }
 
-    // Error covariance
-    mat<4,4> Pww = w * w.transpose() / npairs; 
-
-    // Return covariance
-    return Pww;
+    // Return table
+    return table;
 
 }
