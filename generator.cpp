@@ -187,6 +187,8 @@ mat<> generator::get_diffs() {
 
     for (int i  = 1; i <= npic; i++) {
 
+        std::cout << "Processing image pair No. " << i << std::endl;
+
         sat_state s1, s2;
         s1.X = X1.row(i-1);
         s2.X = X2.row(i-1);
