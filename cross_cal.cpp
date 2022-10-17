@@ -16,10 +16,6 @@ filter::dist cross_cal::run(const transmission& query, filter::base& filt) {
 
     filter::dist dist_x = query.dist_x;
 
-    meas h;
-
-    h.cam = cam;
-
     for (const transmission& tr : train) { 
     
         double dt = query.t - tr.t;
@@ -72,29 +68,8 @@ vec<> cross_cal::meas::h(double t, cvec<> x, cvec<> w) {
     xc.X = x.head<sat_state::N>();
     xr.X = x.tail<sat_state::N>();
 
-    return cross_cal_meas(t, tr, xc, xr, cam, zr) + w;
+    img_state_diff diff(t, tr, xc, xr);
 
-}
-
-vec<4> cross_cal_meas(double tc, double tr, const sat_state& xc,
-        const sat_state& xr, sat_cam& cam, cvec<4> zr) {
-
-    vec<2> pixr1, pixr2;
-    pixr1 = zr.head<2>();
-    pixr2 = zr.tail<2>(); 
-
-    vec<2> ll1, ll2;
-    ll1 = cam.pix2latlon(tr, xr, cam.undistort(xr, pixr1));
-    ll2 = cam.pix2latlon(tr, xr, cam.undistort(xr, pixr2));
-
-    vec<2> pixc1, pixc2;
-    pixc1 = cam.distort(xc, cam.latlon2pix(tc, xc, ll1));
-    pixc2 = cam.distort(xc, cam.latlon2pix(tc, xc, ll2));
-
-    vec<4> zc;
-    zc.head<2>() = pixc1;
-    zc.tail<2>() = pixc2; 
-
-    return zc;
+    return zr + h_mat * diff.dx + w;
 
 }

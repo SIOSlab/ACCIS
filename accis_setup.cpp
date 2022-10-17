@@ -134,9 +134,10 @@ void accis_sat::setup() {
     att_ctrl.J = J.asDiagonal();
 
     mat<4,4> sift_cov;
-    mat<4,img_state_diff::N> sift_h_mat;
+    mat<4,img_state_diff::N> h_mat;
 
     eigen_csv::read("sift_coefs/cov.csv", false, false, sift_cov);    
+    eigen_csv::read("sift_coefs/h_mat.csv", false, false, h_mat);    
 
     filter::dist dist_w_kp(4);
     dist_w_kp.mean.setZero();
@@ -148,6 +149,7 @@ void accis_sat::setup() {
     cc.dt_max = getset<double>(par, "Cross Calibration Time Memory (s)", 3600); 
     cc.max_dist = getset<double>(par, "Keypoint Max. Distance", 100);
     cc.cam = cam;
+    cc.h.h_mat = h_mat;
 
     max_blp = getset<double>(par, "Max. Percentage of Black Pixels", 5);
 
