@@ -83,6 +83,11 @@ class accis_sat {
         sat_meas::star_tracker h_str;
         sat_meas::gyro h_gyr;
 
+        // Measurements
+        std::vector<vec<6>> z_gps;
+        std::vector<vec<3>> z_str;
+        std::vector<vec<3>> z_gyr;
+
         // Measurement error distributions
         filter::dist gps_err;
         filter::dist str_err;
@@ -93,6 +98,9 @@ class accis_sat {
 
         // Principal moments of inertia
         vec<3> J;
+
+        // Control torques
+        std::vector<vec<3>> tau_c;
 
         // Cross-calibrator
         cross_cal cc;

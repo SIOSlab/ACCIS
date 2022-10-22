@@ -29,6 +29,8 @@ void accis_sat::step() {
 
         dist_x = filt->update(t, z, dist_x, gps_err, h_gps);
 
+        z_gps.push_back(z);
+
     }
 
     // Update state estimate -- Star tracker
@@ -38,6 +40,8 @@ void accis_sat::step() {
 
         dist_x = filt->update(t, z, dist_x, str_err, h_str);
 
+        z_str.push_back(z);
+   
     }
     
     // Update state estimate -- Gyroscope
@@ -47,6 +51,8 @@ void accis_sat::step() {
 
         dist_x = filt->update(t, z, dist_x, str_err, h_gyr);
 
+        z_gyr.push_back(z);
+    
     }
 
     // Imaging & cross-calibration
@@ -94,6 +100,7 @@ void accis_sat::step() {
     vec<3> tc = att_ctrl.tau(x_est.qb(), x_est.w(), t);
     roamps_("TC", tc.data());    
     roamps_("JP", J.data()); 
+    tau_c.push_back(tc);
 
     // Get pointing error
     vec<2> att_err_k;
