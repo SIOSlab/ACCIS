@@ -39,7 +39,7 @@
     "Camera Focal Length StD (mm)": 1.0,
     "Disturbance Force StD (N) - Ground Truth": 0.001,
     "Disturbance Torque StD (N*m) - Ground Truth": 0.1,
-    "Cross Calibration Time Memory (s)": 3600.0,
+    "Cross Calibration Time Memory (s)": 300,
     "Orbit Semi-Major Axis (km)": 6750.0,
     "Disturbance Force StD (N) - Filter Model": 10.0,
     "PD Constant kd": 100.0,

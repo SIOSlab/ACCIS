@@ -30,6 +30,8 @@ class accis_sat {
 
         void transmit(accis_sat& target);
 
+        void cross_calibrate();
+
     private:
 
         // Called by constructor and set_param
@@ -107,6 +109,9 @@ class accis_sat {
 
         // Latest transmission
         cross_cal::transmission tr_last;
+
+        // All transmissions
+        std::vector<cross_cal::transmission> tr_out;
 
         // Maximum allowed percentage of black pixels
         double max_blp;

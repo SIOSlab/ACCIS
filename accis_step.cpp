@@ -54,7 +54,10 @@ void accis_sat::step() {
         z_gyr.push_back(z);
     
     }
-
+    
+    // Store updated state estimate
+    states_est.back() = dist_x;
+    
     // Imaging & cross-calibration
     if (cadence_img != 0 && step_no % cadence_img == 0) {
 
@@ -77,23 +80,23 @@ void accis_sat::step() {
             sat_state x_img;
             x_img.X = dist_x.mean;
 
-            // Populate transmission tr_last
+            // Populate latest transmission
             tr_last.sat_id = sat_id;
             tr_last.step = step_no;
             tr_last.t = t;
             tr_last.sift = sifter::sift(t, x_img, image, cc.num_sift_pts);
             tr_last.dist_x = dist_x;
 
-            // Run image-based cross-calibration
-            dist_x = cc.run(tr_last, *filt);
-    
+            // Save latest transmission
+            tr_out.push_back(tr_last);
+
         }
 
+        // Run image-based cross-calibration
+        cross_calibrate();
+    
     }
 
-    // Store updated state estimate
-    states_est.back() = dist_x;
-    
     // Set attitude control torque
     sat_state x_est;
     x_est.X = dist_x.mean;
