@@ -52,17 +52,17 @@ void accis_sat::cross_calibrate() {
             dist_x = filt->update(t, z_str.at(k / cadence_str), dist_x,
                     str_err, h_str);
         
-        // Update state estimate -- gyroscope -- FISHY ERROR DISTRIBUTION
+        // Update state estimate -- gyroscope
         if (k % cadence_gyr == 0)
             dist_x = filt->update(t, z_gyr.at(k / cadence_gyr), dist_x,
-                    str_err, h_gyr);
+                    gyr_err, h_gyr);
 
         // Image-based cross-calibration
         if (k == tq.front().step) {
 
             tq.front().dist_x = dist_x; 
 
-            dist_x = cc.run(tq.front(), *filt);        
+            //dist_x = cc.run(tq.front(), *filt);        
 
             tq.pop();
 

@@ -27,7 +27,7 @@ sats = [sat1, sat2]
 
 t_mins = 1000
 
-t_save = 10
+t_save = 2
 
 steps_per_min = 60
 

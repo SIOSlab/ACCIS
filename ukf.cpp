@@ -1,6 +1,7 @@
 #include <ukf.hpp>
 
 #include <cmath>
+#include <iostream>
 
 using namespace filter;
 
@@ -95,9 +96,11 @@ dist ukf::marginal(const dist& joint_dist, int ind, int dim) {
 // Matrix square root
 mat<> ukf::mat_sqrt(cmat<> A) {
     using namespace Eigen;
-    //BDCSVD<mat<>> svd(A, ComputeFullU);
-    JacobiSVD<mat<>> svd(A, ComputeFullU);
-    return svd.matrixU() * svd.singularValues().cwiseSqrt().asDiagonal();    
+    const double tol = 1E-12;
+    SelfAdjointEigenSolver<mat<>> es(A);
+    vec<> d = es.eigenvalues();
+    mat<> V = es.eigenvectors();
+    return V * d.cwiseMax(tol).cwiseSqrt().asDiagonal();
 }
 
 // Sigma point generation

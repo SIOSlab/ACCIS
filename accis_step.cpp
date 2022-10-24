@@ -44,12 +44,12 @@ void accis_sat::step() {
    
     }
     
-    // Update state estimate -- Gyroscope -- FISHY ERROR DISTRIBUTION
+    // Update state estimate -- Gyroscope
     if (step_no % cadence_gyr == 0) {
 
         vec<> z = h_gyr.H(t, x_tru.X, rnd);
 
-        dist_x = filt->update(t, z, dist_x, str_err, h_gyr);
+        dist_x = filt->update(t, z, dist_x, gyr_err, h_gyr);
 
         z_gyr.push_back(z);
     
