@@ -100,8 +100,7 @@ dist ukf::marginal(const dist& joint_dist, int ind, int dim) {
 
 // Matrix square root
 mat<> ukf::mat_sqrt(cmat<> A) {
-    Eigen::SelfAdjointEigenSolver<mat<>> es(A);
-    return es.operatorSqrt();
+    return A.llt().matrixL();
 }
 
 // Matrix conditioning
