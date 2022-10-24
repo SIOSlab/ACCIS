@@ -44,7 +44,7 @@ void accis_sat::step() {
    
     }
     
-    // Update state estimate -- Gyroscope
+    // Update state estimate -- Gyroscope -- FISHY ERROR DISTRIBUTION
     if (step_no % cadence_gyr == 0) {
 
         vec<> z = h_gyr.H(t, x_tru.X, rnd);
@@ -59,7 +59,7 @@ void accis_sat::step() {
     states_est.back() = dist_x;
     
     // Imaging & cross-calibration
-    if (cadence_img != 0 && step_no % cadence_img == 0) {
+    if (cadence_img != 0 && step_no % cadence_img == 0 && step_no != 0) {
 
         // Get image
         cv::Mat image = cam.real_image(t, x_tru);
@@ -125,7 +125,7 @@ void accis_sat::step() {
 
     // Predict state distribution
     filter::dist dist_x_next = filt->predict(t, t_next,
-            dist_x, dist_w, dyn_tru); 
+            dist_x, dist_w, dyn_filt); 
     states_est.push_back(dist_x_next);
 
 }
