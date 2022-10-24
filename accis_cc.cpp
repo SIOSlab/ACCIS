@@ -62,7 +62,7 @@ void accis_sat::cross_calibrate() {
 
             tq.front().dist_x = dist_x; 
 
-            //dist_x = cc.run(tq.front(), *filt);        
+            dist_x = cc.run(tq.front(), *filt);        
 
             tq.pop();
 
