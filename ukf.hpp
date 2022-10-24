@@ -36,6 +36,12 @@ class ukf : public filter::base {
     // Matrix square root
     static mat<> mat_sqrt(cmat<> A);
 
+    // Matrix conditioning
+    static void condition(rmat<> A);
+
+    // Maximum condition number
+    static constexpr double max_cond = 1E12;
+
     //--------------------------------------------------------------------------
     //  Sigma point structure
     //--------------------------------------------------------------------------
