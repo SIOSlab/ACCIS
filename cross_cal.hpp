@@ -59,6 +59,8 @@ class cross_cal {
 
     filter::dist run(const transmission& query, filter::base& filt);
 
+    static vec<4> kp_diff(cvec<4> z, cvec<4> zr);
+
 };
 
 #endif

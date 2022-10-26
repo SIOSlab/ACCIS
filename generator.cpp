@@ -208,7 +208,7 @@ mat<> generator::get_diffs() {
             vec<4> zc = sm.query[k];
             vec<4> zr = sm.train[k];        
             
-            kp_diff.push_back(zc - zr);
+            kp_diff.push_back(cross_cal::kp_diff(zc, zr));
        
             state_diff.push_back(ds.dx);
 

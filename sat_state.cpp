@@ -188,6 +188,8 @@ img_state_diff::img_state_diff(double t1, double t2, const sat_state& s1,
 
     dx(6) = s2.f() - s1.f();
 
+    dx(7) = 1;
+
     dx.tail<sat_state::ND>() = s2.c() - s1.c();
 
 }

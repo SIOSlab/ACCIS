@@ -6,6 +6,7 @@
 #include <opencv2/features2d.hpp>
 
 #include <cmath>
+#include <complex>
 #include <iostream>
 
 filter::dist cross_cal::run(const transmission& query, filter::base& filt) {
@@ -42,7 +43,7 @@ filter::dist cross_cal::run(const transmission& query, filter::base& filt) {
 
                 mat<4> z_diff(4, smatch.num_pts);
                 for (int i = 0; i < smatch.num_pts; i++)
-                    z_diff.col(i) = smatch.query[i] - smatch.train[i]; 
+                    z_diff.col(i) = kp_diff(smatch.query[i], smatch.train[i]); 
 
                 vec<4> z = z_diff.rowwise().mean();
 
@@ -73,5 +74,28 @@ vec<> cross_cal::meas::h(double t, cvec<> x, cvec<> w) {
     img_state_diff diff(t, tr, xc, xr);
 
     return h_mat * diff.dx + w;
+
+}
+
+vec<4> cross_cal::kp_diff(cvec<4> z, cvec<4> zr) {
+
+    std::complex<double> z1(z.x(), z.y());
+    std::complex<double> z2(z.z(), z.w());
+
+    std::complex<double> zr1(zr.x(), zr.y());
+    std::complex<double> zr2(zr.z(), zr.w());
+
+    std::complex<double> a = (z2 - z1) / (zr2 - zr1);
+
+    std::complex<double> b = z1 - a * zr1;
+
+    vec<4> d;
+
+    d.x() = a.real();
+    d.y() = a.imag();
+    d.z() = b.real();
+    d.w() = b.imag();
+
+    return d;
 
 }
