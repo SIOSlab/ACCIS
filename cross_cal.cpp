@@ -41,18 +41,14 @@ filter::dist cross_cal::run(const transmission& query, filter::base& filt) {
            
                 h.tr = tr.t;
 
-                mat<4> z_diff(4, smatch.num_pts);
-                for (int i = 0; i < smatch.num_pts; i++)
-                    z_diff.col(i) = kp_diff(smatch.query[i], smatch.train[i]); 
+                for (int i = 0; i < smatch.num_pts; i++) {
 
-                vec<4> z = z_diff.rowwise().mean();
+                    vec<4> z = kp_diff(smatch.query[i], smatch.train[i]); 
 
-                filter::dist dist_w = dist_w_kp;
-
-                dist_w.cov /= smatch.num_pts; 
-
-                dist_xx = filt.update(query.t, z, dist_xx, dist_w, h);
+                    dist_xx = filt.update(query.t, z, dist_xx, dist_w_kp, h);
                 
+                }
+
                 dist_x = filt.marginal(dist_xx, 0, sat_state::N);
 
             }
