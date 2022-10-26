@@ -40,16 +40,18 @@ filter::dist cross_cal::run(const transmission& query, filter::base& filt) {
            
                 h.tr = tr.t;
 
-                for (int i = 0; i < smatch.num_pts; i++) {
+                mat<4> z_diff(4, smatch.num_pts);
+                for (int i = 0; i < smatch.num_pts; i++)
+                    z_diff.col(i) = smatch.query[i] - smatch.train[i]; 
 
-                    h.zr = smatch.train[i];
+                vec<4> z = z_diff.rowwise().mean();
 
-                    vec<4> z = smatch.query[i];
+                filter::dist dist_w = dist_w_kp;
 
-                    dist_xx = filt.update(query.t, z, dist_xx, dist_w_kp, h);
+                dist_w.cov /= smatch.num_pts; 
 
-                }
-
+                dist_xx = filt.update(query.t, z, dist_xx, dist_w, h);
+                
                 dist_x = filt.marginal(dist_xx, 0, sat_state::N);
 
             }
@@ -70,6 +72,6 @@ vec<> cross_cal::meas::h(double t, cvec<> x, cvec<> w) {
 
     img_state_diff diff(t, tr, xc, xr);
 
-    return zr + h_mat * diff.dx + w;
+    return h_mat * diff.dx + w;
 
 }

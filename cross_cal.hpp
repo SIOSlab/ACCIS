@@ -35,8 +35,6 @@ class cross_cal {
 
         double tr;
 
-        vec<4> zr;
-
         mat<> h_mat;
 
         virtual vec<> h(double t, cvec<> x, cvec<> w);
