@@ -54,6 +54,8 @@ for n in N:
 
             if cov_norm < min_norm:            
 
+                min_norm = cov_norm
+
                 make_gen_file("gen", gen)
 
                 savetxt("sift_coefs/h_mat.csv", transpose(X), delimiter=",")
