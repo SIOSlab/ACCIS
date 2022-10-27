@@ -177,17 +177,32 @@ img_state_diff::img_state_diff(double t1, double t2, const sat_state& s1,
 
     dr_ecef = recef2 - recef1;
 
-    ef2eci_(&t1, dr_ecef.data(), dr_eci.data());
+    quat q1 = s1.qc_eci(t1);
+    quat q2 = s2.qc_eci(t2);
 
-    quat q1 = s1.qb() * s1.qc();
-    quat q2 = s2.qb() * s2.qc();
+    dx.head<3>() = q1.inverse()._transformVector(dr_ecef);
 
-    dx.head<3>() = q1.inverse()._transformVector(dr_eci);
-
-    dx.segment<3>(3) = quat2rod(q2 * q1.inverse()); 
+    dx.segment<3>(3) = quat2rod(q2 * q1.inverse());
 
     dx(6) = s2.f() - s1.f();
 
+    dx(7) = 1;
+
     dx.tail<sat_state::ND>() = s2.c() - s1.c();
+
+}
+
+quat sat_state::qc_eci(double t) const {
+
+    mat<3,3> I, R;
+
+    I.setIdentity();
+
+    for (int i = 0; i < 3; i++)
+        eci2ef_(&t, I.col(i).data(), R.col(i).data());
+
+    quat q_eci(R);
+
+    return q_eci * qb() * qc();    
 
 }
