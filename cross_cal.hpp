@@ -35,6 +35,8 @@ class cross_cal {
 
         double tr;
 
+        vec<4> zr;
+
         mat<> h_mat;
 
         virtual vec<> h(double t, cvec<> x, cvec<> w);
@@ -59,7 +61,11 @@ class cross_cal {
 
     filter::dist run(const transmission& query, filter::base& filt);
 
-    static vec<4> kp_diff(cvec<4> z, cvec<4> zr);
+    static constexpr int M = 20 + img_state_diff::N;
+
+    static constexpr int N = M * M;
+
+    static vec<N> kp_par(cvec<4> zr, const img_state_diff& diff);
 
 };
 

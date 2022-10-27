@@ -34,7 +34,7 @@
     "Initial Body Attitude StD (rad)": 0.0017453292519943296,
     "Camera Focal Length (mm)": 2000.0,
     "Initial Position StD (km)": 0.1,
-    "Number of SIFT Points": 1000,
+    "Number of SIFT Points": 10000,
     "Camera Attitude StD (rad)": 0.00017453292519943296,
     "Camera Focal Length StD (mm)": 1.0,
     "Disturbance Force StD (N) - Ground Truth": 0.001,

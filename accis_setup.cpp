@@ -134,7 +134,7 @@ void accis_sat::setup() {
     att_ctrl.J = J.asDiagonal();
 
     mat<4,4> sift_cov;
-    mat<4,img_state_diff::N> h_mat;
+    mat<4,cross_cal::N> h_mat;
 
     eigen_csv::read("sift_coefs/cov.csv", false, false, sift_cov);    
     eigen_csv::read("sift_coefs/h_mat.csv", false, false, h_mat);    

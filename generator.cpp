@@ -182,8 +182,8 @@ mat<> generator::get_diffs() {
 
     int npic = X1.rows();
 
-    std::vector<vec<4>> kp_diff;
-    std::vector<vec<img_state_diff::N>> state_diff;
+    std::vector<vec<4>> kps;
+    std::vector<vec<cross_cal::N>> kp_pars;
 
     for (int i  = 1; i <= npic; i++) {
 
@@ -207,24 +207,24 @@ mat<> generator::get_diffs() {
 
             vec<4> zc = sm.query[k];
             vec<4> zr = sm.train[k];        
-            
-            kp_diff.push_back(cross_cal::kp_diff(zc, zr));
-       
-            state_diff.push_back(ds.dx);
+
+            kps.push_back(zc);
+
+            kp_pars.push_back(cross_cal::kp_par(zr, ds));
 
         } 
         
     } 
 
     // Number of key point pairs
-    int npairs = kp_diff.size(); 
+    int npairs = kps.size(); 
     std::cout << npairs << " key point pairs generated" << std::endl;  
 
     // Make table of key point & state differences
-    mat<> table(npairs, 4 + img_state_diff::N);
+    mat<> table(npairs, 4 + cross_cal::N);
     for (int k = 0; k < npairs; k++) {
-        table.row(k).head<4>() = kp_diff[k];
-        table.row(k).tail<img_state_diff::N>() = state_diff[k];
+        table.row(k).head<4>() = kps[k];
+        table.row(k).tail<cross_cal::N>() = kp_pars[k];
     }
 
     // Return table

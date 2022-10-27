@@ -43,7 +43,9 @@ filter::dist cross_cal::run(const transmission& query, filter::base& filt) {
 
                 for (int i = 0; i < smatch.num_pts; i++) {
 
-                    vec<4> z = kp_diff(smatch.query[i], smatch.train[i]); 
+                    vec<4> z = smatch.query[i];
+
+                    h.zr = smatch.train[i]; 
 
                     dist_xx = filt.update(query.t, z, dist_xx, dist_w_kp, h);
                 
@@ -69,29 +71,18 @@ vec<> cross_cal::meas::h(double t, cvec<> x, cvec<> w) {
 
     img_state_diff diff(t, tr, xc, xr);
 
-    return h_mat * diff.dx + w;
+    return h_mat * kp_par(zr, diff) + w;
 
 }
 
-vec<4> cross_cal::kp_diff(cvec<4> z, cvec<4> zr) {
+vec<cross_cal::N> cross_cal::kp_par(cvec<4> zr, const img_state_diff& diff) {
 
-    std::complex<double> z1(z.x(), z.y());
-    std::complex<double> z2(z.z(), z.w());
+    vec<M> cat;
 
-    std::complex<double> zr1(zr.x(), zr.y());
-    std::complex<double> zr2(zr.z(), zr.w());
+    cat.head<4>() = zr;
+    cat.segment<16>(4) = (zr * zr.transpose()).reshaped();
+    cat.tail<img_state_diff::N>() = diff.dx;
 
-    std::complex<double> a = (z2 - z1) / (zr2 - zr1);
-
-    std::complex<double> b = z1 - a * zr1;
-
-    vec<4> d;
-
-    d.x() = a.real();
-    d.y() = a.imag();
-    d.z() = b.real();
-    d.w() = b.imag();
-
-    return d;
+    return (cat * cat.transpose()).reshaped();
 
 }
