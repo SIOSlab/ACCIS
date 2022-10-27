@@ -1,6 +1,7 @@
 #include <ukf.hpp>
 
 #include <cmath>
+#include <iostream>
 
 using namespace filter;
 
@@ -21,6 +22,8 @@ dist ukf::predict(double ti, double tf, const dist& distXi, const dist& distW,
 
     distXf.cov = Xf * S.w.asDiagonal() * Xf.transpose()
         - distXf.mean * distXf.mean.transpose();
+
+    condition(distXf.cov);
 
     return distXf; 
 
@@ -58,6 +61,9 @@ dist ukf::update(double t, cvec<> z, const dist& distXp, const dist& distW,
 
     bool upd_ok = !distXu.mean.hasNaN() && !distXu.cov.hasNaN();
 
+    if (upd_ok)
+        condition(distXu.cov);
+
     return upd_ok ? distXu : distXp;
 
 }
@@ -94,10 +100,17 @@ dist ukf::marginal(const dist& joint_dist, int ind, int dim) {
 
 // Matrix square root
 mat<> ukf::mat_sqrt(cmat<> A) {
-    using namespace Eigen;
-    //BDCSVD<mat<>> svd(A, ComputeFullU);
-    JacobiSVD<mat<>> svd(A, ComputeFullU);
-    return svd.matrixU() * svd.singularValues().cwiseSqrt().asDiagonal();    
+    Eigen::SelfAdjointEigenSolver<mat<>> es(A);
+    return es.operatorSqrt();
+}
+
+// Matrix conditioning
+void ukf::condition(rmat<> A) {
+    Eigen::SelfAdjointEigenSolver<mat<>> es(A);
+    double corr = es.eigenvalues().maxCoeff() / max_cond
+        - es.eigenvalues().minCoeff(); 
+    if (corr > 0)
+       A.diagonal().array() += corr; 
 }
 
 // Sigma point generation
