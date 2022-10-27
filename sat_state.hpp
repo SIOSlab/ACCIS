@@ -79,6 +79,8 @@ class sat_state {
     void qvb(cvec<4> qv) { quat q(qv); qb(q); } 
     void qvc(cvec<4> qv) { quat q(qv); qc(q); } 
 
+    quat qc_eci(double t) const;
+
     void set_coe(const coe& coe_in);
 
     void set_nadir();

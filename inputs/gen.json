@@ -1,7 +1,7 @@
 {
     "Camera Attitude StD (rad)": 0.0017453292519943296,
-    "Number of Key Points": 1000,
-    "Max. Keypoint Descriptor Distance": 0.5,
+    "Number of Key Points": 10000,
+    "Max. Keypoint Descriptor Distance": 0.1,
     "Angular Velocity StD (rad/s)": 0.0017453292519943296,
     "Camera Image Length (pixels)": 1000.0,
     "Camera Aperture (mm)": 500.0,
