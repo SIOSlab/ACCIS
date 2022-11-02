@@ -1,5 +1,5 @@
 {
-    "Number of Key Points": 10,
+    "Number of Key Points": 100,
     "Camera Attitude StD (rad)": 0.0017453292519943295,
     "Camera Distortion Parameter StD": 0.01,
     "Seed": 0,
@@ -12,7 +12,7 @@
     "Camera Focal Length StD (mm)": 0.1,
     "Altitude Variation (km)": 100.0,
     "Camera Image Width (pixels)": 1000.0,
-    "Max. Keypoint Descriptor Distance": 0.2,
+    "Max. Keypoint Descriptor Distance": 0.5,
     "Angular Velocity StD (rad/s)": 0.0017453292519943296,
     "Camera Image Length (pixels)": 1000.0,
     "Camera Aperture (mm)": 500.0,
