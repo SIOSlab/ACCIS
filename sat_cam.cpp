@@ -47,7 +47,7 @@ vec<2> sat_cam::undistort(const sat_state& x, cvec<2> pix) {
 
 vec<2> sat_cam::pix2latlon(double t, const sat_state& x, cvec<2> pix) {
     vec<3> los_cam, los_eci;
-    los_cam.head<2>() = pix / rho;
+    los_cam.head<2>() = (pix - center()) / rho;
     los_cam.z() = u;
     los_eci = cam2eci(x, los_cam);
     static const double tol = 1E-6;
@@ -67,7 +67,7 @@ vec<2> sat_cam::latlon2pix(double t, const sat_state& x, cvec<2> latlon) {
     vec<3> r;
     ll2eci_(&t, &lat, &lon, &alt, r.data());
     vec<3> r_cam = eci2cam(x, r - x.r());
-    return r_cam.head<2>() * (u / r_cam.z()) + center();
+    return rho * r_cam.head<2>() * (u / r_cam.z()) + center();
 }
 
 mat<2,4> sat_cam::corner_pix() {
