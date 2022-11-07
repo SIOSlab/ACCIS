@@ -1,18 +1,11 @@
 cmake_minimum_required(VERSION 3.10)
 
-project(ACCIS CXX)
+project(accis CXX)
 
 enable_language(Fortran)
 
-set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -std=legacy -g -O3 -fno-strict-aliasing -msse2")
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -g -O3 -msse2")
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -O3 -msse2")
-
-set(accis CMAKE_CXX_STANDARD 11)
-set(accis CMAKE_CXX_STANDARD_REQUIRED ON)
-
-set(accis CMAKE_FORTRAN_STANDARD 77)
-set(accis CMAKE_FORTRAN_STANDARD_REQUIRED ON)
+set(CMAKE_Fortran_FLAGS "-std=legacy -O3")
+set(CMAKE_CXX_FLAGS "-std=c++17 -O3 -Wall -pedantic")
 
 find_package(Eigen3 3.3 REQUIRED NO_MODULE)
 find_package(Java REQUIRED)
