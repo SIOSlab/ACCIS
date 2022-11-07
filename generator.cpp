@@ -36,9 +36,6 @@ void generator::run() {
     // Random number generator
     rando rnd(seed);
 
-    // Camera center
-    vec<2> c = cam.center();
-
     // Generated states
     mat<sat_state::N> X1(sat_state::N, max_imgs); 
     mat<sat_state::N> X2(sat_state::N, max_imgs); 
