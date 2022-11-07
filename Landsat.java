@@ -10,12 +10,12 @@ import java.net.SocketTimeoutException;
 
 import javax.imageio.ImageIO;
 
+import java.lang.Thread;
+
 public class Landsat {
 
-//
-//public static LandsatI3WMSLayer layer;
-
-    public static LandsatI3WMSLayer layer;
+    // Landsat image layer
+    private static LandsatI3WMSLayer layer;
 
     //--------------------------------------------------------------------------
     //                     Acquire Landsat-Based Image
@@ -33,59 +33,46 @@ public class Landsat {
     public static int getImage(int widp, int lenp, double latc, double lonc,
             double dp) {
 
-        // Flag
         int flag = 1;
-        
+
         try {
 
-            while (flag != 0) {
-            
-                try {
-
-                    // Initialize Landsat image layer
-                    if (layer == null)
-                        layer = new LandsatI3WMSLayer(); 
+            // Initialize Landsat image layer
+            if (layer == null)
+                layer = new LandsatI3WMSLayer(); 
     
-                    // Compute sector    
-                    Sector sector = new Sector(
-                                       Angle.fromDegrees(latc - lenp*dp),
-                                       Angle.fromDegrees(latc),
-                                       Angle.fromDegrees(lonc), 
-                                       Angle.fromDegrees(lonc + widp*dp));
+            // Compute sector    
+            Sector sector = new Sector(
+                    Angle.fromDegrees(latc - lenp*dp),
+                    Angle.fromDegrees(latc),
+                    Angle.fromDegrees(lonc), 
+                    Angle.fromDegrees(lonc + widp*dp));
 
-                    // Aspect ratio (pixel?)
-                    double ar = 1; 
+            // Aspect ratio (pixel?)
+            double ar = 1; 
 
-                    // Timeout (1 minute)
-                    int timeout = 60000;
+            // Timeout (1 minute)
+            int timeout = 60000;
 
-                    // Image type & filename 
-                    String type = "image/png";
-                    String filename = "landsat_temp.png";
+            // Image type & filename 
+            String type = "image/png";
+            String filename = "landsat_temp.png";
 
-                    // Acquire image 
-                    BufferedImage img = layer.composeImageForSector(sector,
-                            widp, lenp, ar, -1, type, true, null, timeout);
+            // Acquire image 
+            BufferedImage img = layer.composeImageForSector(sector, widp, lenp,
+                    ar, -1, type, true, null, timeout);
 
-                    // Save image
-                    File outputfile = new File(filename);
-                    ImageIO.write(img, "png", outputfile);
+            // Save image
+            File outputfile = new File(filename);
+            ImageIO.write(img, "png", outputfile);
 
-                    // Success
-                    flag = 0;
-
-                } catch (SocketTimeoutException ste) {
-
-                    System.out.println("Socket timed out -- Trying again");
-
-                }
-
-            }
+            // Success
+            flag = 0;
 
         } catch (Exception e) {
 
             e.printStackTrace(System.out);
-        
+
         }
 
         return flag;

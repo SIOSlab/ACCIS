@@ -6,27 +6,28 @@
 cv::Mat Landsat::image(int widp, int lenp,
         double latc, double lonc, double dp) {
 
-    static Landsat landsat;  
+    static Landsat landsat;
 
-    landsat.click(widp, lenp, latc, lonc, dp);
+    cv::Mat img(widp, lenp, CV_8UC3, cv::Scalar(0, 0, 0));
 
-    cv::Mat img = cv::imread("landsat_temp.png");
+    int flag = landsat.click(widp, lenp, latc, lonc, dp);
 
-    remove("landsat_temp.png");
+    if (flag == 0) {
+
+        img = cv::imread("landsat_temp.png");
+
+        remove("landsat_temp.png");
+
+    }
 
     return img;
 
 }
 
-void Landsat::click(int widp, int lenp, double latc, double lonc, double dp) {
+int Landsat::click(int widp, int lenp, double latc, double lonc, double dp) {
 
-    int flag;
-
-    flag = env->CallStaticIntMethod(classLandsat, getImage, widp, lenp,
+    return env->CallStaticIntMethod(classLandsat, getImage, widp, lenp,
             latc, lonc, dp);   
-
-    if (flag != 0)
-        exit(EXIT_FAILURE);
 
 }
 

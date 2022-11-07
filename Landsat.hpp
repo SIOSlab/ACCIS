@@ -15,7 +15,7 @@ class Landsat final {
     private:
 
     // Download Landsat image and save
-    void click(int widp, int lenp,
+    int click(int widp, int lenp,
             double latc, double lonc, double dp);
 
     // Java runtime variables
