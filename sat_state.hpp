@@ -161,7 +161,7 @@ class img_state_diff {
 
     public:
 
-    static const int N = sat_state::ND + 8;
+    static const int N = 2*sat_state::ND + 16;
 
     vec<N> dx;
 
