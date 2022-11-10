@@ -190,7 +190,7 @@ quat sat_state::qc_eci(double t) const {
     I.setIdentity();
 
     for (int i = 0; i < 3; i++)
-        eci2ef_(&t, I.col(i).data(), R.col(i).data());
+        ef2eci_(&t, I.col(i).data(), R.col(i).data());
 
     quat q_eci(R);
 
