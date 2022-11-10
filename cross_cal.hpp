@@ -35,7 +35,7 @@ class cross_cal {
 
         double tr;
 
-        vec<4> zr;
+        std::vector<vec<4>> zr;
 
         sat_cam cam;
 

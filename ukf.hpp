@@ -29,6 +29,9 @@ class ukf : public filter::base {
     virtual filter::dist join(const filter::dist& dist1,
                 const filter::dist& dist2);
 
+    // Joint distribution from n i.i.d. variables
+    virtual filter::dist join_iid(const filter::dist& dist_i, int n);
+    
     // Marginal distribution for distribution components
     virtual filter::dist marginal(const filter::dist& joint_dist, int ind,
                 int dim); 

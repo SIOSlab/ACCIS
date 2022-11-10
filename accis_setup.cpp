@@ -20,8 +20,8 @@ void accis_sat::setup() {
     std::string filter_type = getset<std::string>(par, "Filter Type", "UKF");
     if (filter_type == "UKF")
         filt.reset(new ukf());
-    else if (filter_type == "HOUSE")
-        filt.reset(new house());
+    //else if (filter_type == "HOUSE")
+    //    filt.reset(new house());
     else
         show_error("Fiter Type " + filter_type + " not recognized");
 

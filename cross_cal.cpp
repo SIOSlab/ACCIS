@@ -41,18 +41,19 @@ filter::dist cross_cal::run(const transmission& query, filter::base& filt) {
                           << " points" << std::endl;
 
                 filter::dist dist_xx = filt.join(dist_x, tr.dist_x);
-           
+
+                filter::dist dist_w = filt.join_iid(dist_w_kp, smatch.num_pts);
+
                 h.tr = tr.t;
 
-                for (int i = 0; i < smatch.num_pts; i++) {
+                h.zr = smatch.train;
 
-                    h.zr = smatch.train[i];
+                vec<> z(4 * smatch.num_pts);
 
-                    vec<4> z = smatch.query[i];
+                for (int i = 0; i < smatch.num_pts; i++)
+                    z.segment<4>(4*i) = smatch.query[i];
 
-                    dist_xx = filt.update(query.t, z, dist_xx, dist_w_kp, h);
-
-                }
+                dist_xx = filt.update(query.t, z, dist_xx, dist_w, h);
 
                 dist_x = filt.marginal(dist_xx, 0, sat_state::N);
 
@@ -72,7 +73,12 @@ vec<> cross_cal::meas::h(double t, cvec<> x, cvec<> w) {
     xc.X = x.head<sat_state::N>();
     xr.X = x.tail<sat_state::N>();
 
-    return cross_cal_meas(t, tr, xc, xr, cam, zr) + w;
+    vec<> z(4 * int(zr.size()));
+
+    for (int i = 0; i < int(zr.size()); i++)
+        z.segment<4>(4*i) = cross_cal_meas(t, tr, xc, xr, cam, zr[i]); 
+
+    return z + w;
 
 }
 

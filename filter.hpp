@@ -71,6 +71,9 @@ namespace filter {
         // Joint distribution from two independent distributions 
         virtual dist join(const dist& dist1, const dist& dist2) = 0;
 
+        // Joint distribution from n i.i.d. variables
+        virtual dist join_iid(const dist& dist_i, int n) = 0;
+
         // Marginal distribution for distribution components
         virtual dist marginal(const dist& joint_dist, int ind, int dim) = 0; 
         

@@ -79,6 +79,24 @@ dist ukf::join(const dist& dist1, const dist& dist2) {
 
 }
 
+// Joint distribution from n i.i.d. variables
+dist ukf::join_iid(const dist& dist_i, int n) {
+
+    int m = dist_i.dim;
+
+    dist dist_j(m * n);
+
+    dist_j.mean = dist_i.mean.replicate(n, 1);
+
+    dist_j.cov.setZero();
+
+    for (int i = 0; i < n; i++)
+        dist_j.cov.block(m*i, m*i, m, m) = dist_i.cov;
+
+    return dist_j;
+
+}
+
 // Marginal distribution for distribution components
 dist ukf::marginal(const dist& joint_dist, int ind, int dim) {
 
