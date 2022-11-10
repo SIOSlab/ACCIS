@@ -60,9 +60,9 @@ matches sifter::match(const points& query, const points& train,
 
     std::vector<std::vector<DMatch>> dmatches;
 
-    Ptr<BFMatcher> matcher = BFMatcher::create();
+    Ptr<BFMatcher> matcher = BFMatcher::create(NORM_L2, true);
 
-    matcher->knnMatch(query.desc, train.desc, dmatches, 2);
+    matcher->knnMatch(query.desc, train.desc, dmatches, 1);
 
     matches sm;
 
@@ -72,10 +72,10 @@ matches sifter::match(const points& query, const points& train,
 
     for (const std::vector<DMatch>& dmv : dmatches) {
 
-        double d1 = dmv.at(0).distance;
-        double d2 = dmv.at(1).distance;
+        //double d1 = dmv.at(0).distance;
+        //double d2 = dmv.at(1).distance;
 
-        if (d1 / d2 < max_dist) {
+        if (!dmv.empty()) {
 
             int ind_query = dmv.at(0).queryIdx;
             int ind_train = dmv.at(0).trainIdx;
