@@ -1,6 +1,7 @@
 #include <cross_cal.hpp>
 
 #include <angles.hpp>
+#include <poly2d.hpp>
 #include <sat_state.hpp>
 
 #include <opencv2/features2d.hpp>
