@@ -133,12 +133,11 @@ void accis_sat::setup() {
     att_ctrl.kd = getset<double>(par, "PD Constant kd", 100);
     att_ctrl.J = J.asDiagonal();
 
-    mat<4,4> sift_cov;
-    mat<4,img_state_diff::N> sift_h_mat;
+    mat<> sift_cov;
 
-    eigen_csv::read("sift_coefs/cov.csv", false, false, sift_cov);    
+    eigen_csv::read("sift_coefs/cov.csv", false, true, sift_cov);    
 
-    filter::dist dist_w_kp(4);
+    filter::dist dist_w_kp(sift_cov.rows());
     dist_w_kp.mean.setZero();
     dist_w_kp.cov = sift_cov;
 

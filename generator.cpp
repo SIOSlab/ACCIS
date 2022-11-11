@@ -5,6 +5,7 @@
 #include "eigen_csv.hpp"
 #include "format.hpp"
 #include "rando.hpp"
+#include "poly2d.hpp"
 #include "sifter.hpp"
 
 #include <opencv2/core.hpp>
@@ -182,7 +183,7 @@ mat<> generator::get_cov() {
 
     int npic = X1.rows();
 
-    std::vector<vec<4>> kp_err;
+    std::vector<vec<>> kp_err;
 
     for (int i  = 1; i <= npic; i++) {
 
@@ -200,30 +201,30 @@ mat<> generator::get_cov() {
 
         matches sm = match(pts1, pts2, max_dist);
 
-        for (int k = 0; k < sm.num_pts; k++) {
+        std::cout << "    " << sm.num_pts << " point pairs" << std::endl;
 
-            vec<4> z  = sm.query[k];
-            vec<4> zr = sm.train[k];        
-            
-            vec<4> zc = cross_cal_meas(t, t, s1, s2, cam, zr);
+        if (sm.num_pts > 0) {
 
-            kp_err.push_back(z - zc);
+            vec<> z = poly2d::fit(sm.train, sm.query);
+
+            vec<> zc = cross_cal_meas(t, t, s1, s2, cam, sm.train);
+
+            kp_err.push_back((z - zc) * sqrt(sm.num_pts));
         
-        } 
-        
+        }
+
     } 
 
     // Number of key point pairs
     int npairs = kp_err.size(); 
-    std::cout << npairs << " key point pairs generated" << std::endl;  
 
     // Make table of key point errors
-    mat<> w(4, npairs);
+    mat<> w(2*poly2d::np, npairs);
     for (int k = 0; k < npairs; k++) 
         w.col(k) = kp_err[k];
 
     // Error covariance
-    mat<4,4> Pww = w * w.transpose() / npairs; 
+    mat<> Pww = w * w.transpose() / npairs; 
 
     // Return covariance
     return Pww;

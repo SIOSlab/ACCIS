@@ -10,11 +10,11 @@ namespace poly2d {
 
     using namespace Eigen;
 
-    constexpr int deg = 3;
+    constexpr int deg = 5;
 
     constexpr int np = (deg + 1) * (deg + 1);
 
-    inline mat<np,2> fit(const std::vector<vec<2>>& x,
+    inline vec<np*2> fit(const std::vector<vec<2>>& x,
             const std::vector<vec<2>>& y) {
 
         mat<> B(y.size(), 2);
@@ -50,7 +50,7 @@ namespace poly2d {
         
         JacobiSVD<mat<>> svd(A, ComputeThinU | ComputeThinV);
 
-        return svd.solve(B);
+        return svd.solve(B).reshaped();
 
     } 
 

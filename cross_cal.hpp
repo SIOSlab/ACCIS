@@ -35,7 +35,7 @@ class cross_cal {
 
         double tr;
 
-        vec<4> zr;
+        std::vector<vec<2>> zr;
 
         sat_cam cam;
 
@@ -61,7 +61,7 @@ class cross_cal {
 
 };
 
-vec<4> cross_cal_meas(double tc, double tr, const sat_state& xc,
-        const sat_state& xr, sat_cam& cam, cvec<4> zr);
+vec<> cross_cal_meas(double tc, double tr, const sat_state& xc,
+        const sat_state& xr, sat_cam& cam, const std::vector<vec<2>>& zr);
 
 #endif

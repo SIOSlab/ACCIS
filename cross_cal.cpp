@@ -45,15 +45,15 @@ filter::dist cross_cal::run(const transmission& query, filter::base& filt) {
            
                 h.tr = tr.t;
 
-                for (int i = 0; i < smatch.num_pts; i++) {
+                h.zr = smatch.train;
 
-                    h.zr = smatch.train[i];
+                vec<> z = poly2d::fit(smatch.train, smatch.query); 
 
-                    vec<4> z = smatch.query[i];
+                filter::dist dist_w = dist_w_kp;
 
-                    dist_xx = filt.update(query.t, z, dist_xx, dist_w_kp, h);
+                dist_w_kp.cov /= smatch.num_pts;
 
-                }
+                dist_xx = filt.update(query.t, z, dist_xx, dist_w, h);
 
                 dist_x = filt.marginal(dist_xx, 0, sat_state::N);
 
@@ -77,25 +77,14 @@ vec<> cross_cal::meas::h(double t, cvec<> x, cvec<> w) {
 
 }
 
-vec<4> cross_cal_meas(double tc, double tr, const sat_state& xc,
-        const sat_state& xr, sat_cam& cam, cvec<4> zr) {
+vec<> cross_cal_meas(double tc, double tr, const sat_state& xc,
+        const sat_state& xr, sat_cam& cam, const std::vector<vec<2>>& zr) {
 
-    vec<2> pixr1, pixr2;
-    pixr1 = zr.head<2>();
-    pixr2 = zr.tail<2>(); 
+    std::vector<vec<2>> zc;
 
-    vec<2> ll1, ll2;
-    ll1 = cam.pix2latlon(tr, xr, cam.undistort(xr, pixr1));
-    ll2 = cam.pix2latlon(tr, xr, cam.undistort(xr, pixr2));
+    for (int i = 0; i < int(zr.size()); i++)
+        zc.push_back(cam.latlon2pix(tc, xc, cam.pix2latlon(tr, xr, zr[i])));
 
-    vec<2> pixc1, pixc2;
-    pixc1 = cam.distort(xc, cam.latlon2pix(tc, xc, ll1));
-    pixc2 = cam.distort(xc, cam.latlon2pix(tc, xc, ll2));
-
-    vec<4> zc;
-    zc.head<2>() = pixc1;
-    zc.tail<2>() = pixc2; 
-
-    return zc;
+    return poly2d::fit(zr, zc);
 
 }

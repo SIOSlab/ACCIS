@@ -32,9 +32,9 @@ namespace sifter {
 
         vec<img_state_diff::N> dx;
 
-        std::vector<vec<4>> query;
+        std::vector<vec<2>> query;
 
-        std::vector<vec<4>> train;
+        std::vector<vec<2>> train;
 
     };
     
