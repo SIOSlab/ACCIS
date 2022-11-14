@@ -13,7 +13,13 @@ points sifter::sift(double t, const sat_state& state, const cv::Mat& image,
 
     using namespace cv;
 
-    Ptr<SIFT> sifter = SIFT::create(num_pts);
+	int nOctaveLayers = 5;
+	double contrastThreshold = 0.15;
+	double edgeThreshold = 10;
+	double sigma = 0.5;
+
+    Ptr<SIFT> sifter = SIFT::create(num_pts, nOctaveLayers, contrastThreshold,
+            edgeThreshold, sigma);
 
     points sp;
 
