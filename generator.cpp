@@ -269,6 +269,9 @@ mat<> generator::get_dist() {
             vec<2> c1 = 0.5 * (z1.head<2>() + z1.tail<2>());
             vec<2> c2 = 0.5 * (z2.head<2>() + z2.tail<2>());
 
+            c1 = cam.undistort(s1, c1);
+            c2 = cam.undistort(s2, c2);
+
             kp_dist.push_back(sm.dist[k]);
 
             double lld = cam.pt_dist(t, t, s1, s2, c1, c2); 
