@@ -21,6 +21,8 @@ class generator {
 
         mat<> get_cov();
 
+        mat<> get_dist();
+
         sat_state gen_state(rando& rnd);
 
     private:

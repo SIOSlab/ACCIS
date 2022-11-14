@@ -22,6 +22,7 @@ PYBIND11_MODULE(accis, a) {
         .def("set_param", &generator::set_param)
         .def("get_param", &generator::get_param)
         .def("run",       &generator::run)
-        .def("get_cov",   &generator::get_cov); 
+        .def("get_cov",   &generator::get_cov) 
+        .def("get_dist",  &generator::get_dist); 
 
 }

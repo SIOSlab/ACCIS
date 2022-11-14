@@ -229,3 +229,67 @@ mat<> generator::get_cov() {
     return Pww;
 
 }
+
+mat<> generator::get_dist() {
+
+    using namespace sifter;
+
+    const double t = 0;
+    
+    mat<> X1, X2;
+    eigen_csv::read("gen/state1.csv", false, true, X1);
+    eigen_csv::read("gen/state2.csv", false, true, X2);
+
+    int npic = X1.rows();
+
+    std::vector<double> kp_dist;
+    std::vector<double> ll_dist;
+
+    for (int i  = 1; i <= npic; i++) {
+
+        std::cout << "Processing image pair " << i << " of " << npic << std::endl;
+
+        sat_state s1, s2;
+        s1.X = X1.row(i-1);
+        s2.X = X2.row(i-1);
+
+        cv::Mat img1 = cv::imread("gen/pic_" + int2str0(i, 6) + "_1.png");
+        cv::Mat img2 = cv::imread("gen/pic_" + int2str0(i, 6) + "_2.png");
+
+        points pts1 = sift(t, s1, img1, num_pts); 
+        points pts2 = sift(t, s2, img2, num_pts); 
+
+        matches sm = match(pts1, pts2, max_dist);
+
+        for (int k = 0; k < sm.num_pts; k++) {
+
+            vec<4> z1 = sm.query[k];
+            vec<4> z2 = sm.train[k];     
+       
+            vec<2> c1 = 0.5 * (z1.head<2>() + z1.tail<2>());
+            vec<2> c2 = 0.5 * (z2.head<2>() + z2.tail<2>());
+
+            kp_dist.push_back(sm.dist[k]);
+
+            double lld = cam.pt_dist(t, t, s1, s2, c1, c2); 
+
+            ll_dist.push_back(lld);
+
+        } 
+        
+    } 
+    
+    // Number of key point pairs
+    int npairs = kp_dist.size(); 
+    std::cout << npairs << " key point pairs generated" << std::endl;  
+
+    mat<> table(npairs, 2);
+
+    for (int k = 0; k < npairs; k++) {
+        table(k, 0) = kp_dist[k];
+        table(k, 1) = ll_dist[k];
+    }
+
+    return table;
+
+}
