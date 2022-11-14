@@ -36,6 +36,8 @@ namespace sifter {
 
         std::vector<vec<4>> train;
 
+        std::vector<double> dist;
+
     };
     
     points sift(double t, const sat_state& state, const cv::Mat& image,

@@ -82,7 +82,9 @@ matches sifter::match(const points& query, const points& train,
 
             sm.query.push_back(query.key_pts[ind_query]);
             sm.train.push_back(train.key_pts[ind_train]);
-            
+
+            sm.dist.push_back(dmv.at(0).distance);
+
             sm.num_pts++;
 
         }
