@@ -23,6 +23,8 @@ class generator {
 
         sat_state gen_state(rando& rnd);
 
+        void plot_matches();
+
     private:
 
         // Called by constructor and set_param

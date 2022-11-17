@@ -8,6 +8,7 @@
 #include "sifter.hpp"
 
 #include <opencv2/core.hpp>
+#include <opencv2/features2d.hpp>
 #include <opencv2/imgcodecs.hpp> 
 #include <opencv2/imgproc.hpp>
 
@@ -227,5 +228,46 @@ mat<> generator::get_cov() {
 
     // Return covariance
     return Pww;
+
+}
+
+void generator::plot_matches() {
+
+    using namespace sifter;
+
+    const double t = 0;
+    
+    mat<> X1, X2;
+    eigen_csv::read("gen/state1.csv", false, true, X1);
+    eigen_csv::read("gen/state2.csv", false, true, X2);
+
+    int npic = X1.rows();
+
+    std::vector<vec<4>> kp_err;
+
+    for (int i  = 1; i <= npic; i++) {
+
+        std::cout << "Processing image pair " << i << " of " << npic << std::endl;
+
+        sat_state s1, s2;
+        s1.X = X1.row(i-1);
+        s2.X = X2.row(i-1);
+
+        cv::Mat img1 = cv::imread("gen/pic_" + int2str0(i, 6) + "_1.png");
+        cv::Mat img2 = cv::imread("gen/pic_" + int2str0(i, 6) + "_2.png");
+
+        points pts1 = sift(t, s1, img1, num_pts); 
+        points pts2 = sift(t, s2, img2, num_pts); 
+
+        matches sm = match(pts1, pts2, max_dist);
+
+        cv::Mat img3;
+        
+        cv::drawMatches(img1, pts1.keyPoints, img2, pts2.keyPoints, sm.dMatches,
+               img3);
+
+        cv::imwrite("gen/match_" + int2str0(i, 6) + ".png", img3); 
+
+    }
 
 }

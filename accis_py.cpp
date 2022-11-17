@@ -19,9 +19,10 @@ PYBIND11_MODULE(accis, a) {
 
     py::class_<generator>(a, "generator")
         .def(py::init<>())
-        .def("set_param", &generator::set_param)
-        .def("get_param", &generator::get_param)
-        .def("run",       &generator::run)
-        .def("get_cov",   &generator::get_cov); 
+        .def("set_param",    &generator::set_param)
+        .def("get_param",    &generator::get_param)
+        .def("run",          &generator::run)
+        .def("get_cov",      &generator::get_cov)
+        .def("plot_matches", & generator::plot_matches); 
 
 }

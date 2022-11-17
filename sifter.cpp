@@ -26,6 +26,8 @@ points sifter::sift(double t, const sat_state& state, const cv::Mat& image,
 
     sifter->detectAndCompute(image, noArray(), kps, sp.desc);
 
+    sp.keyPoints = kps;
+
     for (const KeyPoint& kp : kps) {
         
         vec<2> r, dr;
@@ -72,10 +74,9 @@ matches sifter::match(const points& query, const points& train,
 
     for (const std::vector<DMatch>& dmv : dmatches) {
 
-        //double d1 = dmv.at(0).distance;
-        //double d2 = dmv.at(1).distance;
-
         if (!dmv.empty()) {
+
+            sm.dMatches.push_back(dmv.at(0));
 
             int ind_query = dmv.at(0).queryIdx;
             int ind_train = dmv.at(0).trainIdx;

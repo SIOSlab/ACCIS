@@ -2,6 +2,7 @@
 #define SIFTER_HPP
 
 #include <opencv2/core.hpp>
+#include <opencv2/core/types.hpp>
 
 #include <vector>
 
@@ -19,6 +20,8 @@ namespace sifter {
 
         int num_pts;
 
+        std::vector<cv::KeyPoint> keyPoints;
+
         std::vector<vec<4>> key_pts;
         std::vector<vec<2>> key_center;
 
@@ -29,6 +32,8 @@ namespace sifter {
     struct matches {
 
         int num_pts;
+
+        std::vector<cv::DMatch> dMatches;
 
         vec<img_state_diff::N> dx;
 
