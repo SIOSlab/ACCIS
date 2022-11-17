@@ -4,7 +4,9 @@ import matplotlib.pyplot as plt
 dist = np.genfromtxt("sift_coefs/dist.csv", delimiter=",")
 
 x = dist[:, 0]
-y = dist[:, 1]
+y = np.radians(dist[:, 1]) * 6378
 
-plt.scatter(x, y, s=1)
+plt.scatter(x, y, s=0.25)
+plt.xlabel("Descriptor Distance")
+plt.ylabel("Distance on Earth (km)")
 plt.show()
