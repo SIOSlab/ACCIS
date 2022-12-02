@@ -253,8 +253,10 @@ void generator::plot_matches() {
         s1.X = X1.row(i-1);
         s2.X = X2.row(i-1);
 
-        cv::Mat img1 = cv::imread("gen/pic_" + int2str0(i, 6) + "_1.png");
-        cv::Mat img2 = cv::imread("gen/pic_" + int2str0(i, 6) + "_2.png");
+        cv::Mat img1 = cv::imread("gen/pic_" + int2str0(i, 6) + "_1.png",
+                cv::IMREAD_GRAYSCALE);
+        cv::Mat img2 = cv::imread("gen/pic_" + int2str0(i, 6) + "_2.png",
+                cv::IMREAD_GRAYSCALE);
 
         points pts1 = sift(t, s1, img1, num_pts); 
         points pts2 = sift(t, s2, img2, num_pts); 
