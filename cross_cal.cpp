@@ -32,7 +32,7 @@ filter::dist cross_cal::run(const transmission& query, filter::base& filt) {
 
         if (dt > 0 && dt < dt_max && query.sat_id != tr.sat_id && overlap) {
 
-            matches smatch = match(query.sift, tr.sift, max_dist);
+            matches smatch = match(query.sift, tr.sift, cam, max_dist);
 
             if (smatch.num_pts > 0) {
 

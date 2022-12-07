@@ -198,7 +198,7 @@ mat<> generator::get_cov() {
         points pts1 = sift(t, s1, img1, num_pts); 
         points pts2 = sift(t, s2, img2, num_pts); 
 
-        matches sm = match(pts1, pts2, max_dist);
+        matches sm = match(pts1, pts2, cam, max_dist);
 
         for (int k = 0; k < sm.num_pts; k++) {
 

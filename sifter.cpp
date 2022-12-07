@@ -52,9 +52,26 @@ points sifter::sift(double t, const sat_state& state, const cv::Mat& image,
 }
 
 matches sifter::match(const points& query, const points& train,
-        double max_dist) {
+        sat_cam& cam, double max_dist) {
 
     using namespace cv;
+
+    std::vector<bool> mask_query(query.num_pts);
+    std::vector<bool> mask_train(train.num_pts);
+
+    for (int i = 0; i < query.num_pts; i++)
+        mask_query.at(i) = cam.pt_overlap(query.t, train.t,
+               query.state, train.state, query.key_center.at(i));
+
+    for (int i = 0; i < train.num_pts; i++)
+        mask_train.at(i) = cam.pt_overlap(train.t, query.t,
+               train.state, query.state, train.key_center.at(i));
+
+    Mat mask(query.num_pts, train.num_pts, CV_8UC1);
+
+    for (int i = 0; i < query.num_pts; i++)
+        for (int j = 0; j < train.num_pts; j++)
+            mask.at<uchar>(i, j) = mask_query.at(i) && mask_train.at(j);
 
     img_state_diff diff(query.t, train.t, query.state, train.state);
 
@@ -62,7 +79,7 @@ matches sifter::match(const points& query, const points& train,
 
     Ptr<BFMatcher> matcher = BFMatcher::create(NORM_L2, true);
 
-    matcher->knnMatch(query.desc, train.desc, dmatches, 1);
+    matcher->knnMatch(query.desc, train.desc, dmatches, 1, mask, true);
 
     matches sm;
 
