@@ -46,7 +46,8 @@ namespace sifter {
     points sift(double t, const sat_state& state, const cv::Mat& image,
             int num_pts);
 
-    matches match(const points& query, const points& train, double max_dist);
+    matches match(const points& query, const points& train, sat_cam& cam,
+            double max_dist);
 
 }
 

@@ -71,6 +71,10 @@ class sat_cam {
     bool img_overlap(double t1, double t2, const sat_state& x1,
             const sat_state& x2);
 
+    // Determine whether a point is in the overlapping region of two images
+    bool pt_overlap(double t1, double t2, const sat_state& x1,
+            const sat_state& x2, cvec<2> pt1);
+
     //--------------------------------------------------------------------------
     //  Image Distortions
     //--------------------------------------------------------------------------
