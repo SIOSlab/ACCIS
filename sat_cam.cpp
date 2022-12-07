@@ -102,6 +102,13 @@ bool sat_cam::img_overlap(double t1, double t2, const sat_state& x1,
     return (d < r1) && (d < r2);
 }
 
+bool sat_cam::pt_overlap(double t1, double t2, const sat_state& x1,
+        const sat_state& x2, cvec<2> pix1) {
+    vec<2> ll = pix2latlon(t1, x1, pix1);
+    vec<2> pix2 = latlon2pix(t2, x2, ll);
+    return pix2.x() > 0 && pix2.y() > 0 && pix2.x() < widp && pix2.y() < lenp;
+}
+
 mat<2,4> sat_cam::corner_latlon(double t, const sat_state& x) {
     mat<2,4> pix, latlon;
     pix = corner_pix();

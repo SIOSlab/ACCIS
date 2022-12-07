@@ -33,7 +33,7 @@ filter::dist cross_cal::run(const transmission& query, filter::base& filt) {
 
         if (dt > 0 && dt < dt_max && query.sat_id != tr.sat_id && overlap) {
 
-            matches smatch = match(query.sift, tr.sift, max_dist);
+            matches smatch = match(query.sift, tr.sift, cam, max_dist);
 
             if (smatch.num_pts > 0) {
 
@@ -45,9 +45,9 @@ filter::dist cross_cal::run(const transmission& query, filter::base& filt) {
            
                 h.tr = tr.t;
 
-                h.zr = smatch.train;
+                h.zr = smatch.train_center;
 
-                vec<> z = poly2d::fit(smatch.train, smatch.query); 
+                vec<> z = poly2d::fit(smatch.train_center, smatch.query_center); 
 
                 filter::dist dist_w = dist_w_kp;
 

@@ -199,15 +199,15 @@ mat<> generator::get_cov() {
         points pts1 = sift(t, s1, img1, num_pts); 
         points pts2 = sift(t, s2, img2, num_pts); 
 
-        matches sm = match(pts1, pts2, max_dist);
+        matches sm = match(pts1, pts2, cam, max_dist);
 
         std::cout << "    " << sm.num_pts << " point pairs" << std::endl;
 
         if (sm.num_pts > 0) {
 
-            vec<> z = poly2d::fit(sm.train, sm.query);
+            vec<> z = poly2d::fit(sm.train_center, sm.query_center);
 
-            vec<> zc = cross_cal_meas(t, t, s1, s2, cam, sm.train);
+            vec<> zc = cross_cal_meas(t, t, s1, s2, cam, sm.train_center);
 
             kp_err.push_back((z - zc) * sqrt(sm.num_pts));
         
