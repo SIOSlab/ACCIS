@@ -106,6 +106,8 @@ matches sifter::match(const points& query, const points& train,
             
                 sm.num_pts++;
 
+                sm.dMatches.push_back(dmv.at(0));
+
             }
 
         }
