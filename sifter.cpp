@@ -20,11 +20,11 @@ points sifter::sift(double t, const sat_state& state, const cv::Mat& image,
     sp.t = t;
     sp.state = state;
 
-    sp.num_pts = num_pts;
-
     std::vector<KeyPoint> kps;
 
     sifter->detectAndCompute(image, noArray(), kps, sp.desc);
+
+    sp.num_pts = kps.size();
 
     for (const KeyPoint& kp : kps) {
         
