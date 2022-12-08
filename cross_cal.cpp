@@ -28,9 +28,7 @@ filter::dist cross_cal::run(const transmission& query, filter::base& filt) {
         sq.X = query.dist_x.mean;
         st.X = tr.dist_x.mean;
 
-        bool overlap = cam.img_overlap(query.t, tr.t, sq, st); 
-
-        if (dt > 0 && dt < dt_max && query.sat_id != tr.sat_id && overlap) {
+        if (dt > 0 && dt < dt_max && query.sat_id != tr.sat_id) {
 
             matches smatch = match(query.sift, tr.sift, cam, max_dist);
 
