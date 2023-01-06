@@ -4,6 +4,7 @@
 #include "eigen_csv.hpp"
 #include "house.hpp"
 #include "mat.hpp"
+#include "sqrtukf.hpp"
 #include "ukf.hpp"
 
 void accis_sat::setup() {
@@ -22,6 +23,8 @@ void accis_sat::setup() {
         filt.reset(new ukf());
     else if (filter_type == "HOUSE")
         filt.reset(new house());
+    else if (filter_type == "SQRTUKF")
+        filt.reset(new sqrtukf());
     else
         show_error("Fiter Type " + filter_type + " not recognized");
 
