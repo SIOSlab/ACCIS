@@ -33,6 +33,8 @@ dist sqrtukf::predict(double ti, double tf, const dist& distXi, const dist& dist
 dist sqrtukf::update(double t, cvec<> z, const dist& distXp, const dist& distW,
         meas& h) {
 
+    using namespace Eigen;
+
     sig S(distXp, distW, K);
 
     mat<> Z(z.size(), S.n);
@@ -46,7 +48,10 @@ dist sqrtukf::update(double t, cvec<> z, const dist& distXp, const dist& distW,
 
     mat<> Xcv = S.Xc * S.v.asDiagonal();
 
-    mat<> Kt = Zcv.transpose().fullPivHouseholderQr().solve(Xcv.transpose());
+    JacobiSVD<mat<>> svd(Zcv.transpose(), ComputeThinU | ComputeThinV |
+            FullPivHouseholderQRPreconditioner);
+    
+    mat<> Kt = svd.solve(Xcv.transpose());
 
     mat<> Xucv = Xcv - Kt.transpose() * Zcv;
 
