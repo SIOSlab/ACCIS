@@ -50,7 +50,7 @@ dist sqrtukf::update(double t, cvec<> z, const dist& distXp, const dist& distW,
 
     mat<> Xucv = Xcv - Kt.transpose() * Zcv;
 
-    dist distXu;
+    dist distXu(distXp.dim);
 
     distXu.mean = distXp.mean + Kt.transpose() * (z - zm);
 
@@ -100,7 +100,7 @@ mat<> sqrtukf::chol_cov(const filter::dist& distX) {
     if (distX.par.size() == 0)
         ll = distX.cov.llt().matrixL();
     else
-        ll = distX.par.front();
+        ll = distX.par.back();
 
     return ll;
 }
@@ -108,12 +108,14 @@ mat<> sqrtukf::chol_cov(const filter::dist& distX) {
 // L matrix from LQ decomposition
 mat<> sqrtukf::lmat(cmat<> A) {
 
+    mat<> QR = A.transpose().householderQr().matrixQR();
+        
     mat<> ll(A.rows(), A.rows());
 
     ll.setZero();
 
-    ll = A.transpose().householderQr().matrixQR()
-        .template triangularView<Eigen::Upper>().transpose();
+    ll = QR.topRows(A.rows()).transpose()
+        .template triangularView<Eigen::Lower>();
 
     return ll;
 
@@ -137,15 +139,15 @@ sqrtukf::sig::sig(const filter::dist& distX, const filter::dist& distW,
     v = w.cwiseSqrt();
 
     mat<> Lxx = chol_cov(distX);
-    mat<> Lww = chol_cov(distW);
+    mat<> Lww = distW.cov.llt().matrixL();
 
     Xc.setZero();
     Wc.setZero();
-
-    Xc.block(0, 1,    nx, nx) += scale * Lxx;
+    
+    Xc.block(0, 1,    nx, nx) += scale * Lxx; 
     Xc.block(0, 1+nx, nx, nx) -= scale * Lxx;
 
-    Wc.block(0, 2*nx+1,    nw, nw) += scale * Lww;
+    Wc.block(0, 2*nx+1,    nw, nw) += scale * Lww;    
     Wc.block(0, 2*nx+1+nw, nw, nw) -= scale * Lww;
 
     X = Xc.colwise() + distX.mean;

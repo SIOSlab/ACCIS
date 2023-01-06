@@ -14,7 +14,7 @@
     "Camera Image Length (pixels)": 1000.0,
     "GPS Measurement Cadence": 1,
     "Camera Image Width (pixels)": 1000.0,
-    "Filter Type": "UKF",
+    "Filter Type": "SQRTUKF",
     "Initial Velocity StD (km/s)": 0.1,
     "Time Step (s)": 1.0,
     "Initial Angular Velocity StD (rad/s)": 0.0017453292519943296,
