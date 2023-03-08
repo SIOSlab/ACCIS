@@ -80,6 +80,13 @@ dist sqrtukf::join(const dist& dist1, const dist& dist2) {
     distc.cov.topLeftCorner(dist1.dim, dist1.dim) = dist1.cov;
     distc.cov.bottomRightCorner(dist2.dim, dist2.dim) = dist2.cov;
 
+    distc.par.emplace_back(distc.dim, distc.dim);
+
+    distc.par.front().setZero();
+
+    distc.par.front().topLeftCorner(dist1.dim, dist1.dim) = chol_cov(dist1); 
+    distc.par.front().bottomRightCorner(dist2.dim, dist2.dim) = chol_cov(dist2);
+
     return distc;
 
 }
