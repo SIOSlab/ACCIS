@@ -45,7 +45,7 @@ void accis_sat::step() {
 
         vec<> z = h_gyr.H(t, x_tru.X, rnd);
 
-        dist_x = filt->update(t, z, dist_x, str_err, h_gyr);
+        dist_x = filt->update(t, z, dist_x, gyr_err, h_gyr);
 
     }
 
