@@ -2,8 +2,12 @@
 *                      ODE Solver Settings
 *   TL - Relative tolerance (base-10 logarithm)
 *   TH - Threshold (base-10 logarithm)
+*   MT - Runge-Kutta method
+*             1 - 2nd/3rd order
+*             2 - 4th/5th order
+*             3 - 7th/8th order
 *-------------------------------------------------------------------------------
-      INTEGER TL, TH
+      INTEGER TL, TH, MT
 
 *-------------------------------------------------------------------------------
 *                     Perturbation Settings
@@ -18,5 +22,5 @@
 *                        Common Block
 *-------------------------------------------------------------------------------
       COMMON /ROAMCO/
-     &  TL, TH,
+     &  TL, TH, MT,
      &  GD, LG, SG, DR

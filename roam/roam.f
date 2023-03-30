@@ -23,38 +23,28 @@
       EXTERNAL ROAMF
 
 *  ODE Solver Arguments
-      PARAMETER(ITOL = 1)
-      PARAMETER(ITASK = 1)
-      PARAMETER(IOPT = 0)
-      PARAMETER(LRW = 20+16*NX)
-      PARAMETER(LIW = 20)
-      PARAMETER(MF = 10)
-      DIMENSION RWORK(LRW)
-      DIMENSION IWORK(LIW)
-      DIMENSION XK(NX)
+      PARAMETER(LENWRK = 32*NX)
+      DIMENSION WORK(LENWRK), THR(NX), XGOT(NX), XD(NX), XMAX(NX) 
 
 *  Options
       INCLUDE 'roamopt.fi'
 
-*  Threshold
-      RTOL = 10D0**TL
-      ATOL = 10D0**TH
+*  Tolerance & threshold
+      TOL = 10D0**TL
+      THR = 10D0**TH
 
-*  Get initial state, time, and ODE solver state
-      DO I = 1,NX
-          XK(I) = XI(I)
-      ENDDO
-      TK = TI
-      ISTATE = 1
-      RWORK = 0
-      IWORK = 0
+*  Initial time step size
+      H0 = (T(NT) - TI) / NT
 
-*  Run ODE solver
+*  Setup Runge-Kutta solver
+      CALL SETUP(NX, TI, XI, T(NT), TOL, THR, MT, 'U', .FALSE., H0,
+     &    WORK, LENWRK, .FALSE.)
+
+*  Run Runge-Kutta solver
       DO K = 1,NT
-          CALL DLSODE(ROAMF, NX, XK, TK, T(K), ITOL, RTOL, ATOL, ITASK,
-     &        ISTATE, IOPT, RWORK, LRW, IWORK, LIW, ROAMF, MF) 
+          CALL UT(ROAMF, T(K), TGOT, XGOT, XD, XMAX, WORK, IFLAG)
           DO I = 1,NX
-              X(I,K) = XK(I)
+              X(I,K) = XGOT(I)
           ENDDO    
       ENDDO 
 
@@ -63,12 +53,11 @@
 
 *===============================================================================
 
-      SUBROUTINE ROAMF(NX, T, X, XD)
+      SUBROUTINE ROAMF(T, X, XD)
 
 *-------------------------------------------------------------------------------
 *                           State Derivative
-*  IN:  NX - Number of state components (should be 13)
-*       T  - Time (seconds since epoch T0)
+*  IN:  T  - Time (seconds since epoch T0)
 *       X  - State (see subroutine ROAM)
 *  OUT: XD - State derivative
 *-------------------------------------------------------------------------------
@@ -77,6 +66,7 @@
 
 *  State Dimension      
       INTEGER NX
+      PARAMETER(NX = 13)
 
 *  Arguments
       DOUBLE PRECISION T, X(NX), XD(NX)
@@ -258,6 +248,8 @@
           TL = VAL
       ELSEIF (VAR .EQ. 'TH') THEN
           TH = VAL
+      ELSEIF (VAR .EQ. 'MT') THEN
+          MT = VAL
 *  Perturbation Settings
       ELSEIF (VAR .EQ. 'GD') THEN
           GD = VAL
@@ -300,7 +292,7 @@
 
       INCLUDE 'roamopt.fi'
       
-      DATA TL /-8/, TH /-12/,
+      DATA TL /-8/, TH /-12/, MT /3/,
      &  GD /10/, LG /1/, SG /1/, DR /1/
 
       END
