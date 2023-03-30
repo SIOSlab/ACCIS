@@ -2,7 +2,7 @@
     "Max. Percentage of Black Pixels": 5.0,
     "PD Constant kp": 10.0,
     "Keypoint Max. Distance": 0.5,
-    "Imaging Cadence": 60,
+    "Imaging Cadence": 0,
     "Camera Distortion Parameter StD": 0.01,
     "Principal Moments of Inertia (kg*m^2)": [
         100.0,
@@ -12,11 +12,11 @@
     "Camera Pixel Density (pixels/mm)": 1.0,
     "Orbit Eccentricity": 0.0,
     "Camera Image Length (pixels)": 1000.0,
-    "GPS Measurement Cadence": 1,
+    "GPS Measurement Cadence": 5,
     "Camera Image Width (pixels)": 1000.0,
     "Filter Type": "SQRTUKF",
     "Initial Velocity StD (km/s)": 0.1,
-    "Time Step (s)": 1.0,
+    "Time Step (s)": 0.1,
     "Initial Angular Velocity StD (rad/s)": 0.0017453292519943296,
     "Random Number Generator Seed": 0,
     "Orbit RAAN (deg)": 0.0,
@@ -45,5 +45,5 @@
     "PD Constant kd": 100.0,
     "Disturbance Torque StD (N*m) - Filter Model": 1.0,
     "Camera Aperture (mm)": 500.0,
-    "Star Tracker Measurement Cadence": 1
+    "Star Tracker Measurement Cadence": 20
 }
