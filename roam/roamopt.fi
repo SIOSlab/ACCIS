@@ -1,11 +1,4 @@
 *-------------------------------------------------------------------------------
-*                      ODE Solver Settings
-*   TL - Relative tolerance (base-10 logarithm)
-*   TH - Threshold (base-10 logarithm)
-*-------------------------------------------------------------------------------
-      INTEGER TL, TH
-
-*-------------------------------------------------------------------------------
 *                     Perturbation Settings
 *   GD - Degree of Earth gravitational model (up to 100)
 *   LG - Include lunar gravity
@@ -17,6 +10,4 @@
 *-------------------------------------------------------------------------------
 *                        Common Block
 *-------------------------------------------------------------------------------
-      COMMON /ROAMCO/
-     &  TL, TH,
-     &  GD, LG, SG, DR
+      COMMON /ROAMCO/ GD, LG, SG, DR

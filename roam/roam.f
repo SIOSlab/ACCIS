@@ -1,14 +1,12 @@
 *===============================================================================
 
-      SUBROUTINE ROAM(TI, XI, NT, T, X)
+      SUBROUTINE ROAMS(T, H, X)
 
 *-------------------------------------------------------------------------------
-*                            State Propagation
-*  IN:  TI - Initial time (seconds since epoch T0)
-*       XI - Initial state
-*       NT - Number of output times
-*       T  - Times (seconds since epoch T0)
-*  OUT: X  - State at times T
+*                        State Propagation Step
+*  IN:     T - Initial time (seconds since epoch T0)
+*          H - Time step (seconds) 
+*  IN/OUT: X  - State at time T (in), State at time T + H (out)
 *-------------------------------------------------------------------------------
 
       IMPLICIT DOUBLE PRECISION (A-H,O-Z)
@@ -17,45 +15,38 @@
       PARAMETER(NX = 13)
 
 *  Arguments
-      DIMENSION XI(*), T(*), X(NX,*)
+      DIMENSION X(*)
 
-*  State Propagation Function
-      EXTERNAL ROAMF
+*  Local variable dimensions
+      DIMENSION XIN(NX), F1(NX), F2(NX), F3(NX), F4(NX)
 
-*  ODE Solver Arguments
-      PARAMETER(ITOL = 1)
-      PARAMETER(ITASK = 1)
-      PARAMETER(IOPT = 0)
-      PARAMETER(LRW = 20+16*NX)
-      PARAMETER(LIW = 20)
-      PARAMETER(MF = 10)
-      DIMENSION RWORK(LRW)
-      DIMENSION IWORK(LIW)
-      DIMENSION XK(NX)
+      CALL ROAMF(T, X, F1)
 
-*  Options
-      INCLUDE 'roamopt.fi'
+      TIN = T + H / 2
 
-*  Threshold
-      RTOL = 10D0**TL
-      ATOL = 10D0**TH
-
-*  Get initial state, time, and ODE solver state
-      DO I = 1,NX
-          XK(I) = XI(I)
+      DO I = 1, NX
+          XIN(I) = X(I) + H * F1(I) / 2
       ENDDO
-      TK = TI
-      ISTATE = 1
-      RWORK = 0
-      IWORK = 0
 
-*  Run ODE solver
-      DO K = 1,NT
-          CALL DLSODE(ROAMF, NX, XK, TK, T(K), ITOL, RTOL, ATOL, ITASK,
-     &        ISTATE, IOPT, RWORK, LRW, IWORK, LIW, ROAMF, MF) 
-          DO I = 1,NX
-              X(I,K) = XK(I)
-          ENDDO    
+      CALL ROAMF(TIN, XIN, F2)
+      
+      DO I = 1, NX
+          XIN(I) = X(I) + H * F2(I) / 2 
+      ENDDO
+
+      CALL ROAMF(TIN, XIN, F3)
+     
+      TIN = T + H
+
+      DO I = 1, NX
+          XIN(I) = X(I) + H * F3(I) 
+      ENDDO
+     
+      CALL ROAMF(TIN, XIN, F4)
+      
+      DO I = 1, NX
+          X(I) = X(I) + H * (F1(I) / 6 + F2(I) / 3 
+     &                     + F3(I) / 3 + F4(I) / 6)
       ENDDO 
 
       RETURN
@@ -63,12 +54,11 @@
 
 *===============================================================================
 
-      SUBROUTINE ROAMF(NX, T, X, XD)
+      SUBROUTINE ROAMF(T, X, XD)
 
 *-------------------------------------------------------------------------------
 *                           State Derivative
-*  IN:  NX - Number of state components (should be 13)
-*       T  - Time (seconds since epoch T0)
+*  IN:  T  - Time (seconds since epoch T0)
 *       X  - State (see subroutine ROAM)
 *  OUT: XD - State derivative
 *-------------------------------------------------------------------------------
@@ -77,6 +67,7 @@
 
 *  State Dimension      
       INTEGER NX
+      PARAMETER(NX = 13)
 
 *  Arguments
       DOUBLE PRECISION T, X(NX), XD(NX)
@@ -253,13 +244,8 @@
 *  Options
       INCLUDE 'roamopt.fi'
 
-*  ODE Solver Settings
-      IF     (VAR .EQ. 'TL') THEN
-          TL = VAL
-      ELSEIF (VAR .EQ. 'TH') THEN
-          TH = VAL
 *  Perturbation Settings
-      ELSEIF (VAR .EQ. 'GD') THEN
+      IF     (VAR .EQ. 'GD') THEN
           GD = VAL
       ELSEIF (VAR .EQ. 'LG') THEN
           LG = VAL
@@ -300,8 +286,7 @@
 
       INCLUDE 'roamopt.fi'
       
-      DATA TL /-8/, TH /-12/,
-     &  GD /10/, LG /1/, SG /1/, DR /1/
+      DATA GD /10/, LG /1/, SG /1/, DR /1/
 
       END
 

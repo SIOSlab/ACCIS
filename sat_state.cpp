@@ -33,14 +33,16 @@ vec<> sat_dyn::propagate(double ti, double tf, cvec<> xi, cvec<> w) {
     s1.X = xi;
     s2.X = xi;
 
-    vec<13> xdi, xdf;
-    xdi.head<9>() = s1.X.head<9>(); 
-    xdi.tail<4>() = s1.qvb();
+    vec<13> xd;
+    xd.head<9>() = s1.X.head<9>(); 
+    xd.tail<4>() = s1.qvb();
 
-    roam_(&ti, xdi.data(), &nt, &tf, xdf.data());
+    double h = tf - ti;
 
-    s2.X.head<9>() = xdf.head<9>();
-    s2.qvb(xdf.tail<4>());
+    roams_(&ti, &h, xd.data());
+
+    s2.X.head<9>() = xd.head<9>();
+    s2.qvb(xd.tail<4>());
 
     return s2.X;
 

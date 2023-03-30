@@ -5,10 +5,9 @@
 extern "C" {
 #endif
 
-extern void roam_(const double* ti, const double* xi, const int* nt,
-        const double* t, double* x);
+extern void roams_(const double* t, const double* h, double* x);
 
-extern void roamf_(const int* nx, const double* t, const double* x, double* xd);
+extern void roamf_(const double* t, const double* x, double* xd);
 
 extern void roamps_(const char* var, const double* val);
 
