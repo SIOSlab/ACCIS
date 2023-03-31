@@ -29,7 +29,7 @@ t_mins = 300
 
 t_save = 5
 
-steps_per_min = 600
+steps_per_min = 120
 
 steps = t_mins * steps_per_min
 save_cadence = t_save * steps_per_min
