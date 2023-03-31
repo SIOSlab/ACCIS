@@ -86,12 +86,16 @@ void accis_sat::setup() {
     dyn_tru.stdt = getset<double>(par,
             "Disturbance Torque StD (N*m) - Ground Truth", 0.1);
     dyn_tru.include_drag = true;
-    
+    dyn_tru.log_rtol = -12;
+    dyn_tru.log_atol = -12;
+
     dyn_filt.stdf = getset<double>(par,
             "Disturbance Force StD (N) - Filter Model", 10);
     dyn_filt.stdt = getset<double>(par,
             "Disturbance Torque StD (N*m) - Filter Model", 1);
     dyn_filt.include_drag = false;
+    dyn_filt.log_rtol = -6;
+    dyn_filt.log_atol = -6;
 
     dist_w = filter::dist(6);
     dist_w.mean.setZero();

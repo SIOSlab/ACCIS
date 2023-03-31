@@ -145,6 +145,8 @@ class sat_dyn : public filter::dyn {
 
     bool include_drag;
 
+    int log_atol, log_rtol;
+
     vec<> propagate(double ti, double tf, cvec<> xi, cvec<> w);
 
     vec<> propagate_random(double ti, double tf, cvec<> xi, rando& rnd);

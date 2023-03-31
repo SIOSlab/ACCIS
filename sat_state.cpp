@@ -26,6 +26,9 @@ vec<> sat_dyn::propagate(double ti, double tf, cvec<> xi, cvec<> w) {
     Td = w.tail<3>();
 
     roamos_("DR", &dr);
+    roamos_("TL", &log_rtol);
+    roamos_("TH", &log_atol);
+
     roamps_("FD", Fd.data());
     roamps_("TD", Td.data());
 
