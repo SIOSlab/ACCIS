@@ -9,6 +9,7 @@
 #include <opencv2/imgcodecs.hpp> 
 #include <opencv2/imgproc.hpp>
 
+#include <iostream>
 #include <string>
 
 void accis_sat::step() {
@@ -18,6 +19,20 @@ void accis_sat::step() {
 
     // Get true state
     sat_state x_tru = states_tru.back();
+
+    // Print true altitude
+    if (step_no % 100 == 0) {
+
+        const double tol = 1.0E-6;
+
+        double lat, lon, alt;
+       
+        eci2ll_(&t, x_tru.x(), &tol, &lat, &lon, &alt);
+
+        std::cout << "Altitude of Satellite " << sat_id << ": "
+            << alt << std::endl;
+
+    }
 
     // Get current state estimate distribution
     filter::dist dist_x = states_est.back();
