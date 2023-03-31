@@ -86,8 +86,8 @@ void accis_sat::setup() {
     dyn_tru.stdt = getset<double>(par,
             "Disturbance Torque StD (N*m) - Ground Truth", 0.1);
     dyn_tru.include_drag = true;
-    dyn_tru.log_rtol = -12;
-    dyn_tru.log_atol = -12;
+    dyn_tru.log_rtol = -8;
+    dyn_tru.log_atol = -8;
 
     dyn_filt.stdf = getset<double>(par,
             "Disturbance Force StD (N) - Filter Model", 10);

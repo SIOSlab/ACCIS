@@ -34,7 +34,7 @@ include_directories(roam)
 add_jar(Landsat SOURCES Landsat.java INCLUDE_JARS WorldWindJava.jar)
 
 FILE(GLOB ACCIS_SRC *.cpp)
-FILE(GLOB ROAM_SRC roam/*.f)
+FILE(GLOB ROAM_SRC roam/*.f roam/*.cpp)
 
 pybind11_add_module(accis ${ROAM_SRC} ${ACCIS_SRC})
 
