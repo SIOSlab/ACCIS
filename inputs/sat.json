@@ -2,7 +2,7 @@
     "Max. Percentage of Black Pixels": 5.0,
     "PD Constant kp": 1.0,
     "Keypoint Max. Distance": 0.5,
-    "Imaging Cadence": 0,
+    "Imaging Cadence": 120,
     "Camera Distortion Parameter StD": 0.01,
     "Principal Moments of Inertia (kg*m^2)": [
         100.0,
@@ -21,7 +21,7 @@
     "Random Number Generator Seed": 0,
     "Orbit RAAN (deg)": 0.0,
     "Gyroscope Measurement Cadence": 1,
-    "Orbit Inclination (deg)": 0.0,
+    "Orbit Inclination (deg)": 30.0,
     "Satellite ID": 0,
     "Orbit Argument of Perigee (deg)": 0.0,
     "Orbit True Anomaly at Epoch (deg)": 0.0,
