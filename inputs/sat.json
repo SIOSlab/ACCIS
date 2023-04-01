@@ -1,6 +1,6 @@
 {
     "Max. Percentage of Black Pixels": 5.0,
-    "PD Constant kp": 10.0,
+    "PD Constant kp": 1.0,
     "Keypoint Max. Distance": 0.5,
     "Imaging Cadence": 0,
     "Camera Distortion Parameter StD": 0.01,
@@ -42,7 +42,7 @@
     "Cross Calibration Time Memory (s)": 3600.0,
     "Orbit Semi-Major Axis (km)": 6878.0,
     "Disturbance Force StD (N) - Filter Model": 0.001,
-    "PD Constant kd": 10.0,
+    "PD Constant kd": 1.0,
     "Disturbance Torque StD (N*m) - Filter Model": 0.001,
     "Camera Aperture (mm)": 500.0,
     "Star Tracker Measurement Cadence": 2
