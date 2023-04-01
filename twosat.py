@@ -25,11 +25,11 @@ sat2.set_param(p2)
 
 sats = [sat1, sat2]
 
-t_mins = 300
+t_mins = 100
 
-t_save = 5
+t_save = 10
 
-steps_per_min = 120
+steps_per_min = 60
 
 steps = t_mins * steps_per_min
 save_cadence = t_save * steps_per_min
