@@ -18,7 +18,7 @@ for i in range(n_plan):
         par = par_default
 
         par["Orbit RAAN (deg)"]                  = i * 360.0 / n_plan
-        par["Orbit True Anomaly at Epoch (deg)"] = j * 360.0 / n_plan
+        par["Orbit True Anomaly at Epoch (deg)"] = j * 360.0 / n_phas
         par["Satellite ID"]                      = i * n_phas + j + 1
         par["Random Number Generator Seed"]      = j * n_plan + i + 1
 
