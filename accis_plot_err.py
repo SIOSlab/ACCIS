@@ -10,67 +10,47 @@ ylabels = [
     'Attitude Error (deg)',
     'Camera Attitude Error (deg)',
     'Focal Length Error (mm)',
-    'Distortion Parameter c1 Error',
-    'Distortion Parameter c2 Error',
-    'Distortion Parameter c3 Error'
-    ]
-
-fig, axs = plt.subplots(3, 3)
-
-for i in range(3) :
-    for j in range(3) :
-        for sat_id in sat_ids :
-            k = 3*i + j
-            t = np.genfromtxt(
-                    "results/sat_" + str(sat_id) + "_time_s.csv",
-                    delimiter=","
-                    )
-            t = t / 60
-            err = np.genfromtxt(
-                    "results/sat_" + str(sat_id) + "_state_error.csv",
-                    delimiter=","
-                    )
-            e = err[..., k]
-            lbl = 'Satellite ' + str(sat_id)
-            axs[i][j].plot(t, e, label = lbl)
-        axs[i][j].set_xlabel('Time (min)')
-        axs[i][j].set_ylabel(ylabels[k])
-        axs[i][j].set_yscale('log')
-        axs[i][j].legend()
-
-fig.set_size_inches(15, 12)
-fig.tight_layout()
-plt.savefig("plots/est_err.pdf")
-
-#-------------------------------------------------------------------------------
-
-ylabels = [
+    r'Distortion Parameter $c_1$ Error',
+    r'Distortion Parameter $c_2$ Error',
+    r'Distortion Parameter $c_3$ Error',
     'Pointing Error (deg)',
     'Angular Velocity Error (deg/s)'
     ]
 
-fig, axs = plt.subplots(1, 2)
+abbrv = ['pos', 'vel', 'av', 'att', 'ca', 'f', 'c1', 'c2', 'c3', 'pe', 're']
 
-for j in range(2) :
+for i in range(11):
+
+    print('Plot ' + str(i+1))
+
+    plt.figure(figsize = (6, 3))
+
+    plt.rc('font', size=10) 
+
     for sat_id in sat_ids :
-        k = 9 + j
+            
         t = np.genfromtxt(
                 "results/sat_" + str(sat_id) + "_time_s.csv",
                 delimiter=","
                 )
         t = t / 60
+            
         err = np.genfromtxt(
                 "results/sat_" + str(sat_id) + "_state_error.csv",
                 delimiter=","
                 )
-        e = err[..., k]
+            
+        e = err[:, i]
+            
         lbl = 'Satellite ' + str(sat_id)
-        axs[j].plot(t, e, label = lbl)
-    axs[j].set_xlabel('Time (min)')
-    axs[j].set_ylabel(ylabels[j])
-    axs[j].set_yscale('log')
-    axs[j].legend()
+        plt.plot(t, e, label = lbl)
 
-fig.set_size_inches(10, 5)
-fig.tight_layout()
-plt.savefig("plots/att_err.pdf")
+    plt.xlabel('Time (min)')
+    plt.ylabel(ylabels[i])
+    plt.yscale('log')
+    plt.legend()
+
+    plt.tight_layout()
+    plt.savefig('plots/' + abbrv[i] + '_err.pdf')
+
+    plt.close()
