@@ -7,7 +7,7 @@ sat_default = accis_get_sat('sat')
 
 par_default = sat_default.get_param()
 
-n_plan = 6
+n_plan = 1
 n_phas = 6
 
 sats = []
