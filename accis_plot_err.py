@@ -23,12 +23,16 @@ for i in range(11):
 
     print('Plot ' + str(i+1))
 
-    plt.figure(figsize = (6, 3))
+    for j in range(sat_ids.size):
 
-    plt.rc('font', size=10) 
-
-    for sat_id in sat_ids :
+        sat_id = sat_ids[j]
             
+        print('    Satellite ' + str(sat_id))
+            
+        plt.figure(figsize = (4, 4))
+
+        plt.rc('font', size=10) 
+
         t = np.genfromtxt(
                 "results/sat_" + str(sat_id) + "_time_s.csv",
                 delimiter=","
@@ -42,15 +46,17 @@ for i in range(11):
             
         e = err[:, i]
             
-        lbl = 'Satellite ' + str(sat_id)
-        plt.plot(t, e, label = lbl)
+        plt.plot(t, e)
 
-    plt.xlabel('Time (min)')
-    plt.ylabel(ylabels[i])
-    plt.yscale('log')
-    plt.legend()
+        plt.xlabel('Time (min)')
+        plt.ylabel(ylabels[i])
+        plt.yscale('log')
+        plt.xscale('log')
 
-    plt.tight_layout()
-    plt.savefig('plots/' + abbrv[i] + '_err.pdf')
+        plt.title("Satellite " + str(sat_id), {'fontsize': 10})
 
-    plt.close()
+        plt.tight_layout()
+
+        plt.savefig('plots/' + abbrv[i] + '_err_' + str(sat_id) + '.pdf')
+
+        plt.close()
