@@ -41,8 +41,8 @@ class BulkLandsat {
 
         BulkLandsatListener listener = new BulkLandsatListener();
 
-        BulkRetrievalThread thread = layer.makeLocal(sector,
-                resolution, listener);
+        BulkRetrievalThread thread = layer.makeLocal(sector, resolution,
+                fileStore, listener);
 
         thread.run();
 
