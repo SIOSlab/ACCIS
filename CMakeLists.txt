@@ -31,7 +31,8 @@ include_directories(${PYTHON_INCLUDE_DIRS})
 include_directories(.)
 include_directories(roam)
 
-add_jar(Landsat SOURCES Landsat.java INCLUDE_JARS WorldWindJava.jar)
+add_jar(Landsat     SOURCES Landsat.java     INCLUDE_JARS WorldWindJava.jar)
+add_jar(BulkLandsat SOURCES BulkLandsat.java INCLUDE_JARS WorldWindJava.jar ENTRY_POINT BulkLandsat)
 
 FILE(GLOB ACCIS_SRC *.cpp)
 FILE(GLOB ROAM_SRC roam/*.f)

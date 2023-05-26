@@ -6,3 +6,4 @@ sift_coefs/*
 __pycache__/*
 archive/*
 gen/*
+cache
