@@ -6,4 +6,4 @@ sift_coefs/*
 __pycache__/*
 archive/*
 gen/*
-image_cache/*
+mosaic/

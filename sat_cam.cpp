@@ -172,7 +172,6 @@ cv::Mat sat_cam::distort(const cv::Mat& imo, const sat_state& x) {
 
 }
 
-
 cv::Mat sat_cam::ideal_image(cmat<2,4> latlon_corners) {
 
     using namespace cv;

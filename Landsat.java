@@ -10,48 +10,52 @@ import java.net.SocketTimeoutException;
 
 import javax.imageio.ImageIO;
 
-public class Landsat {
+class Landsat {
 
-//
-//public static LandsatI3WMSLayer layer;
-
-    public static LandsatI3WMSLayer layer;
-
-    //--------------------------------------------------------------------------
-    //                     Acquire Landsat-Based Image
-    //
-    //  Produces image of rectangular Earth sector & saves to "landsat_temp.png"
-    //
-    //  IN:  widp, lenp - Width & height of image (pixels)
-    //       latc, lonc - Latitude & longitude of northwest corner (deg)
-    //       degp       - Degrees per pixel
-    //
-    //  OUT: Flag (0 for success)
-    //
-    //--------------------------------------------------------------------------
-
-    public static int getImage(int widp, int lenp, double latc, double lonc,
-            double dp) {
-
-        // Flag
-        int flag = 1;
+    public static void main(String[] args) {
         
+        LandsatI3WMSLayer layer = new LandsatI3WMSLayer(); 
+
+        final int pix_deg = 1000;
+
+        final int widp = pix_deg;
+        final int lenp = pix_deg;
+
+        for (int clat = 0; clat < 180; clat++) {
+
+            for (int lon = 0; lon < 360; lon++) {
+
+                System.out.printf("clat = %03d; lon = %03d\n", clat, lon);
+
+                get_image(clat, lon, widp, lenp, layer);
+
+                System.out.printf("\tAcquired\n");
+
+            }
+
+        }
+
+    }
+
+    private static void get_image(int clat, int lon, int widp, int lenp, 
+            LandsatI3WMSLayer layer) {
+
         try {
+
+            int flag = 1;
 
             while (flag != 0) {
             
                 try {
+   
+                    int lat = 90 - clat;
 
-                    // Initialize Landsat image layer
-                    if (layer == null)
-                        layer = new LandsatI3WMSLayer(); 
-    
                     // Compute sector    
                     Sector sector = new Sector(
-                                       Angle.fromDegrees(latc - lenp*dp),
-                                       Angle.fromDegrees(latc),
-                                       Angle.fromDegrees(lonc), 
-                                       Angle.fromDegrees(lonc + widp*dp));
+                                       Angle.fromDegrees(lat),
+                                       Angle.fromDegrees(lat + 1),
+                                       Angle.fromDegrees(lon), 
+                                       Angle.fromDegrees(lon + 1));
 
                     // Aspect ratio (pixel?)
                     double ar = 1; 
@@ -61,7 +65,8 @@ public class Landsat {
 
                     // Image type & filename 
                     String type = "image/png";
-                    String filename = "landsat_temp.png";
+                    String filename = String.format(
+                            "mosaic/tile_%03d_%03d.png", clat, lon);
 
                     // Acquire image 
                     BufferedImage img = layer.composeImageForSector(sector,
@@ -76,7 +81,7 @@ public class Landsat {
 
                 } catch (SocketTimeoutException ste) {
 
-                    System.out.println("Socket timed out -- Trying again");
+                    System.out.println("\tSocket timed out -- Trying again");
 
                 }
 
@@ -87,8 +92,6 @@ public class Landsat {
             e.printStackTrace(System.out);
         
         }
-
-        return flag;
 
     }
 
