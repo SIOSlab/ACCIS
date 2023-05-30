@@ -12,7 +12,7 @@
 cv::Mat Landsat::image(int widp, int lenp, double latc, double lonc,
         double dp) {
 
-    const int pix_deg = 2000;
+    const int pix_deg = 1000;
 
     int ilatc = int(ceil (latc));
     int ilonc = int(floor(lonc));

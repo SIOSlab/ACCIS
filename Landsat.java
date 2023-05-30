@@ -16,7 +16,7 @@ class Landsat {
         
         LandsatI3WMSLayer layer = new LandsatI3WMSLayer(); 
 
-        final int pix_deg = 2000;
+        final int pix_deg = 1000;
 
         final int widp = pix_deg;
         final int lenp = pix_deg;
