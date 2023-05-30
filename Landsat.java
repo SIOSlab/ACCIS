@@ -16,7 +16,7 @@ class Landsat {
         
         LandsatI3WMSLayer layer = new LandsatI3WMSLayer(); 
 
-        final int pix_deg = 1000;
+        final int pix_deg = 2000;
 
         final int widp = pix_deg;
         final int lenp = pix_deg;
@@ -52,8 +52,8 @@ class Landsat {
 
                     // Compute sector    
                     Sector sector = new Sector(
+                                       Angle.fromDegrees(lat - 1),
                                        Angle.fromDegrees(lat),
-                                       Angle.fromDegrees(lat + 1),
                                        Angle.fromDegrees(lon), 
                                        Angle.fromDegrees(lon + 1));
 
