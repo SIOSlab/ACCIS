@@ -3,6 +3,8 @@ import matplotlib.pyplot as plt
 
 sat_ids = np.genfromtxt("results/sat_ids.csv", delimiter=",", dtype=int)
 
+n_sats = sat_ids.size
+
 ylabels = [
     'Position Error (m)',
     'Velocity Error (m/s)',
@@ -10,53 +12,79 @@ ylabels = [
     'Attitude Error (deg)',
     'Camera Attitude Error (deg)',
     'Focal Length Error (mm)',
-    r'Distortion Parameter $c_1$ Error',
-    r'Distortion Parameter $c_2$ Error',
-    r'Distortion Parameter $c_3$ Error',
+    'Distortion Parameter c1 Error',
+    'Distortion Parameter c2 Error',
+    'Distortion Parameter c3 Error'
+    ]
+
+fig, axs = plt.subplots(3, 3)
+
+t = np.genfromtxt("results/sat_" + str(sat_ids[0]) + "_time_s.csv", \
+        delimiter=",")
+t = t / 60
+        
+for i in range(3) :
+    for j in range(3) :
+
+        e = np.empty((n_sats, t.size))
+
+        for s in range(n_sats):
+            sat_id = sat_ids[s]
+            k = 3*i + j
+            err = np.genfromtxt(
+                    "results/sat_" + str(sat_id) + "_state_error.csv",
+                    delimiter=","
+                    )
+            e[s, :] = err[:, k]
+
+        max_err = np.amax(e, 0)
+        rms_err = np.sqrt(np.mean(e**2, 0))
+
+        axs[i][j].plot(t, max_err, label = "MAX")
+        axs[i][j].plot(t, rms_err, label = "RMS")
+        
+        axs[i][j].set_xlabel('Time (min)')
+        axs[i][j].set_ylabel(ylabels[k])
+        axs[i][j].set_yscale('log')
+        axs[i][j].legend()
+
+fig.set_size_inches(15, 12)
+fig.tight_layout()
+plt.savefig("plots/est_err.pdf")
+
+#-------------------------------------------------------------------------------
+
+ylabels = [
     'Pointing Error (deg)',
     'Angular Velocity Error (deg/s)'
     ]
 
-abbrv = ['pos', 'vel', 'av', 'att', 'ca', 'f', 'c1', 'c2', 'c3', 'pe', 're']
+fig, axs = plt.subplots(1, 2)
 
-for i in range(11):
+for j in range(2):
 
-    print('Plot ' + str(i+1))
-
-    for j in range(sat_ids.size):
-
-        sat_id = sat_ids[j]
-            
-        print('    Satellite ' + str(sat_id))
-            
-        plt.figure(figsize = (4, 4))
-
-        plt.rc('font', size=10) 
-
-        t = np.genfromtxt(
-                "results/sat_" + str(sat_id) + "_time_s.csv",
-                delimiter=","
-                )
-        t = t / 60
-            
+    e = np.empty((n_sats, t.size))
+    
+    for s in range(n_sats):
+        sat_id = sat_ids[s]
+        k = 9 + j
         err = np.genfromtxt(
                 "results/sat_" + str(sat_id) + "_state_error.csv",
                 delimiter=","
                 )
-            
-        e = err[:, i]
-            
-        plt.plot(t, e)
+        e[s, :] = err[:, k]
 
-        plt.xlabel('Time (min)')
-        plt.ylabel(ylabels[i])
-        plt.yscale('log')
-        plt.xscale('log')
+    max_err = np.amax(e, 0)
+    rms_err = np.sqrt(np.mean(e**2, 0))
 
-        plt.title("Satellite " + str(sat_id), {'fontsize': 10})
+    axs[j].plot(t, max_err, label = "MAX")
+    axs[j].plot(t, rms_err, label = "RMS")
+    
+    axs[j].set_xlabel('Time (min)')
+    axs[j].set_ylabel(ylabels[j])
+    axs[j].set_yscale('log')
+    axs[j].legend()
 
-        plt.tight_layout()
-
-        plt.savefig('plots/' + abbrv[i] + '_err_' + str(sat_id) + '.pdf')
-
-        plt.close()
+fig.set_size_inches(10, 5)
+fig.tight_layout()
+plt.savefig("plots/att_err.pdf")
