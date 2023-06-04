@@ -1,33 +1,50 @@
+import math
+
 import build.accis as accis
 
 from accis_io import *
 from accis_run import *
 
-sat = accis_get_sat('sat')
+sat1 = accis_get_sat('sat')
 
-p1 = sat.get_param()
-p2 = sat.get_param()
+p1 = sat1.get_param()
 
-p1["Orbit True Anomaly at Epoch (deg)"] = 4
-p2["Orbit True Anomaly at Epoch (deg)"] = 0
+a = p1["Orbit Semi-Major Axis (km)"]
 
-p1["Random Number Generator Seed"] = 1
-p2["Random Number Generator Seed"] = 2
+mu = 3.986E5;
 
-p1["Satellite ID"] = 1
-p2["Satellite ID"] = 2
+mean_mot = math.degrees(math.sqrt(mu / a**3))
 
-sat1 = accis.sat()
-sat2 = accis.sat()
+dt = 300
 
-sat1.set_param(p1)
-sat2.set_param(p2)
+df = -dt * mean_mot
+dW =  dt * 360 / 86400
 
-sats = [sat1, sat2]
+n_sat = 4
 
-t_mins = 10000
+sats = []
 
-t_save = 100
+for j in range(n_sat):
+    
+    sat = accis_get_sat('sat')
+
+    p = sat.get_param()
+
+    p["Orbit True Anomaly at Epoch (deg)"] = j * df
+
+    p["Orbit RAAN (deg)"] = j * dW
+
+    p["Satellite ID"] = j + 1
+
+    p["Random Number Generator Seed"] = 11 * j + 14 
+
+    sat.set_param(p)
+
+    sats.append(sat)
+
+t_mins = 30
+
+t_save = 5
 
 steps_per_min = 120
 

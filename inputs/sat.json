@@ -1,7 +1,7 @@
 {
     "Max. Percentage of Black Pixels": 5.0,
     "PD Constant kp": 1.0,
-    "Keypoint Max. Distance": 0.5,
+    "Keypoint Max. Distance": 2.0,
     "Imaging Cadence": 120,
     "Camera Distortion Parameter StD": 0.01,
     "Principal Moments of Inertia (kg*m^2)": [
@@ -34,12 +34,12 @@
     "Initial Body Attitude StD (rad)": 0.0017453292519943296,
     "Camera Focal Length (mm)": 2000.0,
     "Initial Position StD (km)": 0.001,
-    "Number of SIFT Points": 1000,
+    "Number of SIFT Points": 100,
     "Camera Attitude StD (rad)": 0.00017453292519943296,
     "Camera Focal Length StD (mm)": 1.0,
     "Disturbance Force StD (N) - Ground Truth": 0.0,
     "Disturbance Torque StD (N*m) - Ground Truth": 0.0001,
-    "Cross Calibration Time Memory (s)": 36000.0,
+    "Cross Calibration Time Memory (s)": 3.6E6,
     "Orbit Semi-Major Axis (km)": 6878.0,
     "Disturbance Force StD (N) - Filter Model": 0.001,
     "PD Constant kd": 1.0,
