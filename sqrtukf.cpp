@@ -65,6 +65,9 @@ dist sqrtukf::update(double t, cvec<> z, const dist& distXp, const dist& distW,
 
     distXu.cov = distXu.par.front() * distXu.par.front().transpose(); 
 
+    if (distXu.mean.hasNaN() | distXu.cov.hasNaN() | distXu.par.back().hasNaN())
+        return distXp;
+
     return distXu; 
 
 }
