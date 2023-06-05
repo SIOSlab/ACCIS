@@ -42,9 +42,9 @@ for j in range(n_sat):
 
     sats.append(sat)
 
-t_mins = 30
+t_mins = 100
 
-t_save = 5
+t_save = 10
 
 steps_per_min = 120
 

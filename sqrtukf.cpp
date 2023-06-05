@@ -48,10 +48,12 @@ dist sqrtukf::update(double t, cvec<> z, const dist& distXp, const dist& distW,
 
     mat<> Xcv = S.Xc * S.v.asDiagonal();
 
-    JacobiSVD<mat<>> svd(Zcv.transpose(), ComputeThinU | ComputeThinV |
-            FullPivHouseholderQRPreconditioner);
-    
-    mat<> Kt = svd.solve(Xcv.transpose());
+    FullPivHouseholderQR<mat<>> qr(Zcv.transpose());
+
+    if (qr.rank() != z.size())
+        return distXp;
+
+    mat<> Kt = qr.solve(Xcv.transpose());
 
     mat<> Xucv = Xcv - Kt.transpose() * Zcv;
 
