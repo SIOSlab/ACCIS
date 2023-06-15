@@ -5,6 +5,7 @@
 #include "eigen_csv.hpp"
 #include "format.hpp"
 #include "rando.hpp"
+#include "roam.h"
 #include "sifter.hpp"
 
 #include <opencv2/core.hpp>
@@ -56,11 +57,23 @@ void generator::run() {
         cv::Mat img1;
         cv::Mat img2;
 
+        double lat, lon, alt;
+        vec<3> r;
+        const double tol = 1E-4;        
+
         // Generate first satellite state & image
         std::cout << " -- Generating first image" << std::endl;
         do {
-            
-            s1 = gen_state(rnd); 
+
+            do {
+
+                s1 = gen_state(rnd); 
+
+                r = s1.r();
+
+                eci2ll_(&t, r.data(), &tol, &lat, &lon, &alt);
+
+            } while (lat < -60 || lat > 60);
 
             img1 = cam.real_image(t, s1);
 
@@ -73,9 +86,17 @@ void generator::run() {
         do {
 
             do {
-                    
-                s2 = gen_state(rnd); 
+
+                do {
+
+                    s2 = gen_state(rnd); 
                 
+                    r = s2.r();
+
+                    eci2ll_(&t, r.data(), &tol, &lat, &lon, &alt);
+                
+                } while (lat < -60 || lat > 60);
+
             } while (!cam.img_overlap(t, t, s1, s2));
 
             img2 = cam.real_image(t, s2);
