@@ -3,6 +3,11 @@ import matplotlib.pyplot as plt
 
 sat_ids = np.genfromtxt("results/sat_ids.csv", delimiter=",", dtype=int)
 
+# Wong color scheme
+colors = ['#0072b2', '#e69f00', '#56b4e9', '#009e73']
+
+styles = ['solid', 'dotted', 'dashed', 'dashdot']
+
 ylabels = [
     'Position Error (m)',
     'Velocity Error (m/s)',
@@ -19,7 +24,8 @@ fig, axs = plt.subplots(3, 3)
 
 for i in range(3) :
     for j in range(3) :
-        for sat_id in sat_ids :
+        for l in range(sat_ids.size):
+            sat_id = sat_ids[l]
             k = 3*i + j
             t = np.genfromtxt(
                     "results/sat_" + str(sat_id) + "_time_s.csv",
@@ -32,7 +38,8 @@ for i in range(3) :
                     )
             e = err[..., k]
             lbl = 'Satellite ' + str(sat_id)
-            axs[i][j].plot(t, e, label = lbl)
+            axs[i][j].plot(t, e, label = lbl, \
+                    color = colors[l], linestyle = styles[l])
         axs[i][j].set_xlabel('Time (min)')
         axs[i][j].set_ylabel(ylabels[k])
         axs[i][j].set_yscale('log')
@@ -51,8 +58,9 @@ ylabels = [
 
 fig, axs = plt.subplots(1, 2)
 
-for j in range(2) :
-    for sat_id in sat_ids :
+for j in range(2):
+    for l in range(sat_ids.size):
+        sat_id = sat_ids[l]
         k = 9 + j
         t = np.genfromtxt(
                 "results/sat_" + str(sat_id) + "_time_s.csv",
@@ -65,7 +73,7 @@ for j in range(2) :
                 )
         e = err[..., k]
         lbl = 'Satellite ' + str(sat_id)
-        axs[j].plot(t, e, label = lbl)
+        axs[j].plot(t, e, label = lbl, color = colors[l], linestyle = styles[l])
     axs[j].set_xlabel('Time (min)')
     axs[j].set_ylabel(ylabels[j])
     axs[j].set_yscale('log')
