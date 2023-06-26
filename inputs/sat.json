@@ -3,7 +3,7 @@
     "PD Constant kp": 1.0,
     "Keypoint Max. Distance": 0.5,
     "Imaging Cadence": 120,
-    "Camera Distortion Parameter StD": 0.01,
+    "Camera Distortion Parameter StD": 0.1,
     "Principal Moments of Inertia (kg*m^2)": [
         100.0,
         100.0,

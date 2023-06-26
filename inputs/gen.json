@@ -1,7 +1,7 @@
 {
     "Number of Key Points": 100,
     "Camera Attitude StD (rad)": 0.0017453292519943295,
-    "Camera Distortion Parameter StD": 0.01,
+    "Camera Distortion Parameter StD": 0.1,
     "Seed": 0,
     "Camera Pixel Density (pixels/mm)": 1.0,
     "Max. Number of Images": 1000,
